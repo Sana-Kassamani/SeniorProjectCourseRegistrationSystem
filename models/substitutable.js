@@ -2,7 +2,7 @@
 const {
   Model
 } = require('sequelize');
-
+const Course=require('./course')
 module.exports = (sequelize, DataTypes) => {
   class Substitutable extends Model {
     /**

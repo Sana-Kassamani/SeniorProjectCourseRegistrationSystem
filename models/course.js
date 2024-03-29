@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     Description: {
-      type: DataTypes.TXT,
+      type: DataTypes.TEXT,
       allowNull: true
     },
     Credits: {
