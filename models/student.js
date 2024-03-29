@@ -20,6 +20,12 @@ module.exports = (sequelize, DataTypes) => {
     StudentID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      autoIncrement: true,
+
+    },
+    StudentIdentificationNumber: {
+      type: DataTypes.STRING,
+      unique:true,
       allowNull: false,
 
     },
@@ -38,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     GPA: {
       type: DataTypes.FLOAT,
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,

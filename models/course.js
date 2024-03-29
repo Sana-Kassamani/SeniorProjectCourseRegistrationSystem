@@ -43,7 +43,6 @@ module.exports = (sequelize, DataTypes) => {
     CourseID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false,
       autoIncrement: true
     },
     CourseCode: {
@@ -56,8 +55,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     Description: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.TXT,
+      allowNull: true
     },
     Credits: {
       type: DataTypes.INTEGER,

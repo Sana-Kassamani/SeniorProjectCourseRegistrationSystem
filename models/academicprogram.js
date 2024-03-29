@@ -22,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
     ProgramID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false,
       autoIncrement: true
     },
     ProgramName: {
