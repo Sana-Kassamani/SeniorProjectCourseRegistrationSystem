@@ -20,13 +20,17 @@ module.exports = (sequelize, DataTypes) => {
   StudentSection.init({
     StudentID: {
       type: DataTypes.INTEGER,
-      primaryKey: true, // Define StudentID as part of the composite primary key
-      allowNull: false
+      references:{
+        model: Student,
+        key: 'StudentID'
+      }
     },
     SectionID: {
       type: DataTypes.INTEGER,
-      primaryKey: true, // Define SectionID as part of the composite primary key
-      allowNull: false
+      references:{
+        model: Section,
+        key: ['CourseID' , 'SectionNumber']
+      }
     },
     Grade: {
       type: DataTypes.STRING

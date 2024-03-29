@@ -11,13 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      AcademicProgram.hasMany(models.Student, { foreignKey:{name: "ProgramId", allowNull: false} })
-      AcademicProgram.belongsTo(models.Faculty, { foreignKey:{name: "FacultyId", allowNull: false }})
+      AcademicProgram.hasMany(models.Student, { foreignKey:{name: "ProgramID", allowNull: false} })
+      AcademicProgram.belongsTo(models.Faculty, { foreignKey:{name: "FacultyID", allowNull: false }})
 
-      AcademicProgram.belongsToMany(models.Course, {
-        through: ProgramCourse,
-        foreignKey: 'ProgramID'
-      });
+      AcademicProgram.belongsToMany(models.Course, {through: ProgramCourse});
       
     }
   }

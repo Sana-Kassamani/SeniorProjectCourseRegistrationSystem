@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      FacultyMember.belongsTo(models.Faculty, { foreignKey: {name:"FacultyId", allowNull: false }})
-      FacultyMember.hasMany(models.Section, { foreignKey: {name:"MemberId", allowNull: false }})
+      FacultyMember.belongsTo(models.Faculty, { foreignKey: {name:"FacultyID", allowNull: false }})
+      FacultyMember.hasMany(models.Section, { foreignKey: {name: "InstructorID", allowNull: false }})
       
     }
   }

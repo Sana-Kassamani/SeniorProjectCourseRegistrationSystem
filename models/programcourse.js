@@ -19,13 +19,17 @@ module.exports = (sequelize, DataTypes) => {
   ProgramCourse.init({
     ProgramID: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false
+      references: {
+        model: AcademicProgram,
+        key: 'ProgramID'
+      }
     },
     CourseID: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false
+      references: {
+        model: Course,
+        key: 'CourseID'
+      }
     },
     Type: {
       type: DataTypes.STRING,

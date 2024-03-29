@@ -12,32 +12,28 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Course.belongsToMany(models.Course, {
-          through: "Prerequisite",
-          foreignKey: 'PrerequisiteID',
-          as: 'prerequisites'
+          through: Prerequisite,
+          foreignKey: 'PrerequisiteID'
         });
       Course.belongsToMany(models.Course, {
-        through: "Prerequisite",
-        foreignKey: 'CourseID',
-        as: 'requiredBy'
+        through: Prerequisite,
+        foreignKey: 'CourseID'
       });
 
       Course.belongsToMany(models.Course, {
-        through: "Substitutable",
+        through: Substitutable,
         foreignKey: 'SubstitutableID'
       });
-    Course.belongsToMany(models.Course, {
-      through: Substitutable,
-      foreignKey: CourseID
-    });
-  
-    Course.belongsToMany(models.AcademicProgram, {
-        through: "ProgramCourse",
+      Course.belongsToMany(models.Course, {
+        through: Substitutable,
         foreignKey: 'CourseID'
       });
-      Course.belongsTo(models.Faculty, { foreignKey:{name: "FacultyId", allowNull: false}  })
+  
+      Course.belongsToMany(models.AcademicProgram, {through: ProgramCourse});
 
-      Course.hasMany(models.Section, { foreignKey:{name: "CourseId", allowNull: false} });
+      Course.belongsTo(models.Faculty, { foreignKey:{name: "FacultyID", allowNull: false}  })
+
+      Course.hasMany(models.Section, { foreignKey:{name: "CourseID", allowNull: false} });
 
 
       

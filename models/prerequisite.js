@@ -19,13 +19,17 @@ module.exports = (sequelize, DataTypes) => {
   Prerequisite.init({
     CourseID: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false
+      references:{
+        model: Course,
+        key: 'CourseID'
+      }
     },
     PrerequisiteID: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false
+      references:{
+        model: Course,
+        key: 'CourseID'
+      }
     }
   }, {
     sequelize,

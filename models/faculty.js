@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Faculty.hasMany(models.FacultyMember, { foreignKey:{name: "FacultyId", allowNull: false} })
-      Faculty.hasMany(models.AcademicProgram, { foreignKey: {name:"FacultyId", allowNull: false} })
-      Faculty.hasMany(models.Course, { foreignKey:{name: "FacultyId", allowNull: false} })
+      Faculty.hasMany(models.FacultyMember, { foreignKey:{name: "FacultyID", allowNull: false} })
+      Faculty.hasMany(models.AcademicProgram, { foreignKey: {name:"FacultyID", allowNull: false} })
+      Faculty.hasMany(models.Course, { foreignKey:{name: "FacultyID", allowNull: false} })
     }
   }
   Faculty.init({
