@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Student.belongsTo(models.AcademicProgram,{ foreignKey: "ProgramId" })
+      Student.belongsTo(models.AcademicProgram,{ foreignKey:{name: "ProgramId" , allowNull: false}})
 
       Course.belongsToMany(models.Section, {
         through: "StudentSection",
@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     StudentID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false
+      allowNull: false,
+
     },
     FName: {
       type: DataTypes.STRING,

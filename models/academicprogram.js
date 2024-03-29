@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      AcademicProgram.hasMany(models.Student, { foreignKey: "ProgramId" })
-      AcademicProgram.belongsTo(models.Faculty, { foreignKey: "FacultyId" })
+      AcademicProgram.hasMany(models.Student, { foreignKey:{name: "ProgramId", allowNull: false} })
+      AcademicProgram.belongsTo(models.Faculty, { foreignKey:{name: "FacultyId", allowNull: false }})
 
       AcademicProgram.belongsToMany(models.Course, {
         through: ProgramCourse,
@@ -25,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
     ProgramID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false
+      allowNull: false,
+      autoIncrement: true
     },
     ProgramName: {
       type: DataTypes.STRING,

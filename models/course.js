@@ -31,22 +31,24 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: CourseID
     });
   
-
-      Course.belongsTo(models.Faculty, { foreignKey: "FacultyId" })
-
-      Course.hasMany(models.Section, { foreignKey: "CourseId" })
-
-      Course.belongsToMany(models.AcademicProgram, {
+    Course.belongsToMany(models.AcademicProgram, {
         through: "ProgramCourse",
         foreignKey: 'CourseID'
       });
+      Course.belongsTo(models.Faculty, { foreignKey:{name: "FacultyId", allowNull: false}  })
+
+      Course.hasMany(models.Section, { foreignKey:{name: "CourseId", allowNull: false} });
+
+
+      
     }
   }
   Course.init({
     CourseID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false
+      allowNull: false,
+      autoIncrement: true
     },
     CourseCode: {
       type: DataTypes.STRING,

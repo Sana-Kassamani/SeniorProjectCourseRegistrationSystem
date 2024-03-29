@@ -11,16 +11,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Faculty.hasMany(models.FacultyMember, { foreignKey: "FacultyId" })
-      Faculty.hasMany(models.AcademicProgram, { foreignKey: "FacultyId" })
-      Faculty.hasMany(models.Course, { foreignKey: "FacultyId" })
+      Faculty.hasMany(models.FacultyMember, { foreignKey:{name: "FacultyId", allowNull: false} })
+      Faculty.hasMany(models.AcademicProgram, { foreignKey: {name:"FacultyId", allowNull: false} })
+      Faculty.hasMany(models.Course, { foreignKey:{name: "FacultyId", allowNull: false} })
     }
   }
   Faculty.init({
     FacultyID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false
+      allowNull: false,
+      autoIncrement: true
     },
     FacultyName: {
       type: DataTypes.STRING,
