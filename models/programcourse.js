@@ -2,8 +2,8 @@
 const {
   Model
 } = require('sequelize');
-const AcademicProgram=require('./academicprogram')
-const Course=require('./course')
+const AcademicProgram =require('./academicprogram')
+const Course =require('./course')
 module.exports = (sequelize, DataTypes) => {
   class ProgramCourse extends Model {
     /**

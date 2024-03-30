@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Course extends Model {
     /**
@@ -12,24 +13,28 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Course.belongsToMany(models.Course, {
-          through: Prerequisite,
-          foreignKey: 'PrerequisiteID'
+          through: models.Prerequisite,
+          foreignKey: 'PrerequisiteID',
+          as: 'Prerequisites'
         });
       Course.belongsToMany(models.Course, {
-        through: Prerequisite,
-        foreignKey: 'CourseID'
+        through: models.Prerequisite,
+        foreignKey: 'CourseID',
+        as: 'RequiredBy'
       });
 
       Course.belongsToMany(models.Course, {
-        through: Substitutable,
-        foreignKey: 'SubstitutableID'
+        through: models.Substitutable,
+        foreignKey: 'SubstitutableID',
+        as: 'Substitutables'
       });
       Course.belongsToMany(models.Course, {
-        through: Substitutable,
-        foreignKey: 'CourseID'
+        through: models.Substitutable,
+        foreignKey: 'CourseID',
+        as: 'SubstitutedBy'
       });
   
-      Course.belongsToMany(models.AcademicProgram, {through: ProgramCourse});
+      Course.belongsToMany(models.AcademicProgram, {through: models.ProgramCourse});
 
       Course.belongsTo(models.Faculty, { foreignKey:{name: "FacultyID", allowNull: false}  })
 

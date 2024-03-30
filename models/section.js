@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Section extends Model {
     /**
@@ -14,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       Section.belongsTo(models.Course, { foreignKey: {name:"CourseID", allowNull: false, primaryKey:true} })
       Section.belongsTo(models.FacultyMember, { foreignKey:{name: "InstructorID", allowNull: false }})
 
-      Section.belongsToMany(models.Student, {through: StudentSection});
+      Section.belongsToMany(models.Student, {through: models.StudentSection, foreignKey:'SectionID'});
 
     }
   }

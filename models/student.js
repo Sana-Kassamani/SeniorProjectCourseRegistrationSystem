@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Student extends Model {
     /**
@@ -13,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Student.belongsTo(models.AcademicProgram,{ foreignKey:{name: "ProgramID" , allowNull: false}})
 
-      Student.belongsToMany(models.Section, {through: StudentSection});
+      Student.belongsToMany(models.Section, {through: models.StudentSection, foreignKey: 'StudentID'});
     }
   }
   Student.init({
