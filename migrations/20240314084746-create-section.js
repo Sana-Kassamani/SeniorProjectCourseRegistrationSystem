@@ -3,33 +3,36 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Sections', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
       SectionNumber: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        //unique:true,
+        allowNull: false
       },
       Semester: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       Days: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       Time: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       Room: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       NbOfSeats: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       Mode: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
+      
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -39,14 +42,14 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-
-    await queryInterface.addConstraint('Sections', ['CourseId', 'SectionNumber'], {
-      type: 'primary key',
-      name: 'section_key'
-    });
+  
+   
+    
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('Sections', 'section_key');
+    
     await queryInterface.dropTable('Sections');
   }
 };
+
+

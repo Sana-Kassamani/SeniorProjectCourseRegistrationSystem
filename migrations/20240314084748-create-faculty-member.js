@@ -3,30 +3,35 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('FacultyMembers', {
-      id: {
+      MemberID: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      MemberID: {
-        type: Sequelize.INTEGER
+      MemberIdentificationNumber: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
       },
       FName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       LName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       EmailAddress: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true // Add unique constraint for EmailAddress
       },
-      AdminFlag: {
-        type: Sequelize.BOOLEAN
+      Flag: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
       },
-      InstructorFlag: {
-        type: Sequelize.BOOLEAN
-      },
+      
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -37,6 +42,7 @@ module.exports = {
       }
     });
   },
+
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('FacultyMembers');
   }

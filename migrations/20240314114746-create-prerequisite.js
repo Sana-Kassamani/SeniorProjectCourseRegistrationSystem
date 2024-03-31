@@ -3,17 +3,25 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Prerequisites', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
       CourseID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Courses', 
+          key: 'CourseID' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       PrerequisiteID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Courses', 
+          key: 'CourseID' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       createdAt: {
         allowNull: false,
@@ -25,10 +33,12 @@ module.exports = {
       }
     });
     // Add composite primary key constraint
-    await queryInterface.addConstraint('Prerequisites', ['CourseID', 'PrerequisiteID'], {
+    await queryInterface.addConstraint('Prerequisites', {
+      fields: ['CourseID', 'PrerequisiteID'],
       type: 'primary key',
       name: 'prerequisite_key'
     });
+    
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.removeConstraint('Prerequisites', 'prerequisite_key');
