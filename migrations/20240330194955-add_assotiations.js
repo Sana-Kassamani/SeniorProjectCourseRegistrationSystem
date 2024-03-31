@@ -76,6 +76,7 @@ module.exports = {
     
 
   down: async (queryInterface, Sequelize) => {
+    await queryInterface.removeConstraint('Sections', 'section_fk');
     await queryInterface.removeColumn('Students', 'ProgramID');
     await queryInterface.removeColumn('AcademicPrograms', 'FacultyID');
     await queryInterface.removeColumn('Courses', 'FacultyID');

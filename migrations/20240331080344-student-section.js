@@ -50,8 +50,12 @@ module.exports = {
       type: 'primary key',
       name: 'studentsection_key'
     });
-  
-    
+   },
+    async down(queryInterface, Sequelize) {
+       await queryInterface.removeConstraint('StudentSections', 'studentsection_key');
+       await queryInterface.removeConstraint('StudentSections', 'section_fk');
+       await queryInterface.dropTable('StudentSections');
+    }
    
-  },
+ 
 }
