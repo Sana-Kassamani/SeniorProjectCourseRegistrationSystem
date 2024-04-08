@@ -1,0 +1,128 @@
+'use strict';
+
+const academicprogram = require('../models/academicprogram');
+const faculty = require('../models/faculty');
+
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up (queryInterface, Sequelize) {
+    await queryInterface.bulkInsert('Faculties', [
+      {
+        FacultyName: 'Faculty of Computer Studies',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ], {});
+    const facultyid = await queryInterface.rawSelect('Faculties', {
+      where: {FacultyName: 'Faculty of Computer Studies' },
+    }, ['FacultyID']);
+    
+  
+    await queryInterface.bulkInsert('AcademicPrograms', [
+      {
+        ProgramName: 'testComputer Science',
+        Degree: 'Bachelor of Science',
+        CoreCredits: 45,
+        MajorCredits: 60,
+        TechnicalCredits: 30,
+        ElectiveCredits: 15,
+        FacultyID: facultyid,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        ProgramName: 'testComputer Engineering',
+        Degree: 'Bachelor of Engineering',
+        CoreCredits: 50,
+        MajorCredits: 65,
+        TechnicalCredits: 35,
+        ElectiveCredits: 20,
+        FacultyID: facultyid,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ], {});
+    await queryInterface.bulkInsert('Courses', [
+      {
+        CourseCode: 'CSC101',
+        CourseName: 'Introduction to Computer Science',
+        Description: 'An introductory course covering basic concepts of computer science.',
+        Credits: 3,
+        FacultyID: facultyid,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        CourseCode: 'CSC201',
+        CourseName: 'Data Structures and Algorithms',
+        Description: 'A course focusing on fundamental data structures and algorithms.',
+        Credits: 3,
+        FacultyID: facultyid,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ], {});
+
+    const AcademicProgramid = await queryInterface.rawSelect('AcademicPrograms', {
+      where: {ProgramName: 'testComputer Science', },
+    }, ['ProgramID']);
+
+    await queryInterface.bulkInsert('Students', [{
+      StudentIdentificationNumber:'20208001',
+      FName: 'testJohn',
+      LName: 'Doe',
+      EmailAddress: 'John-Doe@example.com',
+      ProgramID: AcademicProgramid,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      StudentIdentificationNumber:'20208002',
+      FName: 'testSusan',
+      LName: 'Becker',
+      EmailAddress: 'Susan-Becker@example.com',
+      ProgramID: AcademicProgramid,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+  ]);
+  
+
+await queryInterface.bulkInsert('FacultyMembers', [
+  {
+    MemberIdentificationNumber: '2021001',
+    FName: 'Joe',
+    LName: 'Dart',
+    EmailAddress: 'joe.dart@example.com',
+    Flag: true, // Assuming true means instructor
+    FacultyID: facultyid,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    MemberIdentificationNumber: '2021002',
+    FName: 'Jane',
+    LName: 'Smith',
+    EmailAddress: 'jane.smith@example.com',
+    Flag: false, // Assuming false means staff
+    FacultyID: facultyid,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+], {});
+
+  
+  },
+
+  async down (queryInterface, Sequelize) {
+
+
+
+    await queryInterface.bulkDelete('FacultyMembers', null, {});
+    await queryInterface.bulkDelete('Students', null, {});
+    await queryInterface.bulkDelete('Courses', null, {});
+    await queryInterface.bulkDelete('AcademicPrograms', null, {});
+    await queryInterface.bulkDelete('Faculties', null, {});
+  }
+  
+};
