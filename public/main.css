@@ -1,0 +1,38 @@
+
+header {
+    margin-left: -30px;
+    margin-right: -10px;
+    background-color: #03468e;
+    color: #fff;
+  }
+
+  .nav-item {
+    margin-left: -10%;
+    margin-right: 80px;
+
+    text-align: top;
+    background-color: #03468e;
+  }
+
+  th,
+  td {
+    border-color: #000000;
+  }
+
+  .light-list-color {
+    background-color: rgb(184, 226, 245);
+
+  }
+
+ 
+
+  .search-container {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to next line if needed */
+}
+
+.search-container select {
+  flex: 1; /* Distribute space evenly among the input and selects */
+  margin-right: 10px; /* Adjust the margin between elements */
+  margin-bottom: 10px; /* Adjust vertical margin */
+}
