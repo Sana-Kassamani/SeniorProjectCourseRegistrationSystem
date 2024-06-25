@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      FacultyMember.belongsTo(models.Faculty, { foreignKey: "FacultyId" })
-      FacultyMember.hasMany(models.Section, { foreignKey: "MemberId" })
+      FacultyMember.belongsTo(models.Faculty, { foreignKey: {name:"FacultyID", allowNull: false }})
+      FacultyMember.hasMany(models.Section, { foreignKey: {name: "InstructorID", allowNull: false }})
       
     }
   }
@@ -20,7 +20,12 @@ module.exports = (sequelize, DataTypes) => {
     MemberID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false
+      autoIncrement: true,
+    },
+    MemberIdentificationNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique:true
     },
     FName: {
       type: DataTypes.STRING,
@@ -35,14 +40,11 @@ module.exports = (sequelize, DataTypes) => {
       unique: true, // Add unique constraint for EmailAddress
       allowNull: false
     },
-    AdminFlag: {
+    Flag: {
       type: DataTypes.BOOLEAN,
-      allowNull: true // Allow AdminFlag to be nullable
+      allowNull: false 
     },
-    InstructorFlag: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true // Allow InstructorFlag to be nullable
-    }
+    
   }, {
     sequelize,
     modelName: 'FacultyMember',

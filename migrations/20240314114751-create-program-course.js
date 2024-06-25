@@ -3,20 +3,29 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('ProgramCourses', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
       ProgramID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'AcademicPrograms', 
+          key: 'ProgramID' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       CourseID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Courses', 
+          key: 'CourseID' 
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       Type: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -29,10 +38,12 @@ module.exports = {
     });
 
     // Add composite primary key constraint
-    await queryInterface.addConstraint('ProgramCourses', ['ProgramID', 'CourseID'], {
+    await queryInterface.addConstraint('ProgramCourses', {
+      fields: ['ProgramID', 'CourseID'],
       type: 'primary key',
       name: 'programcourse_key'
     });
+    
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.removeConstraint('ProgramCourses', 'programcourse_key');

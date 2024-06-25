@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class AcademicProgram extends Model {
     /**
@@ -11,13 +12,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      AcademicProgram.hasMany(models.Student, { foreignKey: "ProgramId" })
-      AcademicProgram.belongsTo(models.Faculty, { foreignKey: "FacultyId" })
+      AcademicProgram.hasMany(models.Student, { foreignKey:{name: "ProgramID", allowNull: false} })
+      AcademicProgram.belongsTo(models.Faculty, { foreignKey:{name: "FacultyID", allowNull: false }})
 
-      AcademicProgram.belongsToMany(models.Course, {
-        through: ProgramCourse,
-        foreignKey: 'ProgramID'
-      });
+      AcademicProgram.belongsToMany(models.Course, {through: models.ProgramCourse});
       
     }
   }
@@ -25,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     ProgramID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false
+      autoIncrement: true
     },
     ProgramName: {
       type: DataTypes.STRING,

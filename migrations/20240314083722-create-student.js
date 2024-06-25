@@ -2,27 +2,36 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+   
     await queryInterface.createTable('Students', {
-      id: {
+      
+      StudentID: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      StudentID: {
-        type: Sequelize.INTEGER
+      StudentIdentificationNumber: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false
       },
       FName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       LName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       EmailAddress: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
       },
       GPA: {
-        type: Sequelize.FLOAT
+        type: Sequelize.FLOAT,
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
@@ -31,10 +40,15 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
+     
+     
     });
+  
   },
+ 
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Students');
+
   }
 };

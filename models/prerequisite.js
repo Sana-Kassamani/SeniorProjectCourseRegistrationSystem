@@ -2,7 +2,7 @@
 const {
   Model
 } = require('sequelize');
-
+const Course=require('./course')
 module.exports = (sequelize, DataTypes) => {
   class Prerequisite extends Model {
     /**
@@ -19,13 +19,17 @@ module.exports = (sequelize, DataTypes) => {
   Prerequisite.init({
     CourseID: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false
+      references:{
+        model: Course,
+        key: 'CourseID'
+      }
     },
     PrerequisiteID: {
       type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false
+      references:{
+        model: Course,
+        key: 'CourseID'
+      }
     }
   }, {
     sequelize,

@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Course extends Model {
     /**
@@ -12,41 +13,42 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Course.belongsToMany(models.Course, {
-          through: "Prerequisite",
+          through: models.Prerequisite,
           foreignKey: 'PrerequisiteID',
-          as: 'prerequisites'
+          as: 'Prerequisites'
         });
       Course.belongsToMany(models.Course, {
-        through: "Prerequisite",
+        through: models.Prerequisite,
         foreignKey: 'CourseID',
-        as: 'requiredBy'
+        as: 'RequiredBy'
       });
 
       Course.belongsToMany(models.Course, {
-        through: "Substitutable",
-        foreignKey: 'SubstitutableID'
+        through: models.Substitutable,
+        foreignKey: 'SubstitutableID',
+        as: 'Substitutables'
       });
-    Course.belongsToMany(models.Course, {
-      through: Substitutable,
-      foreignKey: CourseID
-    });
+      Course.belongsToMany(models.Course, {
+        through: models.Substitutable,
+        foreignKey: 'CourseID',
+        as: 'SubstitutedBy'
+      });
   
+      Course.belongsToMany(models.AcademicProgram, {through: models.ProgramCourse});
 
-      Course.belongsTo(models.Faculty, { foreignKey: "FacultyId" })
+      Course.belongsTo(models.Faculty, { foreignKey:{name: "FacultyID", allowNull: false}  })
 
-      Course.hasMany(models.Section, { foreignKey: "CourseId" })
+      Course.hasMany(models.Section, { foreignKey:{name: "CourseID", allowNull: false} });
 
-      Course.belongsToMany(models.AcademicProgram, {
-        through: "ProgramCourse",
-        foreignKey: 'CourseID'
-      });
+
+      
     }
   }
   Course.init({
     CourseID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false
+      autoIncrement: true
     },
     CourseCode: {
       type: DataTypes.STRING,
@@ -58,8 +60,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     Description: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.TEXT,
+      allowNull: true
     },
     Credits: {
       type: DataTypes.INTEGER,

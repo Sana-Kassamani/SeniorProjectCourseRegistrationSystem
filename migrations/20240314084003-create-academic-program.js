@@ -3,32 +3,36 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('AcademicPrograms', {
-      id: {
+      ProgramID: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      ProgramID: {
-        type: Sequelize.INTEGER
-      },
       ProgramName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true // Add unique constraint
       },
       Degree: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       CoreCredits: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       MajorCredits: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       TechnicalCredits: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       ElectiveCredits: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -37,9 +41,11 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
+     
     });
   },
+
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('AcademicPrograms');
   }

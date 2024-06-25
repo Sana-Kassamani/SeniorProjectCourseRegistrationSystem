@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Student extends Model {
     /**
@@ -11,19 +12,23 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Student.belongsTo(models.AcademicProgram,{ foreignKey: "ProgramId" })
+      Student.belongsTo(models.AcademicProgram,{ foreignKey:{name: "ProgramID" , allowNull: false}})
 
-      Course.belongsToMany(models.Section, {
-        through: "StudentSection",
-        foreignKey: 'StudentID'
-      });
+      Student.belongsToMany(models.Section, {through: models.StudentSection, foreignKey: 'StudentID'});
     }
   }
   Student.init({
     StudentID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      allowNull: false
+      autoIncrement: true,
+
+    },
+    StudentIdentificationNumber: {
+      type: DataTypes.STRING,
+      unique:true,
+      allowNull: false,
+
     },
     FName: {
       type: DataTypes.STRING,
@@ -40,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     GPA: {
       type: DataTypes.FLOAT,
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,
