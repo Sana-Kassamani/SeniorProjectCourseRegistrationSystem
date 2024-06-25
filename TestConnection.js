@@ -11,7 +11,7 @@ async function testDatabaseConnection() {
     console.error('Unable to connect to the database:', error);
   } finally {
     // Close the Sequelize connection
-    await db.sequelize.close();
+    //await db.sequelize.close();
   }
 }
 

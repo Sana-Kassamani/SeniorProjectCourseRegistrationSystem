@@ -4,7 +4,12 @@ const router = express.Router()
 const path = require('path')
 
 
+
+
+
+const timetableController = require('../controllers/timetableController');
+
 router.route('/')
-    .get((req, res)=> {
-        res.render('courseLoad')})
-module.exports = router
+  .get(timetableController.getData);
+
+module.exports = router;
