@@ -7,18 +7,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contract sheet</title>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="main.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container-fluid" style="background-color:rgb(184, 226, 245); height: 100vh;">
-    <%- include ('header.ejs') -%>
-
-    <div class="container mt-4">
-      <div class=" row">
+  <div>
+  <div class="container register">
+ 
   
-          <%- include ('NavBar.ejs') -%>
-    <div class="col-md-9">
+      <div class=" row">
+        <div class="col-md-3 register-left">
+        <%- include ('NavBar.ejs') -%>
+
+</div>
+<div class="col-md-9 register-right">
       
           <div id="Contract">
             <div class="scrollable-div" style="height: 550px; overflow-y: auto;">
@@ -87,6 +91,7 @@
                   </div>
                 </li>
               </ul>
+              
             </div>
           </div>
 
