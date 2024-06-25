@@ -13,87 +13,84 @@
   <link href="main.css" rel="stylesheet">
 </head>
 <body>
-  <div>
-  <div class="container register">
- 
+<%- include ('NavBar.ejs') -%>
+<div id="wrapper">
+<%- include ('SideBar.ejs') -%>
+
+<div id="page-content-wrapper">
+  <div id="Contract">
+    <div class="scrollable-div" style="height: 550px; overflow-y: auto;">
+      <h2 class="text-white">Contract Sheet</h2><br>
+      <h5>Core Requirements</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item light-list-color border-dark">CSC212</li>
+        <li class="list-group-item light-list-color border-dark">MAT215</li>
+        <li class="list-group-item light-list-color border-dark">crs</li>
+        <li class="list-group-item list-group-item-warning border-dark" style="color: black;">CSC313</li>
+        <li class="list-group-item list-group-item-warning border-dark" style="color: black;">Crs code 3--</li>
+        <li class="list-group-item list-group-item-danger border-dark" style="color: black;">Crs code 4</li>
+      </ul>
   
-      <div class=" row">
-        <div class="col-md-3 register-left">
-        <%- include ('NavBar.ejs') -%>
-
-</div>
-<div class="col-md-9 register-right">
-      
-          <div id="Contract">
-            <div class="scrollable-div" style="height: 550px; overflow-y: auto;">
-              <h2>Contract Sheet</h2><br>
-              <h5>Core Requirements</h5>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item light-list-color border-dark">CSC212</li>
-                <li class="list-group-item light-list-color border-dark">MAT215</li>
-                <li class="list-group-item light-list-color border-dark">crs</li>
-                <li class="list-group-item list-group-item-warning border-dark" style="color: black;">CSC313</li>
-                <li class="list-group-item list-group-item-warning border-dark" style="color: black;">Crs code 3--</li>
-                <li class="list-group-item list-group-item-danger border-dark" style="color: black;">Crs code 4</li>
-              </ul>
-
-              <h5>Major Requirements</h5>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item light-list-color border-dark">Crs</li>
-                <li class="list-group-item light-list-color border-dark">crs</li>
-                <li class="list-group-item light-list-color border-dark">crs</li>
-                <li class="list-group-item list-group-item-warning border-dark" style="color:black;">CSC325</li>
-                <li class="list-group-item list-group-item-warning border-dark" style="color: black;">Crs code 3--</li>
-                <li class="list-group-item list-group-item-danger border-dark" style="color: black;">CSC 423</li>
-                <li class="list-group-item light-list-color border-dark">
-                  <div class="dropdown btn-outline-none">
-                    <button class="btn btn-secondary dropdown-toggle light-list-color" type="button"
-                      data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
-                      Technical Elective
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Crs</a></li>
-                      <li><a class="dropdown-item" href="#">Crs</a></li>
-                      <li><a class="dropdown-item" href="#">Crs</a></li>
-                    </ul>
-                  </div>
-                </li>
-              </ul>
-
-              <h5>Liberal Arts Curriculum</h5>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item light-list-color border-dark">ENL213</li>
-                <li class="list-group-item light-list-color border-dark">CSC203</li>
-                <li class="list-group-item light-list-color border-dark">
-                  <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle light-list-color" type="button"
-                      data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
-                      Group 3
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Crs</a></li>
-                      <li><a class="dropdown-item" href="#">Crs</a></li>
-                      <li><a class="dropdown-item" href="#">Crs</a></li>
-                    </ul>
-                  </div>
-                </li>
-                <li class="list-group-item light-list-color border-dark">
-                  <div class="dropdown btn-outline-none">
-                    <button class="btn btn-secondary dropdown-toggle light-list-color" type="button"
-                      data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
-                      Group 4
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Crs</a></li>
-                      <li><a class="dropdown-item" href="#">Crs</a></li>
-                      <li><a class="dropdown-item" href="#">Crs</a></li>
-                    </ul>
-                  </div>
-                </li>
-              </ul>
-              
-            </div>
+      <h5>Major Requirements</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item light-list-color border-dark">Crs</li>
+        <li class="list-group-item light-list-color border-dark">crs</li>
+        <li class="list-group-item light-list-color border-dark">crs</li>
+        <li class="list-group-item list-group-item-warning border-dark" style="color:black;">CSC325</li>
+        <li class="list-group-item list-group-item-warning border-dark" style="color: black;">Crs code 3--</li>
+        <li class="list-group-item list-group-item-danger border-dark" style="color: black;">CSC 423</li>
+        <li class="list-group-item light-list-color border-dark">
+          <div class="dropdown btn-outline-none">
+            <button class="btn btn-secondary dropdown-toggle light-list-color" type="button"
+              data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
+              Technical Elective
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Crs</a></li>
+              <li><a class="dropdown-item" href="#">Crs</a></li>
+              <li><a class="dropdown-item" href="#">Crs</a></li>
+            </ul>
           </div>
-
+        </li>
+      </ul>
+  
+      <h5>Liberal Arts Curriculum</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item light-list-color border-dark">ENL213</li>
+        <li class="list-group-item light-list-color border-dark">CSC203</li>
+        <li class="list-group-item light-list-color border-dark">
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle light-list-color" type="button"
+              data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
+              Group 3
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Crs</a></li>
+              <li><a class="dropdown-item" href="#">Crs</a></li>
+              <li><a class="dropdown-item" href="#">Crs</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="list-group-item light-list-color border-dark">
+          <div class="dropdown btn-outline-none">
+            <button class="btn btn-secondary dropdown-toggle light-list-color" type="button"
+              data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
+              Group 4
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Crs</a></li>
+              <li><a class="dropdown-item" href="#">Crs</a></li>
+              <li><a class="dropdown-item" href="#">Crs</a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+      
+    </div>
+  </div>
 </div>
+</div>
+
+<script src="sidebar.js"></script>
 </body>
+</html>

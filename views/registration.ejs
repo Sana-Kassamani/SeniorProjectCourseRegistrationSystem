@@ -13,23 +13,20 @@
 </head>
 <body>
 
-      <div class="container register">
-     
-    
-        <div class=" row">
-          <div class="col-md-3 register-left">
-          <%- include ('NavBar.ejs') -%>
-  
-</div>
-<div class="col-md-9 register-right">
+<%- include ('NavBar.ejs') -%>
+<div id="wrapper">
+<%- include ('SideBar.ejs') -%>
+
+<div id="page-content-wrapper">
         <div id="Registration">
-            <h2>Registration</h2>
+            <h2 class="text-white">Registration</h2>
             <p>This is the registarion recommendation table using AI.</p>
             <br>
             <h6>Fall 2024 </h6> <!--semester ID aw name-->
 
         </div>
          
-    </div>
 </div>
+</div>
+<script src="sidebar.js"></script>
 </body>

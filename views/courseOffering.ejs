@@ -14,41 +14,35 @@
 
   <link href="main.css" rel="stylesheet">
 </head>
+<body>
+<%- include ('NavBar.ejs') -%>
+<div id="wrapper">
+<%- include ('SideBar.ejs') -%>
 
-  
-     <body>
-           <div class="container register">
-           
-    
-        <div class=" row">
-          <div class="col-md-3 register-left">
-        
-          <%- include ('NavBar.ejs') -%>
-  
+<div id="page-content-wrapper">
+    <div id="Offering">
+      <h2 class="text-white">Course Offering</h2>
+      <div class="search-container">
+        <input type="text" id="searchInput" class="form-control" placeholder="Search...">
+        <select id="Filter" class="form-control mt-2">
+          <option value="all">All Majors</option>
+          <option value="name">CS only</option> <!--msh daruri CS bas hasab student major-->
+        </select>
+        <select id="crsFilter" class="form-control mt-2">
+          <option value="all">All Courses</option>
+          <option value="name">Major-Core only</option>
+          <option value="name">Elective only</option>
+        </select>
+        <select id="dayFilter" class="form-control mt-2">
+          <option value="all">All days</option>
+          <option value="name">MWF only</option>
+          <option value="name">TTH only</option>
+        </select>
+      </div>
+  </div>
 </div>
-<div class="col-md-9 register-right">
-        
-          <div id="Offering">
-              <h2>Course Offering</h2>
-              <div class="search-container">
-                <input type="text" id="searchInput" class="form-control" placeholder="Search...">
-                <select id="Filter" class="form-control mt-2">
-                  <option value="all">All Majors</option>
-                  <option value="name">CS only</option> <!--msh daruri CS bas hasab student major-->
-                </select>
-                <select id="crsFilter" class="form-control mt-2">
-                  <option value="all">All Courses</option>
-                  <option value="name">Major-Core only</option>
-                  <option value="name">Elective only</option>
-                </select>
-                <select id="dayFilter" class="form-control mt-2">
-                  <option value="all">All days</option>
-                  <option value="name">MWF only</option>
-                  <option value="name">TTH only</option>
-                </select>
-             </div>
-          </div>
-       </div>
-     </div>
-    </div>
+</div>        
+
+<script src="sidebar.js"></script>
 </body>
+</html>

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,17 +11,14 @@
   <link href="main.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container register">
-    
   
-      <div class=" row">
-        <div class="col-md-3 register-left">
-        <%- include ('NavBar.ejs') -%>
+<%- include ('NavBar.ejs') -%>
+<div id="wrapper">
+<%- include ('SideBar.ejs') -%>
 
-</div>
-<div class="col-md-9 register-right">
-<div id="Load">
-    <h2>Course Load</h2>
+<div id="page-content-wrapper">
+  <div id="Load">
+    <h2 class="text-white">Course Load</h2>
 
     <table class="table table-bordered border-dark">
       <thead class="table-dark"> <!--lazm naamil all colomns same width-->
@@ -84,8 +79,9 @@
       </tbody>
     </table>
   </div>
+   
 </div>
 </div>
-</div>
-</div>
+<script src="sidebar.js"></script>
+
 </body>
