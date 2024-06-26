@@ -96,7 +96,7 @@ const getData = async (req, res) => {
     //const currentSemester = "Spring 2024"
     const data = await getStudentData(studentIdentificationNumber, currentSemester);
     
-    console.log(data);
+    //console.log(data);
     res.render('courseLoad', { data }); // Assuming there's a corresponding EJS view file
   } catch (err) {
     console.error(err);

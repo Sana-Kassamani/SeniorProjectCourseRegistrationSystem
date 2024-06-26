@@ -196,4 +196,24 @@ body, html{
     transition: all 0.5s ease;
     width: auto;
 }
+.fs-5.fw-bold.fst-italic.px-4 {
+   display: inline-block;
+}
+
+.fs-5.fw-bold.fst-italic.px-4 a {
+   display: inline;
+}
+.nav-item.w-100.d-flex.justify-content-between.align-items-center {
+   flex: 1;
+   margin-right: 10px;
+}
+
+.credentials-box {
+   background-color: white;
+   padding: 20px;
+   border-radius: 15px;
+   margin: 10px;
+   padding-top: 0px;
+}
+
 }

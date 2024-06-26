@@ -2,15 +2,10 @@
 const express = require('express')
 const router = express.Router()
 const path = require('path')
-
-
-
-
-
-const timetableController = require('../controllers/timetableController');
+const credentialsController= require('../controllers/credentialsController');
 
 router.route('/')
-  .get(timetableController.getData);
+  .get(credentialsController.getData);
  
 
 module.exports = router;
