@@ -15,7 +15,8 @@ app.use('/courseLoad',  require(path.join(__dirname, 'routes', 'courseLoad')))
 app.use('/contractSheet',  require(path.join(__dirname, 'routes', 'contractSheet')))
 app.use('/',  require(path.join(__dirname, 'routes', 'main')))
 
-testDatabaseConnection()
+
+
 
 app.listen(PORT, ()=>{
     console.log(`Listening on port ${PORT}`)

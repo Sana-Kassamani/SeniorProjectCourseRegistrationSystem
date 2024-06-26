@@ -23,15 +23,13 @@
       <h2 class="text-white">Contract Sheet</h2><br>
       <h5>Core Requirements</h5>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item light-list-color border-dark">CSC212</li>
-        <li class="list-group-item light-list-color border-dark">MAT215</li>
-        <li class="list-group-item light-list-color border-dark">crs</li>
-        <li class="list-group-item list-group-item-warning border-dark" style="color: black;">CSC313</li>
-        <li class="list-group-item list-group-item-warning border-dark" style="color: black;">Crs code 3--</li>
-        <li class="list-group-item list-group-item-danger border-dark" style="color: black;">Crs code 4</li>
+        
+        <% for ( let i=0; i< courses.length; i++) { %>
+          <li class="list-group-item light-list-color border-dark"><%= courses[i].CourseCode %></li>
+          <% } %>
       </ul>
   
-      <h5>Major Requirements</h5>
+      <!-- <h5>Major Requirements</h5>
       <ul class="list-group list-group-flush">
         <li class="list-group-item light-list-color border-dark">Crs</li>
         <li class="list-group-item light-list-color border-dark">crs</li>
@@ -84,7 +82,7 @@
             </ul>
           </div>
         </li>
-      </ul>
+      </ul> -->
       
     </div>
   </div>
