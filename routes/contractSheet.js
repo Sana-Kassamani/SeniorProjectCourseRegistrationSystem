@@ -5,7 +5,7 @@ const contractSheetController=require(path.join(__dirname,'..','controllers','ge
 
 
 
-router.get('/', contractSheetController.getAllCourses)
+router.get('/', contractSheetController.getMajorCourses)
 
 
 module.exports = router
