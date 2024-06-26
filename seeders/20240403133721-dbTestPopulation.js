@@ -60,6 +60,52 @@ module.exports = {
         FacultyID: facultyid,
         createdAt: new Date(),
         updatedAt: new Date()
+      },
+      {
+        CourseCode: 'CSC301',
+        CourseName: 'Advanced Algorithms',
+        Description: 'Advanced study of algorithms and computational complexity.',
+        Credits: 3,
+        FacultyID: facultyid, 
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        CourseCode: 'CSC302',
+        CourseName: 'Database Systems',
+        Description: 'A course on database design and SQL.',
+        Credits: 3,
+        FacultyID: facultyid,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        CourseCode: 'CSC401',
+        CourseName: 'Machine Learning',
+        Description: 'Introduction to machine learning techniques and applications.',
+        Credits: 3,
+        FacultyID: facultyid, // Update with appropriate FacultyID
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        CourseCode: 'CSC402',
+        CourseName: 'Artificial Intelligence',
+        Description: 'Fundamentals and applications of artificial intelligence.',
+        Credits: 3,
+        FacultyID: facultyid, // Update with appropriate FacultyID
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      
+      {
+        CourseCode: 'CEG301',
+        CourseName: 'Digital Logic Design',
+        Description: 'Fundamentals of digital logic design and hardware description languages.',
+        Credits: 3,
+        FacultyID: facultyid, // Update with appropriate FacultyID
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     ], {});
 
