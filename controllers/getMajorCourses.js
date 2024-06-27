@@ -73,11 +73,9 @@ const getCoursesAttended=async (req,res)=>{
   try {
 
     const { QueryTypes } = Sequelize;
-    const courses = await sequelize.query('SELECT crs."CourseID", crs."CourseCode",crs."CourseName",crs."Description", prereq."PrerequisiteID" FROM "Courses" as crs ' +
-        'INNER JOIN "ProgramCourses" as pcrs On crs."CourseID" = pcrs."CourseID" ' +
-        'INNER JOIN "AcademicPrograms" as ap On pcrs."ProgramID" = ap."ProgramID" ' +
-        'LEFT JOIN "Prerequisites" as prereq On crs."CourseID" = prereq."CourseID" ' +
-        'WHERE ap."ProgramName" = \'testComputer Science\'',  {
+    const coursesAttended = await sequelize.query('SELECT sec."CourseID" FROM "StudentSections" as ss ' +
+        'INNER JOIN "Sections" as sec On ss."CourseID" = sec."CourseID" ' +
+        'WHERE sec."StudentID"',  {
     type: QueryTypes.SELECT,
     });
     
