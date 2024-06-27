@@ -78,7 +78,7 @@ right connector from last child*/
 	font-family: arial, verdana, tahoma;
 	font-size: 11px;
 	display: inline-block;
-	
+	background: #c8e4f8; color: #000; border: 1px solid #94a0b4;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -88,18 +88,18 @@ right connector from last child*/
 	-moz-transition: all 0.5s;
 }
 
-/*Time for some hover effects*/
+/* Time for some hover effects
 /*We will apply the hover effect the the lineage of the element also*/
-.tree li a:hover, .tree li a:hover+ul li a {
+/* .tree li a:hover, .tree li a:hover+ul li a {
 	background: #c8e4f8; color: #000; border: 1px solid #94a0b4;
-}
+} */
 /*Connector styles on hover*/
-.tree li a:hover+ul li::after, 
+/* .tree li a:hover+ul li::after, 
 .tree li a:hover+ul li::before, 
 .tree li a:hover+ul::before, 
 .tree li a:hover+ul ul::before{
 	border-color:  #94a0b4;
-}
+} */
 
 /*Thats all. I hope you enjoyed it.
 Thanks :)*/

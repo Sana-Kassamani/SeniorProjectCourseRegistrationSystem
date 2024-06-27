@@ -2,18 +2,30 @@
 // controllers/courseController.js
 const { sequelize } = require('../models');
 const Sequelize = require('sequelize')
+
+const StudentID=1
 // Function to get all courses from the database
 const getMajorCourses = async (req, res) => {
   try {
-
   const { QueryTypes } = Sequelize;
+  const academicProgName= await sequelize.query('SELECT ap."ProgramName" FROM "AcademicPrograms" as ap ' +
+    'INNER JOIN "Students" as std On ap."ProgramID" = std."ProgramID" ' +
+    'WHERE std."StudentID" = :studentId', {
+        type: QueryTypes.SELECT,
+        replacements: { studentId: StudentID }
+      }
+    );
+    console.log(academicProgName)
+
   const courses = await sequelize.query('SELECT crs."CourseID", crs."CourseCode",crs."CourseName",crs."Description", prereq."PrerequisiteID" FROM "Courses" as crs ' +
       'INNER JOIN "ProgramCourses" as pcrs On crs."CourseID" = pcrs."CourseID" ' +
       'INNER JOIN "AcademicPrograms" as ap On pcrs."ProgramID" = ap."ProgramID" ' +
       'LEFT JOIN "Prerequisites" as prereq On crs."CourseID" = prereq."CourseID" ' +
-      'WHERE ap."ProgramName" = \'testComputer Science\'',  {
-  type: QueryTypes.SELECT,
-  });
+      'WHERE ap."ProgramName" = :programName', {
+         type: QueryTypes.SELECT,
+         replacements: { programName: academicProgName[0].ProgramName }
+      }
+    );
   // const dict = new Map()
   // for ( let i=0; i< courses.length; i +=1)
   //   {
@@ -57,7 +69,24 @@ const getMajorCourses = async (req, res) => {
   }
 };
 
+const getCoursesAttended=async (req,res)=>{
+  try {
 
+    const { QueryTypes } = Sequelize;
+    const courses = await sequelize.query('SELECT crs."CourseID", crs."CourseCode",crs."CourseName",crs."Description", prereq."PrerequisiteID" FROM "Courses" as crs ' +
+        'INNER JOIN "ProgramCourses" as pcrs On crs."CourseID" = pcrs."CourseID" ' +
+        'INNER JOIN "AcademicPrograms" as ap On pcrs."ProgramID" = ap."ProgramID" ' +
+        'LEFT JOIN "Prerequisites" as prereq On crs."CourseID" = prereq."CourseID" ' +
+        'WHERE ap."ProgramName" = \'testComputer Science\'',  {
+    type: QueryTypes.SELECT,
+    });
+    
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+      res.send('Error getting courses from database');
+    }
+
+};
 module.exports = { getMajorCourses };
 
 
