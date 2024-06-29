@@ -26,16 +26,7 @@ const getMajorCourses = async (req, res) => {
          replacements: { programName: academicProgName[0].ProgramName }
       }
     );
-  // const dict = new Map()
-  // for ( let i=0; i< courses.length; i +=1)
-  //   {
-  //       dict.set(courses[i],[])
-  //       for ( let j=0; j< courses.length; j +=1)
-  //         if (courses[j].PrerequisiteID == courses[i].CourseID)
-  //           dict.get(courses[i]).push(courses[j])
-  //   }
-  //   console.log(dict)
-  //   res.render("contractSheet", {courses: dict})
+  
   const courseMap = new Map();
   courses.forEach(course => {
       courseMap.set(course.CourseID, {
@@ -43,11 +34,20 @@ const getMajorCourses = async (req, res) => {
         CourseName: course.CourseName,
         Description: course.Description,
         Prerequisites: [],
-        isRoot: true
+        isRoot: true,
+        isAttended: false
 
       });
     });
-
+    attendedCourses=await getCoursesAttended()
+    console.log(attendedCourses)
+    attendedCourses.forEach(attendedCourse => {
+      const course = courseMap.get(attendedCourse.CourseID);
+      if (course) {
+        course.isAttended = true;
+        console.log(`attended ${course.CourseID}`);
+      }
+    });
     courses.forEach(course => {
       if (course.PrerequisiteID) {
         const currentCourse = courseMap.get(course.PrerequisiteID);
@@ -56,12 +56,13 @@ const getMajorCourses = async (req, res) => {
           courseMap.get(course.CourseID).isRoot = false; // Not a root if it has prerequisites
         }
       }
+     
     });
 
     // Find root courses
     const rootCourses = Array.from(courseMap.values()).filter(course => course.isRoot);
 
-
+    console.log(courseMap)
     res.render("contractSheet", { rootCourses: rootCourses });
   } catch (error) {
     console.error('Error fetching courses:', error);
@@ -74,10 +75,12 @@ const getCoursesAttended=async (req,res)=>{
 
     const { QueryTypes } = Sequelize;
     const coursesAttended = await sequelize.query('SELECT sec."CourseID" FROM "StudentSections" as ss ' +
-        'INNER JOIN "Sections" as sec On ss."CourseID" = sec."CourseID" ' +
-        'WHERE sec."StudentID"',  {
-    type: QueryTypes.SELECT,
-    });
+        'INNER JOIN "Sections" as sec On ss."CourseID" = sec."CourseID" AND ss."SectionNumber"=sec."SectionNumber"' +
+        'WHERE ss."StudentID"= :studentID', {
+         type: QueryTypes.SELECT,
+         replacements: { studentID: StudentID  }
+      });
+      return coursesAttended
     
     } catch (error) {
       console.error('Error fetching courses:', error);

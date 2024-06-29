@@ -14,6 +14,7 @@
   <link href="tree.css" rel="stylesheet">
 </head>
 <body>
+  
 <%- include ('NavBar.ejs') -%>
 <div id="wrapper">
 <%- include ('SideBar.ejs') -%>
@@ -22,91 +23,67 @@
   <div id="Contract">
     <div class="scrollable-div" style="height: 550px; overflow-y: auto;">
       <h2 class="text-white">Contract Sheet</h2><br>
-      <div class="tree">
-        <ul>
-          <% function renderCourse(course) { %>
-            <li >
-              <a href="#"><%= course.CourseCode %> <br> <%= course.CourseName %></a>
-              <% if (course.Prerequisites.length > 0) { %>
-                <ul>
-                  <% course.Prerequisites.forEach(prereq => { %>
-                    <%= renderCourse(prereq) %>
-                  <% }); %>
-                </ul>
-              <% } %>
-            </li>
-          <% } %>
+          <div class="tree">
+            <ul>
+              <% function renderCourse(course) { %>
+                <li>
+                  <a href="#" class=" <%= course.isAttended ? 'attend' : 'normal' %>" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title=" <%= course.CourseName %> <%= course.CourseCode%>" data-bs-desc=" <%= course.Description %> ">
+                    <%= course.CourseCode %> <br> <%= course.CourseName %>
+                  </a>
 
-          <% rootCourses.forEach(course => { %>
-            <%= renderCourse(course) %>
-          <% }); %>
-        </ul>
-      </div>
-      
-        
-        
-      
-  
-      <!-- <h5>Major Requirements</h5>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item light-list-color border-dark">Crs</li>
-        <li class="list-group-item light-list-color border-dark">crs</li>
-        <li class="list-group-item light-list-color border-dark">crs</li>
-        <li class="list-group-item list-group-item-warning border-dark" style="color:black;">CSC325</li>
-        <li class="list-group-item list-group-item-warning border-dark" style="color: black;">Crs code 3--</li>
-        <li class="list-group-item list-group-item-danger border-dark" style="color: black;">CSC 423</li>
-        <li class="list-group-item light-list-color border-dark">
-          <div class="dropdown btn-outline-none">
-            <button class="btn btn-secondary dropdown-toggle light-list-color" type="button"
-              data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
-              Technical Elective
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Crs</a></li>
-              <li><a class="dropdown-item" href="#">Crs</a></li>
-              <li><a class="dropdown-item" href="#">Crs</a></li>
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel"></h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <%= course.Description %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <% if (course.Prerequisites.length > 0) { %>
+                    <ul>
+                      <% course.Prerequisites.forEach(prereq => { %>
+                        <%= renderCourse(prereq) %>
+                      <% }); %>
+                    </ul>
+                  <% } %>
+                </li>
+              <% } %>
+
+              <% rootCourses.forEach(course => { %>
+                <%= renderCourse(course) %>
+              <% }); %>
             </ul>
           </div>
-        </li>
-      </ul>
-  
-      <h5>Liberal Arts Curriculum</h5>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item light-list-color border-dark">ENL213</li>
-        <li class="list-group-item light-list-color border-dark">CSC203</li>
-        <li class="list-group-item light-list-color border-dark">
-          <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle light-list-color" type="button"
-              data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
-              Group 3
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Crs</a></li>
-              <li><a class="dropdown-item" href="#">Crs</a></li>
-              <li><a class="dropdown-item" href="#">Crs</a></li>
-            </ul>
-          </div>
-        </li>
-        <li class="list-group-item light-list-color border-dark">
-          <div class="dropdown btn-outline-none">
-            <button class="btn btn-secondary dropdown-toggle light-list-color" type="button"
-              data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
-              Group 4
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Crs</a></li>
-              <li><a class="dropdown-item" href="#">Crs</a></li>
-              <li><a class="dropdown-item" href="#">Crs</a></li>
-            </ul>
-          </div>
-        </li>
-      </ul> 
-      
-    </div> -->
+    </div>
   </div>
 </div>
 </div>
+<script>
+  var exampleModal = document.getElementById('exampleModal')
+  exampleModal.addEventListener('show.bs.modal', function (event) {
+  // Button that triggered the modal
+  var button = event.relatedTarget
+  // Extract info from data-bs-* attributes
+  var title = button.getAttribute('data-bs-title')
+  var desc = button.getAttribute('data-bs-desc')
+  // If necessary, you could initiate an AJAX request here
+  // and then do the updating in a callback.
+  //
+  // Update the modal's content.
+  var modalTitle = exampleModal.querySelector('.modal-title')
+  var modalBodyInput = exampleModal.querySelector('.modal-body ')
 
+  modalTitle.textContent= title
+  modalBodyInput.textContent = desc
+})
+</script>
 <script src="sidebar.js"></script>
 </body>
 </html>
