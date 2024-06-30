@@ -66,17 +66,18 @@
 </div>
 </div>
 <script>
+  var sum = 0;
+  $(".tree ul li a").each(function(){sum += $(this).width()});
+  $(".tree").css('width', sum);
+
   var exampleModal = document.getElementById('exampleModal')
   exampleModal.addEventListener('show.bs.modal', function (event) {
-  // Button that triggered the modal
-  var button = event.relatedTarget
+  
+  var course = event.relatedTarget
   // Extract info from data-bs-* attributes
-  var title = button.getAttribute('data-bs-title')
-  var desc = button.getAttribute('data-bs-desc')
-  // If necessary, you could initiate an AJAX request here
-  // and then do the updating in a callback.
-  //
-  // Update the modal's content.
+  var title = course.getAttribute('data-bs-title')
+  var desc = course.getAttribute('data-bs-desc')
+  
   var modalTitle = exampleModal.querySelector('.modal-title')
   var modalBodyInput = exampleModal.querySelector('.modal-body ')
 

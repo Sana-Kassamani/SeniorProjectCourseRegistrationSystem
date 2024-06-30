@@ -1,18 +1,21 @@
 /*Now the CSS*/
 * {margin: 0; padding: 0;}
+
+  
 .tree{
     overflow-x:auto;
 }
 .tree ul {
-	padding-top: 20px; position: relative;
-	
+	padding-top: 20px; 
+	position: relative;
 	transition: all 0.5s;
 	-webkit-transition: all 0.5s;
 	-moz-transition: all 0.5s;
 }
 
 .tree li {
-	float: left; text-align: center;
+	float: left; 
+	text-align: center;
 	list-style-type: none;
 	position: relative;
 	padding: 20px 5px 0 5px;
@@ -73,49 +76,32 @@ right connector from last child*/
 
 
 
-.normal {
+.normal, .attend {
 	border: 1px solid #ccc;
 	padding: 5px 10px;
 	text-decoration: none;
 	color: #666;
 	font-family: arial, verdana, tahoma;
 	font-size: 11px;
-	display: inline-block;
-	background: #c8e4f8; 
+	display: inline-block; 
 	color: #000; 
 	border: 1px solid #94a0b4;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
-	
 	transition: all 0.5s;
 	-webkit-transition: all 0.5s;
 	-moz-transition: all 0.5s;
 }
+.normal{
+	background: #c8e4f8;
+}
 .attend{
-	border: 1px solid #ccc;
-	padding: 5px 10px;
-	text-decoration: none;
-	color: #666;
-	font-family: arial, verdana, tahoma;
-	font-size: 11px;
-	display: inline-block;
 	background: #64d8cb;
-	color: #000; 
-	border: 1px solid #94a0b4;
-	border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-
-	transition: all 0.5s;
-	-webkit-transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	}
+	
+}
 
 
-
-/* Time for some hover effects
-/*We will apply the hover effect the the lineage of the element also*/
  .normal:hover {
 	background: #4f9cd3; 
 } 
