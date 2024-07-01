@@ -6,10 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "migrate":"npx sequelize-cli db:migrate",
-    "down":"npx sequelize-cli db:migrate:undo",
+    "migrate": "npx sequelize-cli db:migrate",
+    "down": "npx sequelize-cli db:migrate:undo",
     "create-seed": "npx sequelize-cli seed:generate --name",
-    "run-seed":"npx sequelize-cli db:seed --seed",
+    "run-seed": "npx sequelize-cli db:seed --seed",
     "undo-seed": "npx sequelize-cli db:seed:undo --seed",
     "dev": "nodemon server"
   },
@@ -21,6 +21,7 @@
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.18.3",
+    "genetic-js": "^0.1.14",
     "path": "^0.12.7",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",

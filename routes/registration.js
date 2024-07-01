@@ -1,9 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const path = require('path')
+const geneticAlgo =require(path.join(__dirname,'..','controllers','geneticController'))
 
 
-router.route('/')
-    .get((req, res)=> {
-        res.render('registration')})
+
+router.get('/', geneticAlgo.recommendCourses)
+
+
 module.exports = router
