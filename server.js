@@ -1,12 +1,20 @@
-
 const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser');
 const app = express()
+const session = require('express-session')
 const { testDatabaseConnection } = require('./TestConnection'); // Update the path
 const PORT = 5055
-
+const verifyLoggedIn = require('./middlewares/verifyLogin')
 const credentialsMiddleware = require('./middlewares/credentialsMiddleware');
+
+// session middleware
+app.use(session({
+    secret: process.env.SESSION_TOKEN ,
+    resave: false,
+    saveUninitialized: false,
+}));
+
 
 // Use the credentials middleware for all routes
 app.use(credentialsMiddleware);
@@ -16,6 +24,9 @@ app.use(bodyParser.json());
 
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')))
+
+app.use(verifyLoggedIn)
+
 app.use('/transcript',  require(path.join(__dirname, 'routes', 'transcript')))
 app.use('/courseOffering',  require(path.join(__dirname, 'routes', 'courseOffering')))
 app.use('/registration',  require(path.join(__dirname, 'routes', 'registration')))

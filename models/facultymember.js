@@ -44,6 +44,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false 
     },
+    refreshToken: {
+      type: DataTypes.STRING,
+      allowNull: true // Adjust allowNull as per your requirements
+    },
+    Password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     
   }, {
     sequelize,

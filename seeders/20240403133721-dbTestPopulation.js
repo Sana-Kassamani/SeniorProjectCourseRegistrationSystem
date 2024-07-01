@@ -64,17 +64,18 @@ module.exports = {
         updatedAt: new Date()
       }
     ], {});
-
+    const salt = await bcrypt.genSalt(10);
     const AcademicProgramid = await queryInterface.rawSelect('AcademicPrograms', {
       where: {ProgramName: 'testComputer Science', },
     }, ['ProgramID']);
-     const salt = await bcrypt.genSalt(10);
+     
      await queryInterface.bulkInsert('Students', [{
       StudentIdentificationNumber:'20208001',
       FName: 'testJohn',
       LName: 'Doe',
       EmailAddress: 'John-Doe@example.com',
       Password: await bcrypt.hash("hello", salt),
+      refreshToken:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
       ProgramID: AcademicProgramid,
       createdAt: new Date(),
       updatedAt: new Date()
@@ -85,6 +86,7 @@ module.exports = {
       LName: 'Becker',
       EmailAddress: 'Susan-Becker@example.com',
       Password:"hello",
+      refreshToken:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
       ProgramID: AcademicProgramid,
       createdAt: new Date(),
       updatedAt: new Date()
@@ -99,6 +101,8 @@ await queryInterface.bulkInsert('FacultyMembers', [
     LName: 'Dart',
     EmailAddress: 'joe.dart@example.com',
     Flag: true, // Assuming true means instructor
+    refreshToken:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+    Password: await bcrypt.hash("hello", salt),
     FacultyID: facultyid,
     createdAt: new Date(),
     updatedAt: new Date()
@@ -109,6 +113,8 @@ await queryInterface.bulkInsert('FacultyMembers', [
     LName: 'Smith',
     EmailAddress: 'jane.smith@example.com',
     Flag: false, // Assuming false means staff
+    refreshToken:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+    Password: await bcrypt.hash("hello", salt),
     FacultyID: facultyid,
     createdAt: new Date(),
     updatedAt: new Date()

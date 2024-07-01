@@ -43,6 +43,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.FLOAT,
     allowNull: true
     },
+    refreshToken: {
+      type: DataTypes.STRING,
+      allowNull: true // Adjust allowNull as per your requirements
+    },
+   
     Password:{
       type:DataTypes.STRING}
   }, {
