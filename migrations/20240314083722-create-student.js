@@ -33,6 +33,10 @@ module.exports = {
         type: Sequelize.FLOAT,
         allowNull: true
       },
+      Password: { // Adding Password column
+        type: Sequelize.STRING, // Adjust the type as needed
+        allowNull: false // Adjust as per your requirement
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

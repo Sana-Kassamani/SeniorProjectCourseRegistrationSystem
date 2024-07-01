@@ -2,10 +2,12 @@
 
 const academicprogram = require('../models/academicprogram');
 const faculty = require('../models/faculty');
+const bcrypt = require('bcryptjs');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
+
     await queryInterface.bulkInsert('Faculties', [
       {
         FacultyName: 'Faculty of Computer Studies',
@@ -66,12 +68,13 @@ module.exports = {
     const AcademicProgramid = await queryInterface.rawSelect('AcademicPrograms', {
       where: {ProgramName: 'testComputer Science', },
     }, ['ProgramID']);
-
-    await queryInterface.bulkInsert('Students', [{
+     const salt = await bcrypt.genSalt(10);
+     await queryInterface.bulkInsert('Students', [{
       StudentIdentificationNumber:'20208001',
       FName: 'testJohn',
       LName: 'Doe',
       EmailAddress: 'John-Doe@example.com',
+      Password: await bcrypt.hash("hello", salt),
       ProgramID: AcademicProgramid,
       createdAt: new Date(),
       updatedAt: new Date()
@@ -81,6 +84,7 @@ module.exports = {
       FName: 'testSusan',
       LName: 'Becker',
       EmailAddress: 'Susan-Becker@example.com',
+      Password:"hello",
       ProgramID: AcademicProgramid,
       createdAt: new Date(),
       updatedAt: new Date()

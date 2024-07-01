@@ -22,7 +22,7 @@ app.use('/registration',  require(path.join(__dirname, 'routes', 'registration')
 app.use('/courseLoad',  require(path.join(__dirname, 'routes', 'courseLoad')))
 app.use('/contractSheet',  require(path.join(__dirname, 'routes', 'contractSheet')))
 app.use('/credentials',  require(path.join(__dirname, 'routes', 'credentials')))
-app.use('/',  require(path.join(__dirname, 'routes', 'login')))
+app.use(['/login', '/'], require(path.join(__dirname, 'routes', 'login')));
 app.use('/main',  require(path.join(__dirname, 'routes', 'main')))
 
 testDatabaseConnection()

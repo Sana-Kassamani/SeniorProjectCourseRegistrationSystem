@@ -25,6 +25,14 @@
 
               <form action="/login" method="POST">
                 <div class="form-outline form-white mb-4">
+                    
+                    <% if (message) { %>
+                      <div class="alert alert-danger">
+                      <strong>Failure: </strong> <%= message %>
+                      </div>
+                    <% } %>
+                    <p>  </p>
+                    <p>  </p>
                   <label class="form-label" for="ID">ID</label>
                   <input type="text" id="ID" name="ID" class="form-control form-control-lg" required />
                 </div>
@@ -48,7 +56,7 @@
 
                 <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
               </form>
-
+             
               <div class="d-flex justify-content-center text-center mt-4 pt-1">
                 <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
                 <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>

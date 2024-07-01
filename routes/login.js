@@ -4,11 +4,11 @@ const loginController = require(path.join('..', 'controllers', 'loginController'
 const router = express.Router();
 
 // Route to display the login page
-router.get('/login', (req, res) => {
+router.get('/', (req, res) => {
     res.render('login', { message: '' });
 });
 
 // Route to handle login form submission
-router.post('/login', loginController.loginUser);
+router.post('/', loginController.loginUser);
 
 module.exports = router;

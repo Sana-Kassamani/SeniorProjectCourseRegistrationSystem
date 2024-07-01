@@ -1,6 +1,6 @@
 const db = require('../models/index'); // Adjust path as per your project structure
 require('dotenv').config();
-// const bcrypt = require('bcryptjs'); // Uncomment if you plan to use bcrypt
+const bcrypt = require('bcryptjs'); // Uncomment if you plan to use bcrypt
 
 async function getStudentID(studentIdentificationNumber) {
     
@@ -51,6 +51,7 @@ const loginUser = async (req, res) => {
 
        
         const isMatch = await bcrypt.compare(password, student.Password);
+        
         if (!isMatch) {
             const message = "Invalid credentials";
             console.log(message);

@@ -2,7 +2,6 @@
 const {
   Model
 } = require('sequelize');
-
 module.exports = (sequelize, DataTypes) => {
   class Student extends Model {
     /**
@@ -12,9 +11,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Student.belongsTo(models.AcademicProgram,{ foreignKey:{name: "ProgramID" , allowNull: false}})
-
-      Student.belongsToMany(models.Section, {through: models.StudentSection, foreignKey: 'StudentID'});
     }
   }
   Student.init({
@@ -45,12 +41,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     GPA: {
       type: DataTypes.FLOAT,
-      allowNull: true
-    }
+    allowNull: true
+    },
+    Password:{
+      type:DataTypes.STRING}
   }, {
     sequelize,
     modelName: 'Student',
   });
-  
   return Student;
 };
