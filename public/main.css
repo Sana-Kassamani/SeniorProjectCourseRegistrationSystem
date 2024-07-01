@@ -215,5 +215,36 @@ body, html{
    margin: 10px;
    padding-top: 0px;
 }
-
+.form-outline {
+   position: relative;
+ }
+ .form-outline .form-control {
+   padding-right: 2.5rem; /* Adjust to make space for the icon */
+ }
+ .form-outline i {
+   position: absolute;
+   right: 10px;
+   top: 65%;
+   transform: translateY(-50%);
+   cursor: pointer;
+   color: black; /* Set the eye icon color to black */
+   font-size: 1.25rem; /* Adjust icon size as needed */
+ }
+ .form-outline label {
+   text-align: left; /* Align labels to the left */
+   width: 100%; /* Make sure labels take full width */
+   color: white; /* Label text color */
+   font-weight: bold; /* Label font weight */
+ }
+ .custom-control-label::before,
+ .custom-control-input:checked~.custom-control-label::before {
+   border: 1px solid #ced4da; /* Border color */
+   background-color: #343a40; /* Background color */
+ }
+ .custom-control-input:checked~.custom-control-label::after {
+   background-color: #343a40; /* Background color when checked */
+ }
+ .custom-control-input:focus~.custom-control-label::before {
+   box-shadow: none; /* Remove focus box shadow */
+ }
 }

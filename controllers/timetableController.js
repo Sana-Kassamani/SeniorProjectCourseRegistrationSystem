@@ -29,8 +29,8 @@ async function getStudentCourses(studentID, currentSemester) {
     const query = `
       SELECT crs."CourseCode", fm."FName", fm."LName", sec."Semester", sec."Days", sec."Time"
       FROM "StudentSections" ss
-      INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber"
-      INNER JOIN "Courses" crs ON ss."CourseID" = crs."CourseID"
+      INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber" AND ss."CourseID" = sec."CourseID"
+      INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
       INNER JOIN "FacultyMembers" fm ON sec."InstructorID" = fm."MemberID"
       WHERE ss."StudentID" = :studentID 
         AND sec."Semester" = :currentSemester
@@ -92,11 +92,11 @@ function getCurrentSemester() {
 const getData = async (req, res) => {
   try {
     const studentIdentificationNumber = req.params.studentIdentificationNumber || '20208001'; // Get studentIdentificationNumber from request parameters or use default
-    const currentSemester = getCurrentSemester(); // Example: Get the current semester dynamically from your system
-    //const currentSemester = "Spring 2024"
+    //const currentSemester = getCurrentSemester(); // Example: Get the current semester dynamically from your system
+    const currentSemester = "Spring 2024"
     const data = await getStudentData(studentIdentificationNumber, currentSemester);
     
-    //console.log(data);
+    console.log(data);
     res.render('courseLoad', { data }); // Assuming there's a corresponding EJS view file
   } catch (err) {
     console.error(err);
