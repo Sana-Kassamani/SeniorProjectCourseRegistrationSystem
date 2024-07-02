@@ -13,6 +13,7 @@ app.use(session({
     secret: process.env.SESSION_TOKEN ,
     resave: false,
     saveUninitialized: false,
+
 }));
 
 
@@ -35,7 +36,7 @@ app.use('/contractSheet',  require(path.join(__dirname, 'routes', 'contractSheet
 app.use('/credentials',  require(path.join(__dirname, 'routes', 'credentials')))
 app.use(['/login', '/'], require(path.join(__dirname, 'routes', 'login')));
 app.use('/main',  require(path.join(__dirname, 'routes', 'main')))
-
+app.use('/logout',  require(path.join(__dirname, 'routes', 'logout')))
 testDatabaseConnection()
 
 app.listen(PORT, ()=>{
