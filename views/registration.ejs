@@ -22,8 +22,49 @@
             <h2 class="text-white">Registration</h2>
             <p>This is the registarion recommendation table using AI.</p>
             <br>
-            <h6>Fall 2024 </h6> <!--semester ID aw name-->
-
+            <a href="/recommender" ><button type="button" class="btn btn-primary">AI Recommend</button></a>
+            
+            
+            <% if (schedule) {%>
+            <table class="table table-bordered border-dark">
+              <thead class="table-dark"> <!--lazm naamil all colomns same width-->
+                <tr>
+                  <th></th>
+                  <th>Monday</th>
+                  <th>Tuesday</th>
+                  <th>Wednesday</th>
+                  <th>Thursday</th>
+                  <th>Friday</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; %>
+        
+                    <% // Determine unique time slots from data %>
+                    <% const timeSlots = [...new Set(schedule.map(course => course.Time))].sort(); %>
+        
+                    <% timeSlots.forEach(slot => { %>
+                      <tr>
+                        <td><%= slot %></td>
+                        <% daysOfWeek.forEach(day => { %>
+                          <% const coursesForSlot = schedule.filter(course => course.Days.includes(day) && course.Time === slot); %>
+                          <td>
+                            <% if (coursesForSlot.length > 0) { %>
+                              <% coursesForSlot.forEach(course => { %>
+                                <span> Course <%= course.CourseID %> <br></span>
+                                <span> Section <%= course.SectionNumber %>  <br> <br></span>
+                                
+                              <% }); %>
+                            <% } else { %>
+                              <!-- No course scheduled -->
+                            <% } %>
+                          </td>
+                        <% }); %>
+                      </tr>
+                    <% }); %>
+              </tbody>
+            </table>
+            <% } %>
         </div>
          
 </div>

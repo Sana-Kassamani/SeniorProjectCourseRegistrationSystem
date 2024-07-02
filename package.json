@@ -10,6 +10,10 @@
     "down": "npx sequelize-cli db:migrate:undo",
     "create-seed": "npx sequelize-cli seed:generate",
     "run-seed": "npx sequelize-cli db:seed --seed",
+    "migrate": "npx sequelize-cli db:migrate",
+    "down": "npx sequelize-cli db:migrate:undo",
+    "create-seed": "npx sequelize-cli seed:generate --name",
+    "run-seed": "npx sequelize-cli db:seed --seed",
     "undo-seed": "npx sequelize-cli db:seed:undo --seed",
     "dev": "nodemon server"
   },
@@ -27,6 +31,7 @@
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "npm": "^10.8.1",
+    "genetic-js": "^0.1.14",
     "path": "^0.12.7",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
