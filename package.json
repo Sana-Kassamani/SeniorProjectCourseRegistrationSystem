@@ -10,10 +10,6 @@
     "down": "npx sequelize-cli db:migrate:undo",
     "create-seed": "npx sequelize-cli seed:generate",
     "run-seed": "npx sequelize-cli db:seed --seed",
-    "migrate": "npx sequelize-cli db:migrate",
-    "down": "npx sequelize-cli db:migrate:undo",
-    "create-seed": "npx sequelize-cli seed:generate --name",
-    "run-seed": "npx sequelize-cli db:seed --seed",
     "undo-seed": "npx sequelize-cli db:seed:undo --seed",
     "dev": "nodemon server"
   },
