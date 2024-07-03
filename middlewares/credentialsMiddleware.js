@@ -1,8 +1,12 @@
+
+const fs = require('fs'); // Require the fs module
 const { getStudentCredentials } = require('../controllers/credentialsController'); // Adjust the path based on your project structure
 
 module.exports = async (req, res, next) => {
   try {
-    const studentIdentificationNumber = '20208001'; // Example student ID; you can get this from req.params or req.body
+    // Read the studentIdentificationNumber from the text file
+    const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
+
     const student = await getStudentCredentials(studentIdentificationNumber);
 
     if (!student) {
@@ -14,7 +18,7 @@ module.exports = async (req, res, next) => {
     res.locals.credentials = {
       FName: student.FName,
       LName: student.LName,
-      ProgramName:student.ProgramName
+      ProgramName: student.ProgramName
     };
 
     // Continue to the next middleware or route handler

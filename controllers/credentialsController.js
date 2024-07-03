@@ -1,4 +1,5 @@
 const db = require('../models/index'); // Adjust the path based on your project structure
+const fs = require('fs'); // Require the fs module
 
 async function getStudentCredentials(studentIdentificationNumber) {
   try {
@@ -24,18 +25,23 @@ async function getStudentCredentials(studentIdentificationNumber) {
     throw err; // Re-throw the error to handle it in the caller function
   }
 }
+
 const getData = async (req, res) => {
   try {
-    const studentIdentificationNumber = req.params.studentIdentificationNumber || '20208001'; // Get studentIdentificationNumber from request parameters or use default
+    // Read the studentIdentificationNumber from the text file
+    const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
+
     const data = await getStudentCredentials(studentIdentificationNumber);
     
     //console.log(data);
-    res.render('credentials', { data,studentIdentificationNumber }); // Assuming there's a corresponding EJS view file
+    res.render('credentials', { data, studentIdentificationNumber }); // Assuming there's a corresponding EJS view file
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
-  }}
+  }
+}
 
 module.exports = {
-  getStudentCredentials,getData 
+  getStudentCredentials,
+  getData 
 };
