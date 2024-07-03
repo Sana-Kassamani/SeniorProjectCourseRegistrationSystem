@@ -9,11 +9,11 @@ const {getCoursesAttended}=majorController;
 const StudentID=1;
 
 const config = {
-    iterations: 100,//TODO change once populated courses
+    iterations: 600,//TODO change once populated courses
     size: 250,
     crossover: 0.3,
     mutation: 0.3,
-    skip: 20
+    skip: 50
 };
 
 const genetic = Genetic.create();

@@ -4,7 +4,7 @@ const Sequelize = require('sequelize')
 const contractSheetController=require(path.join(__dirname,'..','controllers','getMajorCourses'))
 
 const {getProgram}=contractSheetController
-const Semester='Spring 2024'// TODO shouldn't be hardcoded
+const Semester='Spring 2025'// TODO shouldn't be hardcoded
 const StudentID=1// TODO shouldn't be hardcoded
 
 
