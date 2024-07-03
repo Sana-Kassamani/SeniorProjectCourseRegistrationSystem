@@ -1,15 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>course registration system</title>
+  <title>Course Registration System</title>
   <link rel="stylesheet" href="main.css">
-  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      margin: 0;
+      padding: 20px; /* Adding padding to body */
+    }
+
+    .quote-container {
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(143, 146, 179, 0.1);
+      max-width: 600px;
+      margin: auto; /* Center horizontally */
+      margin-top: 150px; /* Add margin top */
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .quote-container:hover {
+      background-color: #2478b7; /* Change background color on hover */
+      transform: scale(1.05); /* Increase size on hover */
+    }
+
+    .quote {
+      font-size: 24px;
+      font-style: italic;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .author {
+      font-size: 18px;
+      font-weight: bold;
+      color: #777;
+    }
+  </style>
 </head>
 <body>
-<%- include ('NavBar.ejs') -%>
-<div id="wrapper">
-<%- include ('SideBar.ejs') -%>
-</div>
-   
-<script src="sidebar.js"></script>
-</body> 
+  <!-- Navigation and sidebar includes -->
+  <%- include ('NavBar.ejs') -%>
+  <div id="wrapper">
+    <%- include ('SideBar.ejs') -%>
+
+    <!-- Quote section -->
+    <div class="quote-container">
+      <div class="quote">
+        <p>Welcome to our smart registration system! Your journey starts here, where dreams meet dedication and every course shapes a brighter future.</p>
+        <p>Let’s embark on this educational adventure together with enthusiasm and determination.</p>
+      </div>
+      <div class="author">
+        - College Name
+      </div>
+    </div>
+
+    <script src="sidebar.js"></script>
+  </div>
+</body>
+</html>
