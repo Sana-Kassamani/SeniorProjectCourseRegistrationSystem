@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Offering</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="main.css" rel="stylesheet">
+  <link href="course.css" rel="stylesheet">
+  
+</head>
+<body>
+  <%# Include your navigation and sidebar %>
+  <%- include('NavBar.ejs') %>
+  <div id="wrapper">
+    <%# Include Sidebar %>
+    <%- include('SideBar.ejs') %>
+    <div id="page-content-wrapper">
+      <div id="Offering">
+        <h2 class="text-white">Course Offering</h2>
+
+        <!-- Search Form -->
+        <div class="search-container">
+          <form id="searchForm" action="/searchAndRegister" method="GET">
+            <div class="mb-3">
+              <label for="searchInput" class="form-label">Course Code</label>
+              <input type="text" id="searchInput" name="CourseCode" class="form-control" placeholder="Search...">
+            </div>
+            <div class="mb-3">
+              <label for="semesterInput" class="form-label">Semester</label>
+              <input type="text" id="semesterInput" name="Semester" class="form-control" placeholder="Enter semester...">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+          </form>
+        </div>
+
+        <!-- Display Data -->
+        <div class="mt-4">
+          <% if (!data) { %>
+            <p>No data available.</p>
+          <% } else if (data.length === 0) { %>
+            <p>No courses found.</p>
+          <% } else { %>
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Course Name</th>
+                  <th>Credits</th>
+                  <th>Days</th>
+                  <th>Time</th>
+                  <th>Seats</th>
+                  <th>Instructor</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% data.forEach(course => { %>
+                  <tr>
+                    <td><%= course.CourseName %></td>
+                    <td><%= course.Credits %></td>
+                    <td><%= course.Days %></td>
+                    <td><%= course.Time %></td>
+                    <td><%= course.NbOfSeats %></td>
+                    <td><%= course.FName %> <%= course.LName %></td>
+                    <td>
+                      <button class="btn btn-primary btn-sm add-course-btn" data-course-name="<%= course.CourseName %>">Add</button>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Table to display selected courses -->
+      <div id="selectedCourses">
+        <h3>Selected Courses</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Course Name</th>
+              <th>Credits</th>
+              <th>Days</th>
+              <th>Time</th>
+              <th>Instructor</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="selectedCoursesBody">
+            <!-- Selected courses will be added here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- JavaScript to handle adding and removing courses -->
+  <script>
+    // Set to store added course names
+    let addedCourseNames = new Set();
+
+    // Function to handle add course button click
+    document.querySelectorAll('.add-course-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        let courseName = btn.getAttribute('data-course-name');
+        if (!addedCourseNames.has(courseName)) {
+          let courseRow = btn.closest('tr');
+          let courseData = {
+            CourseName: courseRow.querySelector('td:nth-child(1)').innerText,
+            Credits: courseRow.querySelector('td:nth-child(2)').innerText,
+            Days: courseRow.querySelector('td:nth-child(3)').innerText,
+            Time: courseRow.querySelector('td:nth-child(4)').innerText,
+            Instructor: courseRow.querySelector('td:nth-child(6)').innerText
+          };
+          addCourseToTable(courseData);
+          addedCourseNames.add(courseName);
+        } else {
+          alert('Course already added.');
+        }
+      });
+    });
+
+    // Function to add course to the table
+    function addCourseToTable(course) {
+      let tableBody = document.getElementById('selectedCoursesBody');
+      let row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${course.CourseName}</td>
+        <td>${course.Credits}</td>
+        <td>${course.Days}</td>
+        <td>${course.Time}</td>
+        <td>${course.Instructor}</td>
+        <td><button class="btn btn-danger btn-sm remove-course-btn">Remove</button></td>
+      `;
+      tableBody.appendChild(row);
+
+      // Add event listener for remove button
+      let removeBtn = row.querySelector('.remove-course-btn');
+      removeBtn.addEventListener('click', function() {
+        row.remove(); // Remove the row from the table
+        addedCourseNames.delete(course.CourseName); // Remove from set
+      });
+    }
+  </script>
+</body>
+</html>

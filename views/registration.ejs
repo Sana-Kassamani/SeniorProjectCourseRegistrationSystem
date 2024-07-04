@@ -11,9 +11,9 @@
 
 <body>
 
-  <%- include('NavBar.ejs') %> <!-- Ensure correct path -->
+  <% include('NavBar.ejs') %> <!-- Ensure correct path -->
   <div id="wrapper">
-    <%- include('SideBar.ejs') %> <!-- Ensure correct path -->
+    <% include('SideBar.ejs') %> <!-- Ensure correct path -->
 
     <% if (!registrationStatus) { %>
       <div id="page-content-wrapper">
@@ -30,6 +30,9 @@
           <br>
           <h6>Fall 2024</h6> <!-- Replace with actual semester ID and name -->
 
+          <!-- Button to go to search page -->
+          <a href="/searchAndRegister" class="btn btn-primary">Go to Search Page</a>
+          
           <!-- Additional content for registration time -->
         </div>
       </div>

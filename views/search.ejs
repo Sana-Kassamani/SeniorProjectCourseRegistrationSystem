@@ -14,31 +14,7 @@
   
 </head>
 <body>
-  <%# Include your navigation and sidebar %>
-  <%- include('NavBar.ejs') %>
-  <div id="wrapper">
-    <%# Include Sidebar %>
-    <%- include('SideBar.ejs') %>
-    <div id="page-content-wrapper">
-      <div id="Offering">
-        <h2 class="text-white">Course Offering</h2>
-
-        <!-- Search Form -->
-        <div class="search-container">
-          <form id="searchForm" action="/search" method="GET">
-            <div class="mb-3">
-              <label for="searchInput" class="form-label">Course Code</label>
-              <input type="text" id="searchInput" name="CourseCode" class="form-control" placeholder="Search...">
-            </div>
-            <div class="mb-3">
-              <label for="semesterInput" class="form-label">Semester</label>
-              <input type="text" id="semesterInput" name="Semester" class="form-control" placeholder="Enter semester...">
-            </div>
-            <button type="submit" class="btn btn-primary">Search</button>
-          </form>
-        </div>
-
-        <!-- Display Data -->
+    <%- include('courseOffering.ejs') %>
         <div class="mt-4">
           <% if (!data) { %>
             <p>No data available.</p>

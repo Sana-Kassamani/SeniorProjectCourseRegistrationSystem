@@ -7,7 +7,7 @@ const getData = async (req, res) => {
         
         const data = await searchCourse(courseCode, semester);
         console.log(data);
-        res.render('search', { data }); // Assuming there's a corresponding EJS view file
+        res.render('searchAndRegister', { data }); // Assuming there's a corresponding EJS view file
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');
