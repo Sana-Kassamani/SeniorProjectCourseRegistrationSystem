@@ -55,24 +55,24 @@ async function  getInsructorID(MemberIdentificationNumber) {
     }
 }
 
-async function updateRefreshToken(userType, ID, refreshToken) {
-    const tableName = userType === 'student' ? 'Students' : 'FacultyMembers';
-    const updateQuery = `
-        UPDATE "${tableName}"
-        SET "refreshToken" = :refreshToken
-        WHERE "${userType === 'student' ? 'StudentIdentificationNumber' : 'MemberIdentificationNumber'}" = :ID
-    `;
+// async function updateRefreshToken(userType, ID, refreshToken) {
+//     const tableName = userType === 'student' ? 'Students' : 'FacultyMembers';
+//     const updateQuery = `
+//         UPDATE "${tableName}"
+//         SET "refreshToken" = :refreshToken
+//         WHERE "${userType === 'student' ? 'StudentIdentificationNumber' : 'MemberIdentificationNumber'}" = :ID
+//     `;
     
-    try {
-        await db.sequelize.query(updateQuery, {
-            replacements: { ID, refreshToken },
-            type: db.sequelize.QueryTypes.UPDATE
-        });
-    } catch (err) {
-        console.error('Error updating refreshToken', err);
-        throw err;
-    }
-}
+//     try {
+//         await db.sequelize.query(updateQuery, {
+//             replacements: { ID, refreshToken },
+//             type: db.sequelize.QueryTypes.UPDATE
+//         });
+//     } catch (err) {
+//         console.error('Error updating refreshToken', err);
+//         throw err;
+//     }
+// }
 
 
 const loginUser = async (req, res) => {
@@ -109,19 +109,19 @@ const loginUser = async (req, res) => {
             console.log(message);
             return res.render('login', { message });
         }
-        const accessToken = jwt.sign({ userId: user.ID }, process.env.ACCESS_TOKEN, {
-            expiresIn: '15m',
-        });
-        req.session.accessToken = accessToken;
+        // const accessToken = jwt.sign({ userId: user.ID }, process.env.ACCESS_TOKEN, {
+        //     expiresIn: '15m',
+        // });
+        // req.session.accessToken = accessToken;
         
-        const refreshToken = jwt.sign({ userId: user.ID }, process.env.REFRESH_TOKEN);
+        // const refreshToken = jwt.sign({ userId: user.ID }, process.env.REFRESH_TOKEN);
 
-        // Save the refresh token to the user document
-        user.refreshToken = refreshToken;
-        await updateRefreshToken(userType, ID, refreshToken);
+        // // Save the refresh token to the user document
+        // user.refreshToken = refreshToken;
+        // await updateRefreshToken(userType, ID, refreshToken);
         
-        // save username to session
-        req.session.ID = user.ID
+        // // save username to session
+        // req.session.ID = user.ID
         // Successful login
         const message = "Login successful";
         console.log(message);
