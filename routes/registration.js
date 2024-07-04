@@ -1,9 +1,9 @@
-const express = require('express')
-const router = express.Router()
-const path = require('path')
+const express = require('express');
+const router = express.Router();
+const registrationController = require('../controllers/registrationController');
+
+router.get('/', registrationController.getRegistrationPage);
+
+module.exports = router;
 
 
-router.route('/')
-    .get((req, res)=> {
-        res.render('registration')})
-module.exports = router

@@ -7,7 +7,5 @@ const courseOfferingController  = require('../controllers/courseOfferingControll
 
 
 router.route('/')
-    .get((req, res)=> {
-        res.render('courseOffering')})
     .get(courseOfferingController.getData)
 module.exports = router

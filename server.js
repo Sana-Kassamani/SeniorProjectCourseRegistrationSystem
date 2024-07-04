@@ -30,7 +30,8 @@ app.use(verifyLoggedIn)
 
 app.use('/transcript',  require(path.join(__dirname, 'routes', 'transcript')))
 app.use('/courseOffering',  require(path.join(__dirname, 'routes', 'courseOffering')))
-app.use('/registration',  require(path.join(__dirname, 'routes', 'registration')))
+app.use('/search',require(path.join(__dirname, 'routes', 'search')))
+app.use('/registration', require(path.join(__dirname, 'routes', 'registration')));
 app.use('/courseLoad',  require(path.join(__dirname, 'routes', 'courseLoad')))
 app.use('/contractSheet',  require(path.join(__dirname, 'routes', 'contractSheet')))
 app.use('/credentials',  require(path.join(__dirname, 'routes', 'credentials')))
