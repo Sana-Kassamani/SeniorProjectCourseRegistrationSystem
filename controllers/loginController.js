@@ -1,13 +1,13 @@
 const db = require('../models/index'); // Adjust path as per your project structure
 require('dotenv').config();
-const bcrypt = require('bcryptjs'); // Uncomment if you plan to use bcrypt
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fs = require('fs'); // Require the fs module
 
 async function getStudentID(studentIdentificationNumber) {
     try {
         const query = `
-            SELECT "StudentID", "Password","refreshToken"
+            SELECT "StudentID", "Password", "refreshToken"
             FROM "Students"
             WHERE "StudentIdentificationNumber" = :studentIdentificationNumber
         `;
@@ -24,14 +24,14 @@ async function getStudentID(studentIdentificationNumber) {
         return student;
     } catch (err) {
         console.error('Error executing query', err);
-        throw err; // Re-throw the error to handle it in the caller function
+        throw err;
     }
 }
 
 async function getInstructorID(MemberIdentificationNumber) {
     try {
         const query = `
-            SELECT "MemberIdentificationNumber", "Password","refreshToken"
+            SELECT "MemberIdentificationNumber", "Password", "refreshToken"
             FROM "FacultyMembers"
             WHERE "MemberIdentificationNumber" = :MemberIdentificationNumber
         `;
@@ -48,7 +48,7 @@ async function getInstructorID(MemberIdentificationNumber) {
         return member;
     } catch (err) {
         console.error('Error executing query', err);
-        throw err; // Re-throw the error to handle it in the caller function
+        throw err;
     }
 }
 
@@ -104,6 +104,7 @@ const loginUser = async (req, res) => {
             console.log(message);
             return res.render('login', { message });
         }
+
         const accessToken = jwt.sign({ userId: user.ID }, process.env.ACCESS_TOKEN, {
             expiresIn: '15m',
         });
@@ -116,22 +117,31 @@ const loginUser = async (req, res) => {
         await updateRefreshToken(userType, ID, refreshToken);
 
         // Save ID to session
-        req.session.ID = user.ID
+        req.session.ID = user.ID;
+           // Clear the session
+    fs.writeFile('userID.txt', '', (err) => {
+        if (err) {
+            console.log('Error erasing userID.txt:', err);
+        } else {
+            console.log('userID.txt content erased successfully');
+        }
+    });
+
 
         // Save ID to a text file
-        fs.writeFileSync('userID.txt', ID, (err) => {
-            if (err) {
-                console.error('Error writing ID to file', err);
-                throw err;
-            }
+        try {
+            fs.writeFileSync('userID.txt', ID);
             console.log('ID saved to file successfully');
-        });
+        } catch (err) {
+            console.error('Error writing ID to file', err);
+            throw err;
+        }
 
         // Successful login
         const message = "Login successful";
         console.log(message);
         if (userType === 'admin') {
-            // return res.render('mainAdmin', { message })  *************admin main page************************
+            // return res.render('mainAdmin', { message })  // Admin main page
         }
         return res.render('main', { message });
 
