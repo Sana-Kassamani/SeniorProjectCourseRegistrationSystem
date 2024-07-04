@@ -24,18 +24,28 @@ const getOfferredCourses= async ()=>{
         replacements: { semester: Semester, programID: program[0].ProgramID}
       }  );
 
-      const processedSections = offeredSections.map(section => ({
-        ...section,
-        prerequisites: []
-    }));
+       // Create a map to store processed sections
+    const processedSectionsMap = new Map();
 
-      processedSections.forEach(section => {
-        if (section.PrerequisiteID) {
-          section.prerequisites.push(section.PrerequisiteID);
-        }
-      });
+    offeredSections.forEach(section => {
+      const key = `${section.CourseID}_${section.SectionNumber}`;
+      if (!processedSectionsMap.has(key)) {
+        // Initialize the section with an empty array for prerequisites
+        processedSectionsMap.set(key, {
+          ...section,
+          prerequisites: [],
+        });
+      }
+      // Add prerequisite if it exists
+      if (section.PrerequisiteID) {
+        processedSectionsMap.get(key).prerequisites.push(section.PrerequisiteID);
+      }
+    });
 
-      return processedSections;
+    // Convert map values back to an array of sections
+    const processedSections = Array.from(processedSectionsMap.values());
+
+    return processedSections;
     }
     catch(error){
         console.error('Error fetching offered courses:', error);
