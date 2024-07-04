@@ -25,10 +25,11 @@ async function getStudentTranscript(studentID) {
     const query = `
       SELECT crs."CourseCode", crs."Credits", ss."Grade", sec."Semester"
       FROM "StudentSections" ss
-      INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber"
+      INNER JOIN "Sections" sec ON ss."CourseID"=sec."CourseID" AND ss."SectionNumber" = sec."SectionNumber"
       INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
       WHERE ss."StudentID" = :studentID
     `;
+    // TODO add semester as a join condition on sec and ss after updating db accordingly
     return await db.sequelize.query(query, {
       replacements: { studentID },
       type: db.sequelize.QueryTypes.SELECT
