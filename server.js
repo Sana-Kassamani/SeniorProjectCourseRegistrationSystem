@@ -29,7 +29,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(verifyLoggedIn)
 app.use('/transcript',  require(path.join(__dirname, 'routes', 'transcript')))
 app.use('/courseOffering',  require(path.join(__dirname, 'routes', 'courseOffering')))
-app.use('/search',require(path.join(__dirname, 'routes', 'search')))
 app.use('/searchAndRegister',require(path.join(__dirname, 'routes', 'searchAndRegister')))
 app.use('/registration', require(path.join(__dirname, 'routes', 'registration')));
 app.use('/courseLoad',  require(path.join(__dirname, 'routes', 'courseLoad')))
@@ -38,6 +37,8 @@ app.use('/credentials',  require(path.join(__dirname, 'routes', 'credentials')))
 app.use(['/login', '/'], require(path.join(__dirname, 'routes', 'login')));
 app.use('/main',  require(path.join(__dirname, 'routes', 'main')))
 app.use('/logout',  require(path.join(__dirname, 'routes', 'logout')))
+
+app.use('/search',require(path.join(__dirname, 'routes', 'search')))
 testDatabaseConnection()
 
 app.listen(PORT, ()=>{

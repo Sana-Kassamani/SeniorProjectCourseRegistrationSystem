@@ -1,8 +1,5 @@
-// studentData.js
-const fs = require('fs'); // Require the fs module
 const db = require('../models/index'); // Adjust the path based on your project structure
-const getCurrentSemester = require('./semester'); // Import the getCurrentSemester function
-
+const fs = require('fs'); // Require the fs module
 async function getStudentID(studentIdentificationNumber) {
   try {
     const query = `
@@ -30,7 +27,7 @@ async function getStudentID(studentIdentificationNumber) {
 async function getStudentCourses(studentID, currentSemester) {
   try {
     const query = `
-      SELECT crs."CourseCode", fm."FName", fm."LName", sec."Semester", sec."Days", sec."Time", sec."Room"
+      SELECT crs."CourseCode", fm."FName", fm."LName", sec."Semester", sec."Days", sec."Time"
       FROM "StudentSections" ss
       INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber" AND ss."CourseID" = sec."CourseID"
       INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
@@ -69,15 +66,34 @@ async function getStudentData(studentIdentificationNumber, currentSemester) {
     throw err; // Re-throw the error to handle it in the caller function
   }
 }
+function getCurrentSemester() {
+  const currentDate = new Date(); // Get current date
 
+  // Define semester start and end dates (example rules)
+  const semesterRules = [
+    { name: 'Spring', startMonth: 1, startDay: 1, endMonth: 5, endDay: 31 },
+    { name: 'Summer', startMonth: 6, startDay: 1, endMonth: 8, endDay: 31 },
+    { name: 'Fall', startMonth: 9, startDay: 1, endMonth: 12, endDay: 31 }
+    // Add more rules as needed
+  ];
+
+  // Find the current semester based on current date
+  for (const rule of semesterRules) {
+    const start = new Date(currentDate.getFullYear(), rule.startMonth - 1, rule.startDay);
+    const end = new Date(currentDate.getFullYear(), rule.endMonth - 1, rule.endDay);
+
+    if (currentDate >= start && currentDate <= end) {
+      return `${rule.name} ${currentDate.getFullYear()}`; // Return semester name and year
+    }
+  }
+
+  return 'Unknown'; // Return default if no matching semester found
+}
 const getData = async (req, res) => {
   try {
-    // Read the studentIdentificationNumber from the text file
-    const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
-    
-    currentSemester = getCurrentSemester(); // Get the current semester dynamically from your system
-    console.log(currentSemester)
-    currentSemester = "Spring 2024"; // Use static semester for testing
+    const studentIdentificationNumber =fs.readFileSync('userID.txt', 'utf8').trim(); // Get studentIdentificationNumber from request parameters or use default
+    //currentSemester = getCurrentSemester(); 
+    currentSemester = "Spring 2024"
     const data = await getStudentData(studentIdentificationNumber, currentSemester);
     
     console.log(data);

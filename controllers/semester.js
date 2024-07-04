@@ -23,5 +23,9 @@ function getCurrentSemester() {
     return 'Unknown'; // Return default if no matching semester found
   }
   
-  module.exports = getCurrentSemester;
+  
+ 
+  
+  
+  module.exports = {getCurrentSemester};
   

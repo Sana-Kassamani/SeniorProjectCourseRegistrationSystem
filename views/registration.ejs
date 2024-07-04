@@ -11,10 +11,9 @@
 
 <body>
 
-  <% include('NavBar.ejs') %> <!-- Ensure correct path -->
+  <%- include ('NavBar.ejs') -%>
   <div id="wrapper">
-    <% include('SideBar.ejs') %> <!-- Ensure correct path -->
-
+    <%- include ('SideBar.ejs') -%>
     <% if (!registrationStatus) { %>
       <div id="page-content-wrapper">
         <div id="Registration">

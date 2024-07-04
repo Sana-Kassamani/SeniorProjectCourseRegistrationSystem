@@ -8,4 +8,5 @@ const searchAndRegisterController  = require('../controllers/searchAndRegisterCo
 
 router.route('/')
     .get(searchAndRegisterController.getData)
+    .post( searchAndRegisterController.registerCoursesHandler);
 module.exports = router

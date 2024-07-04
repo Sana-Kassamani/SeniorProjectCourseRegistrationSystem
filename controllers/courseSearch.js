@@ -5,7 +5,7 @@ async function searchCourse(courseCode, semester) {
     try {
         // Adjusted query to be case-insensitive and allow partial matches for CourseCode
         const query = `
-            SELECT cr."CourseName", cr."Credits", sec."Days", sec."Time", sec."NbOfSeats", fm."FName", fm."LName"
+            SELECT cr."CourseName", cr."Credits", sec."Days", sec."Time", sec."NbOfSeats", fm."FName", fm."LName",sec."SectionNumber",cr."CourseCode"
             FROM "Sections" sec 
             INNER JOIN "Courses" cr ON sec."CourseID" = cr."CourseID"
             INNER JOIN "FacultyMembers" fm ON sec."InstructorID" = fm."MemberID"
@@ -14,7 +14,7 @@ async function searchCourse(courseCode, semester) {
         `;
         
         const courses = await db.sequelize.query(query, {
-            replacements: { courseCode: `%${courseCode}%`, semester },
+            replacements: { courseCode: `${courseCode}%`, semester },
             type: db.sequelize.QueryTypes.SELECT
         });
 

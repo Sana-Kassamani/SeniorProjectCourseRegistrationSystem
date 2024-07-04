@@ -1,3 +1,6 @@
+
+//remove
+
 const { searchCourse } = require('./courseSearch');
 
 const getData = async (req, res) => {
