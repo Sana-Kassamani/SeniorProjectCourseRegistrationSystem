@@ -7,60 +7,127 @@
   <title>Course Load</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   
   <link href="main.css" rel="stylesheet">
-</head>
-<body>
   
-<%- include ('NavBar.ejs') -%>
-<div id="wrapper">
-<%- include ('SideBar.ejs') -%>
+  <style>
+    .widget {
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+      width: 100%;
+    }
+    .widget:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    .widget table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .widget td, .widget th {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .widget th {
+      background-color: #f1f1f1;
+    }
+    .container {
+      margin-top: 50px;
+    }
+  </style>
+</head>
 
-<div id="page-content-wrapper">
-  <div id="Load">
-    <h2 class="text-white">Course Load</h2>
+<body>
 
-    <table class="table table-bordered border-dark">
-      <thead class="table-dark"> <!--lazm naamil all colomns same width-->
-        <tr>
-          <th></th>
-          <th>Monday</th>
-          <th>Tuesday</th>
-          <th>Wednesday</th>
-          <th>Thursday</th>
-          <th>Friday</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; %>
+  <%- include('NavBar.ejs') %>
+  <div id="wrapper">
+    <%- include('SideBar.ejs') %>
 
-            <% // Determine unique time slots from data
-            const timeSlots = [...new Set(data.map(course => course.Time))].sort(); %>
+    <div id="page-content-wrapper">
+      <div id="Load">
+        <h2 class="text-white">Course Load</h2>
 
-            <% timeSlots.forEach(slot => { %>
-              <tr>
-                <td><%= slot %></td>
-                <% daysOfWeek.forEach(day => { %>
-                  <% const coursesForSlot = data.filter(course => course.Days.includes(day) && course.Time === slot); %>
-                  <td>
-                    <% if (coursesForSlot.length > 0) { %>
-                      <% coursesForSlot.forEach(course => { %>
-                        <%= course.CourseCode %> <br>
-                        <%= course.FName %> <%= course.LName %> <br>
-                      <% }); %>
-                    <% } else { %>
-                      <!-- No course scheduled -->
-                    <% } %>
-                  </td>
-                <% }); %>
-              </tr>
-            <% }); %>
-      </tbody>
-    </table>
+        <div class="container">
+          <div class="row">
+            <!-- Widget for Monday, Wednesday, Friday -->
+            <div class="col-md-6">
+              <div class="widget">
+                <h4>Monday <br>Wednesday <br>Friday</h4>
+                <table>
+                  <tbody>
+                    <% const daysOfWeekMWF = ['Monday']; %>
+                    <% const timeSlotsMWF = [...new Set(data.map(course => course.Time))].sort(); %>
+                    <% timeSlotsMWF.forEach(slot => { %>
+                      <tr>
+                        <td><%= slot %></td>
+                        <% daysOfWeekMWF.forEach(day => { %>
+                          <% const coursesForSlot = data.filter(course => course.Days.includes(day) && course.Time === slot); %>
+                          <td>
+                            <% if (coursesForSlot.length > 0) { %>
+                              <% coursesForSlot.forEach(course => { %>
+                                <%= course.CourseCode %> <br>
+                                <%= course.FName %> <%= course.LName %> <br>
+                              <% }); %>
+                            <% } else { %>
+                              <!-- No course scheduled -->
+                            <% } %>
+                          </td>
+                        <% }); %>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Widget for Tuesday, Thursday -->
+            <div class="col-md-6">
+              <div class="widget">
+                <h4>Tuesday <br>Thursday</h4>
+                <table>
+                  <tbody>
+                    <% const daysOfWeekTT = ['Tuesday']; %>
+                    <% const timeSlotsTT = [...new Set(data.map(course => course.Time))].sort(); %>
+                    <% timeSlotsTT.forEach(slot => { %>
+                      <tr>
+                        <td><%= slot %></td>
+                        <% daysOfWeekTT.forEach(day => { %>
+                          <% const coursesForSlot = data.filter(course => course.Days.includes(day) && course.Time === slot); %>
+                          <td>
+                            <% if (coursesForSlot.length > 0) { %>
+                              <% coursesForSlot.forEach(course => { %>
+                                <%= course.CourseCode %> <br>
+                                <%= course.FName %> <%= course.LName %> <br>
+                              <% }); %>
+                            <% } else { %>
+                              <!-- No course scheduled -->
+                            <% } %>
+                          </td>
+                        <% }); %>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
-   
-</div>
-</div>
-<script src="sidebar.js"></script>
+
+  <script src="sidebar.js"></script>
 
 </body>
+</html>

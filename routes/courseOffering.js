@@ -3,7 +3,8 @@ const router = express.Router()
 const path = require('path')
 
 
-router.route('/')
-    .get((req, res)=> {
-        res.render('courseOffering')})
-module.exports = router
+const { getOfferedCourses } = require('../controllers/getOfferedController');
+
+// Define a route for getting offered courses
+router.get('/', getOfferedCourses);
+module.exports = router;

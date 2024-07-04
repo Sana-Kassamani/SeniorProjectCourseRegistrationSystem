@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const app = express()
 const session = require('express-session')
 const { testDatabaseConnection } = require('./TestConnection'); // Update the path
-const PORT = 5055
+const PORT = 3000
 const verifyLoggedIn = require('./middlewares/verifyLogin')
 const credentialsMiddleware = require('./middlewares/credentialsMiddleware');
 
