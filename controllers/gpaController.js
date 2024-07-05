@@ -59,6 +59,14 @@ async function calculateAndUpdateGPA(studentID) {
         case 'D': gradePoint = 1.0; break;
         case 'F': gradePoint = 0.0; break;
         default: gradePoint = 0.0; break;
+        case 'A+': gradePoint = 4.0; break;
+        case 'A-': gradePoint = 3.7; break;
+        case 'B+': gradePoint = 3.3; break;
+        case 'B-': gradePoint = 2.7; break;
+        case 'C+': gradePoint = 2.3; break;
+        case 'C-': gradePoint = 1.7; break;
+        case 'D+': gradePoint = 1.3; break;
+        case 'D-': gradePoint = 0.7; break;
       }
       totalCredits += credits;
       totalQualityPoints += credits * gradePoint;
