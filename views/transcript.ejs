@@ -142,20 +142,44 @@
                 const credits = parseFloat($(this).find('.credits').val());
                 const grade = $(this).find('.grade').val();
         
-                // Convert grade to GPA scale (assuming a simple example)
-                let gradePoint;
+                // Convert grade to GPA scale
+               let gradePoint;
                 switch (grade.toUpperCase()) {
+                  case 'A+':
+                    gradePoint = 4.0;
+                    break;
                   case 'A':
                     gradePoint = 4.0;
+                    break;
+                  case 'A-':
+                    gradePoint = 3.7;
+                    break;
+                  case 'B+':
+                    gradePoint = 3.3;
                     break;
                   case 'B':
                     gradePoint = 3.0;
                     break;
+                  case 'B-':
+                    gradePoint = 2.7;
+                    break;
+                  case 'C+':
+                    gradePoint = 2.3;
+                    break;
                   case 'C':
                     gradePoint = 2.0;
                     break;
+                  case 'C-':
+                    gradePoint = 1.7;
+                    break;
+                  case 'D+':
+                    gradePoint = 1.3;
+                    break;
                   case 'D':
                     gradePoint = 1.0;
+                    break;
+                  case 'D-':
+                    gradePoint = 0.7;
                     break;
                   case 'F':
                     gradePoint = 0.0;
