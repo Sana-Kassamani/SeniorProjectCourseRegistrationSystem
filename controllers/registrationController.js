@@ -14,7 +14,7 @@ const getRegistrationPage = async (req, res) => {
     });
 
     if (registrationStatus && registrationStatus.status) {
-      res.render('registration', { registrationStatus: true });
+      res.render('registration', { registrationStatus: true, schedule: null});
     } else {
       res.render('registration', { registrationStatus: false });
     }
