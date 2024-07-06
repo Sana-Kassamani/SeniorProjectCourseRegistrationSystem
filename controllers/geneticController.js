@@ -11,12 +11,20 @@ const {getCoursesAttended}=majorController;
 const StudentID=1;
 
 let start = 0
+let time = null
+let days= null
+
 const config = {
-    iterations: 700,//TODO change once populated courses
-    size: 200,
-    crossover: 0.6,
-    mutation: 0.8,
-    skip: 100
+    iterations: 800,//TODO change once populated courses
+    size: 100,
+    crossover: 0.5,
+    mutation: 0.6,
+    skip: 50,
+    elitism: true,
+    creditCount : 18,
+    time: time,
+    days:days
+
 };
 
 const genetic = Genetic.create();
@@ -57,10 +65,13 @@ genetic.select2 = Genetic.Select2.Tournament2;
 //     return Array.from(scheduleSet);
 // };
 genetic.seed = function () {
+    const desiredCreditCount= config.creditCount
     const schedule = new Set();
-    while (schedule.size < this.userData.sections.length / 2) { // Adjust to desired initial size
+    let creditCount=0
+    while (creditCount <= desiredCreditCount) { // Adjust to desired initial size
         const section = this.userData.sections[Math.floor(Math.random() * this.userData.sections.length)];
         schedule.add(section);
+        creditCount += Number(section.Credits)
     }
     return Array.from(schedule);
 };
@@ -86,7 +97,7 @@ genetic.mutate = function (schedule) {
 
 
 genetic.crossover = function (mother, father) {
-    const pivot = Math.floor(Math.random() * mother.length);
+    const pivot = Math.floor(Math.random() * mother.length );
     const sonSet = new Set(mother.slice(0, pivot).concat(father.slice(pivot)));
     const daughterSet = new Set(father.slice(0, pivot).concat(mother.slice(pivot)));
     return [Array.from(sonSet), Array.from(daughterSet)];
@@ -113,11 +124,15 @@ genetic.crossover = function (mother, father) {
 // };
 
 genetic.fitness = function (schedule) {
+    const desiredCreditCount=config.creditCount
     // Calculate fitness based on constraints and preferences
     let fitness = 0;
     //console.log("schedule is ",schedule, "and fitness is :")
     // Check for time conflicts
+    let creditCount=0
     for (let i = 0; i < schedule.length; i++) {
+        creditCount += Number(schedule[i].Credits)
+        
         if(this.userData.userCourseHistory.includes(schedule[i].CourseID))
             {
                 fitness -= 100
@@ -135,9 +150,10 @@ genetic.fitness = function (schedule) {
                     //console.log("same section offered")
                     fitness -= 100
                 }
+            
             if (schedule[i].Days == schedule[j].Days && this.timeConflict(schedule[i], schedule[j])) {
                 
-                fitness -= 300
+                fitness -= 100
                 //console.log("time conflict")
             }
             else{
@@ -150,20 +166,45 @@ genetic.fitness = function (schedule) {
     for (const section of schedule) {
         if (!this.hasTakenPrerequisites(section, this.userData.userCourseHistory)) {
             //console.log("msh a5edd prereq")
-            fitness -= 200
+            fitness -= 100
             //console.log("msh a5ed prereq")
         }
         else{
             //fitness += 1000
         }
     }
-
+    if (creditCount > desiredCreditCount)
+        {
+            fitness-= 200
+        }
+    if(!fitness)
+        {
+            for (let i = 0; i < schedule.length; i++) {
+                if(config.time && this.withinTime(config.time,schedule[i].Time)){
+        
+                    fitness +=20
+                }
+                if(config.days)
+                    {
+                        if(config.days == schedule[i].days)
+                            fitness +=20
+                        else {
+                            fitness -=10
+                        }
+                            
+                    }
+                }
+        }
     // Add fitness for each course in the schedule
     //fitness += schedule.length;
     //console.log(fitness)
     return fitness;
 };
-
+genetic.withinTime= function(desired,course){
+    const [start1, end1] = course.split('-').map(this.parseTime);
+    const [desiredStart, desiredEnd] = desired.split('-').map(this.parseTime);
+    return (desiredStart <= start1 && end1 <= desiredEnd)
+}
 genetic.timeConflict = function (course1, course2) {
     const [start1, end1] = course1.Time.split('-').map(this.parseTime);
     const [start2, end2] = course2.Time.split('-').map(this.parseTime);
@@ -182,7 +223,17 @@ genetic.hasTakenPrerequisites = function (course, userHistory) {
     return course.prerequisites.every(prereq => userHistory.includes(prereq));
 };
 
-genetic.generation = function (pop, generation, stats) {
+genetic.generation = function (pop, generation, stats) { 
+    // const uniqueSchedules = new Set(pop.map(individual => JSON.stringify(individual.entity)));
+    // if (uniqueSchedules.size < pop.length / 2) {
+    //     // Introduce manual mutation to increase diversity
+    //     for (let i = 0; i < pop.length; i++) {
+    //         if (Math.random() < 0.2) { // Adjust the probability of manual mutation
+    //             pop[i].entity = this.mutate(pop[i].entity);
+    //         }
+    //     }
+    // }
+    
     return pop[0].entity.length > 0;  // Stop if we find a valid schedule
 };
 
@@ -267,11 +318,10 @@ const recommendCourses = async function (req,res) {
         // console.log(userData.sections)
         // console.log()
         // console.log(userData.userCourseHistory,"\n\n")
-
+       
         
         genetic.userData = userData;
         genetic.recommendedCourses = []; // Initialize recommendedCourses in genetic object
-
         // Evolve genetic algorithm
         
         genetic.evolve(config, userData);

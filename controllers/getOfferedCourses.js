@@ -14,8 +14,9 @@ const getOfferredCourses= async ()=>{
         const program= await getProgram(StudentID);
         console.log("\n\nprogram in getProgram is ",program,"\n\n")
         const offeredSections= await sequelize.query(
-        `SELECT sec.*, prereq."PrerequisiteID"
-        FROM "Sections" AS sec
+        `SELECT sec.*, prereq."PrerequisiteID", crs."Credits",crs."CourseCode",crs."CourseName"
+        FROM "Sections" AS sec 
+        INNER JOIN "Courses" AS crs ON crs."CourseID"= sec."CourseID"
         INNER JOIN "ProgramCourses" AS pgcrs ON sec."CourseID" = pgcrs."CourseID"
         LEFT JOIN "Prerequisites" AS prereq ON pgcrs."CourseID" = prereq."CourseID"
         WHERE sec."Semester" = :semester
