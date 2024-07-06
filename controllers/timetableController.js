@@ -1,5 +1,5 @@
 const db = require('../models/index'); // Adjust the path based on your project structure
-
+const fs = require('fs'); // Require the fs module
 async function getStudentID(studentIdentificationNumber) {
   try {
     const query = `
@@ -91,9 +91,9 @@ function getCurrentSemester() {
 }
 const getData = async (req, res) => {
   try {
-    const studentIdentificationNumber = req.params.studentIdentificationNumber || '20208001'; // Get studentIdentificationNumber from request parameters or use default
-    //const currentSemester = getCurrentSemester(); // Example: Get the current semester dynamically from your system
-    const currentSemester = "Spring 2024"
+    const studentIdentificationNumber =fs.readFileSync('userID.txt', 'utf8').trim(); // Get studentIdentificationNumber from request parameters or use default
+    //currentSemester = getCurrentSemester(); 
+    currentSemester = "Spring 2024"
     const data = await getStudentData(studentIdentificationNumber, currentSemester);
     
     console.log(data);

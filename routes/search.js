@@ -6,8 +6,6 @@ const courseOfferingController  = require('../controllers/courseOfferingControll
 // GET request for searching courses
 
 
-const { getOfferedCourses } = require('../controllers/getOfferedController');
-
-// Define a route for getting offered courses
-router.get('/', getOfferedCourses);
-module.exports = router;
+router.route('/')
+    .get(courseOfferingController.getData)
+module.exports = router

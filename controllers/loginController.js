@@ -1,14 +1,13 @@
 const db = require('../models/index'); // Adjust path as per your project structure
 require('dotenv').config();
-const bcrypt = require('bcryptjs'); // Uncomment if you plan to use bcrypt
-const jwt = require('jsonwebtoken')
-
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const fs = require('fs'); // Require the fs module
 
 async function getStudentID(studentIdentificationNumber) {
-    
     try {
         const query = `
-            SELECT "StudentID", "Password","refreshToken"
+            SELECT "StudentID", "Password", "refreshToken"
             FROM "Students"
             WHERE "StudentIdentificationNumber" = :studentIdentificationNumber
         `;
@@ -25,16 +24,14 @@ async function getStudentID(studentIdentificationNumber) {
         return student;
     } catch (err) {
         console.error('Error executing query', err);
-        throw err; // Re-throw the error to handle it in the caller function
+        throw err;
     }
 }
 
-
-async function  getInsructorID(MemberIdentificationNumber) {
-    
+async function getInstructorID(MemberIdentificationNumber) {
     try {
         const query = `
-            SELECT "MemberIdentificationNumber", "Password","refreshToken"
+            SELECT "MemberIdentificationNumber", "Password", "refreshToken"
             FROM "FacultyMembers"
             WHERE "MemberIdentificationNumber" = :MemberIdentificationNumber
         `;
@@ -51,7 +48,7 @@ async function  getInsructorID(MemberIdentificationNumber) {
         return member;
     } catch (err) {
         console.error('Error executing query', err);
-        throw err; // Re-throw the error to handle it in the caller function
+        throw err;
     }
 }
 
@@ -62,7 +59,7 @@ async function updateRefreshToken(userType, ID, refreshToken) {
         SET "refreshToken" = :refreshToken
         WHERE "${userType === 'student' ? 'StudentIdentificationNumber' : 'MemberIdentificationNumber'}" = :ID
     `;
-    
+
     try {
         await db.sequelize.query(updateQuery, {
             replacements: { ID, refreshToken },
@@ -74,9 +71,8 @@ async function updateRefreshToken(userType, ID, refreshToken) {
     }
 }
 
-
 const loginUser = async (req, res) => {
-    const { ID, password} = req.body;
+    const { ID, password } = req.body;
     const userType = req.body.userType;
     console.log("Received ID:", ID); // Log received ID
     console.log("Received password:", password); // Log received password
@@ -86,14 +82,14 @@ const loginUser = async (req, res) => {
         console.log(message);
         return res.render('login', { message });
     }
-   
+
     try {
         let user;
 
         if (userType === 'student') {
-          user = await getStudentID(ID);
+            user = await getStudentID(ID);
         } else if (userType === 'admin') {
-          user = await  getInsructorID(ID);
+            user = await getInstructorID(ID);
         }
         if (!user) {
             const message = "User not found";
@@ -101,37 +97,55 @@ const loginUser = async (req, res) => {
             return res.render('login', { message });
         }
 
-       
         const isMatch = await bcrypt.compare(password, user.Password);
-        
+
         if (!isMatch) {
             const message = "Invalid credentials";
             console.log(message);
             return res.render('login', { message });
         }
+
         const accessToken = jwt.sign({ userId: user.ID }, process.env.ACCESS_TOKEN, {
             expiresIn: '15m',
         });
         req.session.accessToken = accessToken;
-        
+
         const refreshToken = jwt.sign({ userId: user.ID }, process.env.REFRESH_TOKEN);
 
         // Save the refresh token to the user document
         user.refreshToken = refreshToken;
         await updateRefreshToken(userType, ID, refreshToken);
-        
-        // save username to session
-        req.session.ID = user.ID
+
+        // Save ID to session
+        req.session.ID = user.ID;
+           // Clear the session
+    fs.writeFile('userID.txt', '', (err) => {
+        if (err) {
+            console.log('Error erasing userID.txt:', err);
+        } else {
+            console.log('userID.txt content erased successfully');
+        }
+    });
+
+
+        // Save ID to a text file
+        try {
+            fs.writeFileSync('userID.txt', ID);
+            console.log('ID saved to file successfully');
+        } catch (err) {
+            console.error('Error writing ID to file', err);
+            throw err;
+        }
+
         // Successful login
         const message = "Login successful";
         console.log(message);
-        if (userType === 'admin'){ 
-            // return res.render('mainAdmin', { message })  *************admin main page************************
+        if (userType === 'admin') {
+            // return res.render('mainAdmin', { message })  // Admin main page
         }
         return res.render('main', { message });
 
-       
-    } catch (err) { 
+    } catch (err) {
         console.error(err.message);
         return res.status(500).json({ message: 'Server error' });
     }

@@ -1,11 +1,9 @@
-const express = require('express')
-const router = express.Router()
-const path = require('path')
-const registration =require(path.join(__dirname,'..','controllers','registration'))
+const express = require('express');
+const router = express.Router();
+const registrationController = require('../controllers/registrationController');
+
+router.get('/', registrationController.getRegistrationPage);
+
+module.exports = router;
 
 
-
-router.get('/', registration.getRegistration)
-
-
-module.exports = router

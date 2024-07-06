@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,20 +5,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registration</title>
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="main.css" rel="stylesheet">
 </head>
+
 <body>
 
-<%- include ('NavBar.ejs') -%>
-<div id="wrapper">
-<%- include ('SideBar.ejs') -%>
-
-<div id="page-content-wrapper">
+  <%- include ('NavBar.ejs') -%>
+  <div id="wrapper">
+    <%- include ('SideBar.ejs') -%>
+    <% if (!registrationStatus) { %>
+      <div id="page-content-wrapper">
         <div id="Registration">
+          <h2 class="text-white">Registration</h2>
+          <p>This is not registration time.</p>
+        </div>
+      </div>
+    <% } else { %>
+      <div id="page-content-wrapper">
+        <div id="Registration">
+          <h2 class="text-white">Registration</h2>
+          <p>This is the registration recommendation table using AI.</p>
+          <br>
+          <h6>Fall 2024</h6> <!-- Replace with actual semester ID and name -->
+
+          <!-- Button to go to search page -->
+          <a href="/searchAndRegister" class="btn btn-primary">Press to start registration process </a>
+          
+          <!-- Additional content for registration time -->
             <h2 class="text-white">Registration</h2>
-            <p>This is the registarion recommendation table using AI.</p>
+           
             <br>
             <a href="/recommender" ><button type="button" class="btn btn-primary">AI Recommend</button></a>
             
@@ -66,8 +80,12 @@
             </table>
             <% } %>
         </div>
-         
-</div>
-</div>
-<script src="sidebar.js"></script>
+      </div>
+    <% } %>
+
+  </div>
+
+  <script src="sidebar.js"></script>
 </body>
+
+</html>
