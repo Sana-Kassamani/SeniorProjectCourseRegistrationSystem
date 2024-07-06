@@ -65,7 +65,8 @@
                           <td>
                             <% if (coursesForSlot.length > 0) { %>
                               <% coursesForSlot.forEach(course => { %>
-                                <span> Course <%= course.CourseID %> <br></span>
+                                <span> <%= course.CourseCode %> <br></span>
+                                <span> <%= course.CourseName %> <br></span>
                                 <span> Section <%= course.SectionNumber %>  <br> <br></span>
                                 
                               <% }); %>

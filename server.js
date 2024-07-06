@@ -9,12 +9,12 @@ const verifyLoggedIn = require('./middlewares/verifyLogin')
 const credentialsMiddleware = require('./middlewares/credentialsMiddleware');
 
 // session middleware
-app.use(session({
-    secret: process.env.SESSION_TOKEN ,
-    resave: false,
-    saveUninitialized: false,
+// app.use(session({
+//     secret: process.env.SESSION_TOKEN ,
+//     resave: false,
+//     saveUninitialized: false,
 
-}));
+// }));
 
 
 // Use the credentials middleware for all routes

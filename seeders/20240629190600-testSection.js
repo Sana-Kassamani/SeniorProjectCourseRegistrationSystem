@@ -46,6 +46,7 @@ module.exports = {
           StudentID: 2,
           CourseID: 1,
           SectionNumber: 2,
+          Semester: 'Spring 2024',
           Grade: 'A',
           createdAt: new Date(),
           updatedAt: new Date()
@@ -58,6 +59,7 @@ module.exports = {
           StudentID: 2,
           CourseID: 2,
           SectionNumber: 1,
+          Semester: 'Spring 2024',
           Grade: 'A',
           createdAt: new Date(),
           updatedAt: new Date()
@@ -83,21 +85,26 @@ module.exports = {
       await queryInterface.bulkDelete('StudentSections', {
         StudentID: 2,
         CourseID: 2,
-        SectionNumber: 1,// Adjust criteria based on what was inserted in `up`
+        SectionNumber: 1,
+        Semester: 'Spring 2024',// Adjust criteria based on what was inserted in `up`
       }, { transaction });
+
       await queryInterface.bulkDelete('StudentSections', {
         StudentID: 2,
         CourseID: 1,
-        SectionNumber: 2,// Adjust criteria based on what was inserted in `up`
+        SectionNumber: 2,
+        Semester: 'Spring 2024',// Adjust criteria based on what was inserted in `up`
       }, { transaction });
       // Similarly adjust for Sections table
       await queryInterface.bulkDelete('Sections', {
         SectionNumber: 1,
-        CourseID: 2,// Adjust criteria based on what was inserted in `up`
+        CourseID: 2,
+        Semester: 'Spring 2024',// Adjust criteria based on what was inserted in `up`
       }, { transaction });
       await queryInterface.bulkDelete('Sections', {
         SectionNumber: 1,
-        CourseID: 2,// Adjust criteria based on what was inserted in `up`
+        CourseID: 2,
+        Semester: 'Spring 2024',// Adjust criteria based on what was inserted in `up`
       }, { transaction });
 
       // Commit the transaction for rollback
