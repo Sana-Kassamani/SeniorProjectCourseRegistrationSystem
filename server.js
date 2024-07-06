@@ -8,6 +8,9 @@ const PORT = process.env.PORT
 const verifyLoggedIn = require('./middlewares/verifyLogin')
 const credentialsMiddleware = require('./middlewares/credentialsMiddleware');
 
+
+app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')))
 // session middleware
 app.use(session({
     secret: process.env.SESSION_TOKEN ,
@@ -23,8 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'public')))
+
 
 app.use(verifyLoggedIn)
 app.use('/transcript',  require(path.join(__dirname, 'routes', 'transcript')))
