@@ -325,7 +325,7 @@ const recommendCourses = async function (req,res) {
         // Evolve genetic algorithm
         
         genetic.evolve(config, userData);
-        res.render("registration",{schedule: recommendedCourses});
+        res.render("registration",{registrationStatus: true, schedule: recommendedCourses});
     } catch (error) {
         console.log('Error fetching recommending courses:', error);
         res.send('Error recommending courses');
