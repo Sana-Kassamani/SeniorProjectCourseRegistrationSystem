@@ -15,7 +15,33 @@ module.exports = {
           Room: 'CA210',
           NbOfSeats: 20,
           Mode: 'In-Person',
-          CourseID: 3,
+          CourseID: 9,
+          InstructorID: 1,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          SectionNumber: 2,
+          Semester: 'Spring 2025',
+          Days: 'Monday, Wednesday, Friday',
+          Time: '9-10',
+          Room: 'CC218',
+          NbOfSeats: 20,
+          Mode: 'In-Person',
+          CourseID: 9,
+          InstructorID: 1,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        {
+          SectionNumber: 1,
+          Semester: 'Spring 2025',
+          Days: 'Tuesday, Thursday',
+          Time: '8-9',
+          Room: 'CC123',
+          NbOfSeats: 20,
+          Mode: 'In-Person',
+          CourseID: 4,
           InstructorID: 1,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -25,36 +51,10 @@ module.exports = {
           Semester: 'Spring 2025',
           Days: 'Tuesday, Thursday',
           Time: '9-10',
-          Room: 'CA210',
+          Room: 'CA321',
           NbOfSeats: 20,
           Mode: 'In-Person',
-          CourseID: 3,
-          InstructorID: 1,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          SectionNumber: 1,
-          Semester: 'Spring 2025',
-          Days: 'Tuesday, Thursday',
-          Time: '9-10',
-          Room: 'CA210',
-          NbOfSeats: 20,
-          Mode: 'In-Person',
-          CourseID: 8,
-          InstructorID: 1,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        },
-        {
-          SectionNumber: 1,
-          Semester: 'Spring 2025',
-          Days: 'Tuesday, Thursday',
-          Time: '10-11',
-          Room: 'CA209',
-          NbOfSeats: 20,
-          Mode: 'In-Person',
-          CourseID: 14,
+          CourseID: 4,
           InstructorID: 1,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -64,20 +64,20 @@ module.exports = {
           Semester: 'Spring 2025',
           Days: 'Monday, Wednesday, Friday',
           Time: '10-11',
-          Room: 'CA209',
+          Room: 'CA212',
           NbOfSeats: 20,
           Mode: 'In-Person',
-          CourseID: 16,
+          CourseID: 5,
           InstructorID: 1,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          SectionNumber: 1,
+          SectionNumber: 2,
           Semester: 'Spring 2025',
           Days: 'Monday, Wednesday, Friday',
-          Time: '11-12',
-          Room: 'CA231A',
+          Time: '3-4',
+          Room: 'CC222',
           NbOfSeats: 20,
           Mode: 'In-Person',
           CourseID: 11,
@@ -86,14 +86,14 @@ module.exports = {
           updatedAt: new Date()
         },
         {
-          SectionNumber: 3,
+          SectionNumber: 1,
           Semester: 'Spring 2025',
-          Days: 'Monday, Wednesday, Friday',
+          Days: 'Tuesday, Thursday',
           Time: '1-2',
           Room: 'CA231A',
           NbOfSeats: 20,
           Mode: 'In-Person',
-          CourseID: 2,
+          CourseID: 1,
           InstructorID: 1,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -101,12 +101,12 @@ module.exports = {
         {
           SectionNumber: 1,
           Semester: 'Spring 2025',
-          Days: 'Tuesday, Thursday',
-          Time: '2-3',
+          Days: 'Monday, Wednesday, Friday',
+          Time: '9-10',
           Room: 'CA231A',
           NbOfSeats: 20,
           Mode: 'In-Person',
-          CourseID: 10,
+          CourseID: 2,
           InstructorID: 1,
           createdAt: new Date(),
           updatedAt: new Date()
@@ -135,54 +135,55 @@ module.exports = {
     try {
       
       await queryInterface.bulkDelete('Sections', {
-        CourseID: 3,
+        CourseID: 9,
         SectionNumber: 1,
         Semeseter:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
-        CourseID: 3,
+        CourseID: 9,
         SectionNumber: 2,
         Semeseter:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
-        CourseID: 8,
+        CourseID: 4,
         SectionNumber: 1,
         Semeseter:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
-        CourseID: 14,
-        SectionNumber: 1,
+        CourseID: 4,
+        SectionNumber: 2,
         Semeseter:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
-        CourseID: 16,
+        CourseID: 5,
         SectionNumber: 1,
         Semeseter:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
         CourseID: 11,
+        SectionNumber: 2,
+        Semeseter:'Spring 2025'
+      }, { transaction });
+
+      await queryInterface.bulkDelete('Sections', {
+        CourseID: 1,
         SectionNumber: 1,
         Semeseter:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
         CourseID: 2,
-        SectionNumber: 3,
-        Semeseter:'Spring 2025'
-      }, { transaction });
-
-      await queryInterface.bulkDelete('Sections', {
-        CourseID: 10,
         SectionNumber: 1,
         Semeseter:'Spring 2025'
       }, { transaction });
 
       await transaction.commit();
+      
     } catch (error) {
       // If an error occurs during rollback, rollback the rollback!
       await transaction.rollback();

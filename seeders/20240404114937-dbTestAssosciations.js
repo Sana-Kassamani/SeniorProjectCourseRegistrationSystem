@@ -121,6 +121,7 @@ module.exports = {
       {
         StudentID: 1,
         CourseID: 1,
+        Semester: 'Fall 2024',
         SectionNumber: 1,
         Grade: 'A', // Example grade
         createdAt: new Date(),
@@ -129,6 +130,7 @@ module.exports = {
       {
         StudentID: 1,
         CourseID: 2,
+        Semester: 'Spring 2024',
         SectionNumber: 2,
         Grade: 'B+', // Example grade
         createdAt: new Date(),
