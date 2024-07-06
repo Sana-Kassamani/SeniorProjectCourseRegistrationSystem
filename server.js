@@ -4,17 +4,17 @@ const bodyParser = require('body-parser');
 const app = express()
 const session = require('express-session')
 const { testDatabaseConnection } = require('./TestConnection'); // Update the path
-const PORT = 3000
+const PORT = process.env.PORT
 const verifyLoggedIn = require('./middlewares/verifyLogin')
 const credentialsMiddleware = require('./middlewares/credentialsMiddleware');
 
 // session middleware
-// app.use(session({
-//     secret: process.env.SESSION_TOKEN ,
-//     resave: false,
-//     saveUninitialized: false,
+app.use(session({
+    secret: process.env.SESSION_TOKEN ,
+    resave: false,
+    saveUninitialized: false,
 
-// }));
+}));
 
 
 // Use the credentials middleware for all routes
@@ -39,7 +39,6 @@ app.use(['/login', '/'], require(path.join(__dirname, 'routes', 'login')));
 app.use('/main',  require(path.join(__dirname, 'routes', 'main')))
 app.use('/logout',  require(path.join(__dirname, 'routes', 'logout')))
 
-app.use('/search',require(path.join(__dirname, 'routes', 'search')))
 testDatabaseConnection()
 
 app.listen(PORT, ()=>{
