@@ -71,7 +71,7 @@ async function getStudentID(studentIdentificationNumber) {
         return student.StudentID;
     } catch (err) {
         console.error('Error executing query', err);
-        throw err; // Re-throw the error to handle it in the caller function
+        throw err; 
     }
 }
 
@@ -95,28 +95,61 @@ async function getCourseID(courseCode) {
         return course.CourseID;
     } catch (err) {
         console.error('Error executing query', err);
-        throw err; // Re-throw the error to handle it in the caller function
+        throw err; 
     }
 }
-///////////////////////////////////////add semester////////////////////////////////////////////////
+
 async function registerStudentInCourse(studentID, courseID, sectionNumber) {
     try {
-        const query = `
+        // Check if seats are available
+        const checkQuery = `
+            SELECT "NbOfSeats", "reserved"
+            FROM "Sections"
+            WHERE "CourseID" = :courseID AND "SectionNumber" = :sectionNumber
+        `;
+        const [section] = await db.sequelize.query(checkQuery, {
+            replacements: { courseID, sectionNumber },
+            type: db.sequelize.QueryTypes.SELECT
+        });
+
+        if (!section) {
+            console.log('Section not found');
+            return { success: false, message: 'Section not found' };
+        }
+
+        if (section.nbOfSeats <= section.reserved) {
+            console.log('No available seats');
+            return { success: false, message: 'No available seats' };
+        }
+
+        // Register student in the course
+        const registerQuery = `
             INSERT INTO "StudentSections" ("StudentID", "CourseID", "SectionNumber", "createdAt", "updatedAt") 
             VALUES (:studentID, :courseID, :sectionNumber, NOW(), NOW())
         `;
-        const result = await db.sequelize.query(query, {
+        await db.sequelize.query(registerQuery, {
             replacements: { studentID, courseID, sectionNumber },
             type: db.sequelize.QueryTypes.INSERT
         });
-        console.log('Course registration saved');
-        return result[0]; // Assuming the query returns the inserted row(s)
+
+        // Update reserved seats
+        const updateQuery = `
+            UPDATE "Sections"
+            SET "reserved" = "reserved" + 1
+            WHERE "CourseID" = :courseID AND "SectionNumber" = :sectionNumber
+        `;
+        await db.sequelize.query(updateQuery, {
+            replacements: { courseID, sectionNumber },
+            type: db.sequelize.QueryTypes.UPDATE
+        });
+
+        console.log('Course registration saved and reserved seats updated');
+        return { success: true, message: 'Registration successful' };
     } catch (err) {
         console.error('Error saving course registration', err);
         throw err;
     }
 }
-
 
 async function registerCourses(courses) {
     const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
@@ -125,14 +158,16 @@ async function registerCourses(courses) {
     for (const element of courses) {
         const courseID = await getCourseID(element.courseCode);
         const secNB = element.sectionNumber;
-        ///////////////////////////////////////add semester////////////////////////////////////////////////
-        await registerStudentInCourse(studentID, courseID, secNB);
+        
+        const result = await registerStudentInCourse(studentID, courseID, secNB);
+        if (!result.success) {
+            throw new Error(result.message);
+        }
     }
 
-    return true; // Return true if registration is successful
+    return true; 
 }
 
-// Function to handle course registration
 const registerCoursesHandler = async (req, res) => {
     try {
         const { courses } = req.body;
@@ -149,7 +184,7 @@ const registerCoursesHandler = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
+        res.status(500).json({ success: false, error: error.message });
     }
 };
 

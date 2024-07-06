@@ -50,7 +50,12 @@ module.exports = (sequelize, DataTypes) => {
     Mode: {
       type: DataTypes.STRING,
       allowNull: false
-    }
+    },
+    reserved:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+  }
   }, {
     sequelize,
     modelName: 'Section',
