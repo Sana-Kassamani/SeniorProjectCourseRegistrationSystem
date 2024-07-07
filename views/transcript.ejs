@@ -17,7 +17,7 @@
       padding: 15px;
       background-color: #f8f9fa;
       border-radius: 8px;
-       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
@@ -36,9 +36,9 @@
 
 <body>
 
-  <%- include ('NavBar.ejs') -%>
+  <%- include('NavBar.ejs') -%>
     <div id="wrapper">
-      <%- include ('SideBar.ejs') -%>
+      <%- include('SideBar.ejs') -%>
 
         <div id="page-content-wrapper">
           <div id="Transcript">
@@ -86,15 +86,15 @@
                             <% }) %>
                         </tbody>
                       </table>
+                      <h6>GPA: <span class="semester-gpa" data-semester="<%= semester %>">Calculating...</span></h6>
                     </div>
                     <% } %>
               </div>
-              <h3 class="text-center mt-4">GPA: <span id="gpa-display">
+              <h3 class="text-center mt-4">Cumulative GPA: <span id="gpa-display">
                   <%= data.gpa %>
                 </span></h3>
 
             </div>
-
 
             <button class="btn btn-primary mt-4" onclick="showGpaCalculation()">Calculate GPA</button>
 
@@ -111,18 +111,20 @@
                     </tr>
                   </thead>
                   <tbody id="gpa-calculation-body">
-                    <% const latestSemester = Object.keys(semesters).sort().pop(); %>
-                    <% semesters[latestSemester].forEach(function(course) { %>
-                      <tr>
-                        <td><%= course.CourseCode %></td>
-                        <td>
-                          <input type="number" class="form-control credits" placeholder="Credits" required>
-                        </td>
-                        <td>
-                          <input type="text" class="form-control grade" placeholder="Grade" required>
-                        </td>
-                      </tr>
-                    <% }); %>
+                    <% const latestSemester=Object.keys(semesters).sort().pop(); %>
+                      <% semesters[latestSemester].forEach(function(course) { %>
+                        <tr>
+                          <td>
+                            <%= course.CourseCode %>
+                          </td>
+                          <td>
+                            <input type="number" class="form-control credits" placeholder="Credits" required>
+                          </td>
+                          <td>
+                            <input type="text" class="form-control grade" placeholder="Grade" required>
+                          </td>
+                        </tr>
+                        <% }); %>
                   </tbody>
                 </table>
                 <button class="btn btn-primary" onclick="calculateGPA()">Calculate</button>
@@ -130,26 +132,28 @@
               </div>
             </div>
           </div>
-        
-          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+          <!-- Hidden element to store JSON data -->
+          <div id="semester-data" data-semesters='<%= JSON.stringify(semesters) %>' style="display: none;"></div>
+
           <script>
             function showGpaCalculation() {
               document.getElementById('gpa-calculation').style.display = 'block';
             }
-        
+
             function calculateGPA() {
               // Initialize variables for GPA calculation
               let totalCredits = 0;
               let totalQualityPoints = 0;
-        
+
               // Loop through each row in the GPA calculation table
-              $('#gpa-calculation-body tr').each(function() {
+              $('#gpa-calculation-body tr').each(function () {
                 // Get credits and grade entered by user
                 const credits = parseFloat($(this).find('.credits').val());
                 const grade = $(this).find('.grade').val();
-        
-                // Convert grade to GPA scale
-               let gradePoint;
+
+                // Convert grade to GPA scale (assuming a simple example)
+                let gradePoint;
                 switch (grade.toUpperCase()) {
                   case 'A+':
                     gradePoint = 4.0;
@@ -194,23 +198,101 @@
                     gradePoint = 0.0; // Handle other grades as needed
                     break;
                 }
-        
+
                 // Calculate quality points for this course
                 const qualityPoints = credits * gradePoint;
-        
+
                 // Accumulate total credits and quality points
                 totalCredits += credits;
                 totalQualityPoints += qualityPoints;
               });
-        
+
               // Calculate GPA
               const gpa = totalQualityPoints / totalCredits;
-        
+
               // Display calculated GPA
               $('#calculated-gpa').text(gpa.toFixed(2));
             }
+
+            function calculateSemesterGPA(courses) {
+              let totalCredits = 0;
+              let totalQualityPoints = 0;
+
+              courses.forEach(course => {
+                const credits = course.Credits;
+                const grade = course.Grade;
+
+                let gradePoint;
+                switch (grade.toUpperCase()) {
+                  case 'A+':
+                    gradePoint = 4.0;
+                    break;
+                  case 'A':
+                    gradePoint = 4.0;
+                    break;
+                  case 'A-':
+                    gradePoint = 3.7;
+                    break;
+                  case 'B+':
+                    gradePoint = 3.3;
+                    break;
+                  case 'B':
+                    gradePoint = 3.0;
+                    break;
+                  case 'B-':
+                    gradePoint = 2.7;
+                    break;
+                  case 'C+':
+                    gradePoint = 2.3;
+                    break;
+                  case 'C':
+                    gradePoint = 2.0;
+                    break;
+                  case 'C-':
+                    gradePoint = 1.7;
+                    break;
+                  case 'D+':
+                    gradePoint = 1.3;
+                    break;
+                  case 'D':
+                    gradePoint = 1.0;
+                    break;
+                  case 'D-':
+                    gradePoint = 0.7;
+                    break;
+                  case 'F':
+                    gradePoint = 0.0;
+                    break;
+                  default:
+                    gradePoint = 0.0;
+                    break;
+                }
+
+                const qualityPoints = credits * gradePoint;
+
+                totalCredits += credits;
+                totalQualityPoints += qualityPoints;
+              });
+
+              const gpa = totalQualityPoints / totalCredits;
+              return gpa.toFixed(2);
+            }
+
+            $(document).ready(function () {
+              // Retrieve and parse the JSON data
+              const semesters = JSON.parse($('#semester-data').attr('data-semesters'));
+
+              $('.semester-widget').each(function () {
+                const semester = $(this).find('.semester-heading').text().trim();
+                const courses = semesters[semester];
+
+                if (courses) {
+                  const semesterGPA = calculateSemesterGPA(courses);
+                  $(this).find('.semester-gpa').text(semesterGPA);
+                }
+              });
+            });
           </script>
-          </div>
         </div>
     </div>
 </body>
