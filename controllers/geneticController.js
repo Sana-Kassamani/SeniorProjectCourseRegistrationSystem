@@ -21,7 +21,7 @@ const config = {
     mutation: 0.6,
     skip: 50,
     elitism: true,
-    creditCount : 18,
+    creditCount : 12,
     time: time,
     days:days
 
@@ -186,7 +186,7 @@ genetic.fitness = function (schedule) {
                 }
                 if(config.days)
                     {
-                        if(config.days == schedule[i].days)
+                        if(schedule[i].days.include(config.days))
                             fitness +=20
                         else {
                             fitness -=10
@@ -315,8 +315,7 @@ const recommendCourses = async function (req,res) {
             sections,
             userCourseHistory
         };
-        // console.log(userData.sections)
-        // console.log()
+        
         // console.log(userData.userCourseHistory,"\n\n")
        
         
@@ -327,7 +326,7 @@ const recommendCourses = async function (req,res) {
         genetic.evolve(config, userData);
         res.render("registration",{registrationStatus: true, schedule: recommendedCourses});
     } catch (error) {
-        console.log('Error fetching recommending courses:', error);
+        console.log('Error  recommending courses:', error);
         res.send('Error recommending courses');
     }
 };

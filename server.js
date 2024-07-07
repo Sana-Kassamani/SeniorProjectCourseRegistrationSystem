@@ -29,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(verifyLoggedIn)
 app.use('/transcript',  require(path.join(__dirname, 'routes', 'transcript')))
 app.use('/courseOffering',  require(path.join(__dirname, 'routes', 'courseOffering')))
+app.use('/searchOffered',require(path.join(__dirname, 'routes', 'searchOffered')) )
 app.use('/searchAndRegister',require(path.join(__dirname, 'routes', 'searchAndRegister')))
 app.use('/registration', require(path.join(__dirname, 'routes', 'registration')));
 app.use('/recommender',  require(path.join(__dirname, 'routes', 'recommender')))

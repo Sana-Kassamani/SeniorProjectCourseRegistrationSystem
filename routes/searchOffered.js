@@ -1,11 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const path = require('path')
-const { getCourseOfferingForm } = require('../controllers/searchOffered');
+const { getOfferedCourses } = require('../controllers/searchOffered');
 
 
 // Define a route for getting offered courses
-router.get('/', getCourseOfferingForm);
-
+router.get('/', getOfferedCourses);
 
 module.exports = router;
