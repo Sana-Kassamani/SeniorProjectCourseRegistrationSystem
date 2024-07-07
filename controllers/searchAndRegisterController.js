@@ -2,6 +2,7 @@ const { searchCourse } = require('./courseSearch');
 const fs = require('fs');
 const db = require('../models/index');
 
+
 function getNextSemester() {
     const currentDate = new Date(); // Get current date
   
@@ -44,7 +45,7 @@ const getData = async (req, res) => {
         console.log(semester);
         const schedule = await searchCourse(courseCode, semester);
         console.log(schedule);
-        res.render('registration',{registrationStatus: true, schedule }); // Assuming there's a corresponding EJS view file
+        res.render('registration',{registrationStatus: true, schedule}); // Assuming there's a corresponding EJS view file
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');
@@ -99,16 +100,92 @@ async function getCourseID(courseCode) {
     }
 }
 
-async function registerStudentInCourse(studentID, courseID, sectionNumber) {
+
+
+
+async function getStudentTranscript(studentID) {
     try {
+      const query = `
+        SELECT crs."CourseID"
+        FROM "StudentSections" ss
+        INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber" AND  ss."CourseID" = sec."CourseID"
+        INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
+        WHERE ss."StudentID" = :studentID
+        
+      `;
+      const studentTranscript = await db.sequelize.query(query, {
+        replacements: { studentID },
+        type: db.sequelize.QueryTypes.SELECT
+      });
+  
+      if (!studentTranscript || studentTranscript.length === 0) {
+        return [];
+      }
+  
+      return studentTranscript;
+    } catch (err) {
+      console.error('Error executing getStudentTranscript query', err);
+      throw err;
+    }
+  }
+
+  async function checkPrerequisites(studentID, courseID) {
+    try {
+        const studentTranscript = await getStudentTranscript(studentID);
+        const query = `
+            SELECT "PrerequisiteID"
+            FROM "Prerequisites"
+            WHERE "CourseID" = :courseID
+        `;
+        const prerequisites = await db.sequelize.query(query, {
+            replacements: { courseID },
+            type: db.sequelize.QueryTypes.SELECT
+        });
+
+        for (const prerequisite of prerequisites) {
+            if (!studentTranscript.includes(prerequisite.PrerequisiteCourseID)) {
+                return false; // Prerequisite not met
+            }
+        }
+
+        return true; // All prerequisites met
+    } catch (err) {
+        console.error('Error checking prerequisites', err);
+        throw err;
+    }
+}
+
+async function registerStudentInCourse(studentID, courseID, sectionNumber, semester) {
+    try {
+        // Check if the student is already registered for this course in the same semester
+        const duplicateCheckQuery = `
+            SELECT *
+            FROM "StudentSections"
+            WHERE "StudentID" = :studentID AND "CourseID" = :courseID AND "SectionNumber" = :sectionNumber AND "Semester" = :semester
+        `;
+        const [existingRegistration] = await db.sequelize.query(duplicateCheckQuery, {
+            replacements: { studentID, courseID, sectionNumber, semester },
+            type: db.sequelize.QueryTypes.SELECT
+        });
+
+        if (existingRegistration) {
+            console.log('Already registered for this course in the same semester');
+            return { success: false, message: 'Cannot register for the same course twice in the same semester' };
+        }
+    
+            const prerequisitesMet = await checkPrerequisites(studentID, courseID);
+            if (!prerequisitesMet) {
+                console.log('Prerequisites not met');
+                return { success: false, message: 'Prerequisites not met' };
+            }
         // Check if seats are available
         const checkQuery = `
             SELECT "NbOfSeats", "reserved"
             FROM "Sections"
-            WHERE "CourseID" = :courseID AND "SectionNumber" = :sectionNumber
+            WHERE "CourseID" = :courseID AND "SectionNumber" = :sectionNumber AND "Semester" = :semester
         `;
         const [section] = await db.sequelize.query(checkQuery, {
-            replacements: { courseID, sectionNumber },
+            replacements: { courseID, sectionNumber,semester },
             type: db.sequelize.QueryTypes.SELECT
         });
 
@@ -119,16 +196,17 @@ async function registerStudentInCourse(studentID, courseID, sectionNumber) {
 
         if (section.nbOfSeats <= section.reserved) {
             console.log('No available seats');
+         
             return { success: false, message: 'No available seats' };
         }
 
         // Register student in the course
         const registerQuery = `
-            INSERT INTO "StudentSections" ("StudentID", "CourseID", "SectionNumber", "createdAt", "updatedAt") 
-            VALUES (:studentID, :courseID, :sectionNumber, NOW(), NOW())
+            INSERT INTO "StudentSections" ("StudentID", "CourseID", "SectionNumber","Semester", "createdAt", "updatedAt") 
+            VALUES (:studentID, :courseID, :sectionNumber,:semester, NOW(), NOW())
         `;
         await db.sequelize.query(registerQuery, {
-            replacements: { studentID, courseID, sectionNumber },
+            replacements: { studentID, courseID, sectionNumber,semester },
             type: db.sequelize.QueryTypes.INSERT
         });
 
@@ -136,10 +214,10 @@ async function registerStudentInCourse(studentID, courseID, sectionNumber) {
         const updateQuery = `
             UPDATE "Sections"
             SET "reserved" = "reserved" + 1
-            WHERE "CourseID" = :courseID AND "SectionNumber" = :sectionNumber
+            WHERE "CourseID" = :courseID AND "SectionNumber" = :sectionNumber  AND "Semester" = :semester
         `;
         await db.sequelize.query(updateQuery, {
-            replacements: { courseID, sectionNumber },
+            replacements: { courseID, sectionNumber,semester },
             type: db.sequelize.QueryTypes.UPDATE
         });
 
@@ -154,12 +232,12 @@ async function registerStudentInCourse(studentID, courseID, sectionNumber) {
 async function registerCourses(courses) {
     const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
     const studentID = await getStudentID(studentIdentificationNumber);
-
+    const semester=getNextSemester()
     for (const element of courses) {
         const courseID = await getCourseID(element.courseCode);
         const secNB = element.sectionNumber;
-        
-        const result = await registerStudentInCourse(studentID, courseID, secNB);
+      
+        const result = await registerStudentInCourse(studentID, courseID, secNB,semester);
         if (!result.success) {
             throw new Error(result.message);
         }

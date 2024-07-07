@@ -229,12 +229,12 @@
             addedCourseCodes.clear();
             localStorage.removeItem('selectedCourses'); // Clear local storage
           } else {
-            alert('Failed to register courses.');
+            alert(`Failed to register courses. Note: ${data.message}`);
           }
         })
         .catch(error => {
           console.error('Error:', error);
-          alert('Error registering courses.');
+          alert('Error registering courses.  ${error}');
         });
       });
     });
