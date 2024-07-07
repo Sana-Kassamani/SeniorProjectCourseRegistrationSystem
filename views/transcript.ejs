@@ -87,13 +87,14 @@
                         </tbody>
                       </table>
                       <h6>GPA: <span class="semester-gpa" data-semester="<%= semester %>">Calculating...</span></h6>
+                      <% if (semester === 'Spring 2024') { %>
+                        <h4 class="mt-4">Cumulative GPA: <span id="gpa-display">
+                          <%= data.gpa %>
+                        </span></h4>
+                      <% } %>
                     </div>
                     <% } %>
               </div>
-              <h3 class="text-center mt-4">Cumulative GPA: <span id="gpa-display">
-                  <%= data.gpa %>
-                </span></h3>
-
             </div>
 
             <button class="btn btn-primary mt-4" onclick="showGpaCalculation()">Calculate GPA</button>
