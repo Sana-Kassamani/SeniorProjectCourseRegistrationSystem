@@ -24,11 +24,17 @@ app.use(session({
 app.use(credentialsMiddleware);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-
-
-
 app.use(verifyLoggedIn)
+
+
+const preventBacktracking = (req, res, next) => {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.header('Expires', '-1');
+    res.header('Pragma', 'no-cache');
+    next();
+};
+
+app.use(preventBacktracking);
 app.use('/transcript',  require(path.join(__dirname, 'routes', 'transcript')))
 app.use('/courseOffering',  require(path.join(__dirname, 'routes', 'courseOffering')))
 app.use('/searchAndRegister',require(path.join(__dirname, 'routes', 'searchAndRegister')))

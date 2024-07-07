@@ -7,6 +7,7 @@
   <title>Registration</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="main.css" rel="stylesheet">
+  <link href="course.css" rel="stylesheet">
 </head>
 
 <body>
@@ -25,64 +26,231 @@
       <div id="page-content-wrapper">
         <div id="Registration">
           <h2 class="text-white">Registration</h2>
-          <p>This is the registration recommendation table using AI.</p>
-          <br>
-          <h6>Fall 2024</h6> <!-- Replace with actual semester ID and name -->
 
           <!-- Button to go to search page -->
-          <a href="/searchAndRegister" class="btn btn-primary">Press to start registration process </a>
+  
+    <div id="Offering">
+      <!-- Search Form -->
+      <div class="search-container">
+        <form id="searchForm" action="/searchAndRegister" method="GET">
+          <div class="mb-3">
+            <label for="searchInput" class="form-label" style="color: navy;">Course Code</label>
+            <input type="text" id="searchInput" name="CourseCode" class="form-control" placeholder="Search...">
+          </div>
           
-          <br>
-          <a href="/recommender" ><button type="button" class="btn btn-primary">AI Recommend</button></a>
-            
-            
-            <% if (schedule) {%>
-            <table class="table table-bordered border-dark">
-              <thead class="table-dark"> <!--lazm naamil all colomns same width-->
-                <tr>
-                  <th></th>
-                  <th>Monday</th>
-                  <th>Tuesday</th>
-                  <th>Wednesday</th>
-                  <th>Thursday</th>
-                  <th>Friday</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; %>
-        
-                    <% // Determine unique time slots from data %>
-                    <% const timeSlots = [...new Set(schedule.map(course => course.Time))].sort(); %>
-        
-                    <% timeSlots.forEach(slot => { %>
-                      <tr>
-                        <td><%= slot %></td>
-                        <% daysOfWeek.forEach(day => { %>
-                          <% const coursesForSlot = schedule.filter(course => course.Days.includes(day) && course.Time === slot); %>
-                          <td>
-                            <% if (coursesForSlot.length > 0) { %>
-                              <% coursesForSlot.forEach(course => { %>
-                                <span> <%= course.CourseCode %> <br></span>
-                                <span> <%= course.CourseName %> <br></span>
-                                <span> Section <%= course.SectionNumber %>  <br> <br></span>
-                                
-                              <% }); %>
-                            <% } else { %>
-                              <!-- No course scheduled -->
-                            <% } %>
-                          </td>
-                        <% }); %>
-                      </tr>
-                    <% }); %>
-              </tbody>
-            </table>
-            <% } %>
-        </div>
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
       </div>
-    <% } %>
 
+      <!-- Display Data -->
+      <div class="mt-4">
+        <% if (!schedule) { %>
+          <p>No data available.</p>
+        <% } else if (schedule.length === 0) { %>
+          <p>No courses found.</p>
+        <% } else { %>
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Course Code</th>
+                <th>Course Name</th>
+                <th>Credits</th>
+                <th>Days</th>
+                <th>Time</th>
+                <th>Seats</th>
+                <th>Instructor</th>
+                <th>Section Number</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% schedule.forEach(course => { %>
+                <tr>
+                  <td><%= course.CourseCode %></td>
+                  <td><%= course.CourseName %></td>
+                  <td><%= course.Credits %></td>
+                  <td><%= course.Days %></td>
+                  <td><%= course.Time %></td>
+                  <td><%= course.NbOfSeats %></td>
+                  <td><%= course.FName %> <%= course.LName %></td>
+                  <td><%= course.SectionNumber %></td>
+                  <td>
+                    <button class="btn btn-primary btn-sm add-course-btn" data-course-code="<%= course.CourseCode %>" data-section-number="<%= course.SectionNumber %>">Add</button>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Table to display selected courses -->
+    <div id="selectedCourses">
+      <h3>Selected Courses</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Course Code</th>
+            <th>Course Name</th>
+            <th>Credits</th>
+            <th>Days</th>
+            <th>Time</th>
+            <th>Instructor</th>
+            <th>Section Number</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="selectedCoursesBody">
+          <!-- Selected courses will be added here -->
+        </tbody>
+      </table>
+      <button id="registerBtn" class="btn btn-success">Register</button>
+      <a href="/recommender" ><button type="button" class="btn btn-primary">AI Recommend</button></a>
+    </div>
   </div>
+</div>
 
+
+<br><br><br>
+<% if (schedule) {%>
+  <table class="table table-striped table-hover">
+    <thead class="table-dark"> 
+      <tr>
+        <th></th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; %>
+
+          <% // Determine unique time slots from data %>
+          <% const timeSlots = [...new Set(schedule.map(course => course.Time))].sort(); %>
+
+          <% timeSlots.forEach(slot => { %>
+            <tr>
+              <td><%= slot %></td>
+              <% daysOfWeek.forEach(day => { %>
+                <% const coursesForSlot = schedule.filter(course => course.Days.includes(day) && course.Time === slot); %>
+                <td>
+                  <% if (coursesForSlot.length > 0) { %>
+                    <% coursesForSlot.forEach(course => { %>
+                      <span> <%= course.CourseCode %> <br></span>
+                      <span> <%= course.CourseName %> <br></span>
+                      <span> Section <%= course.SectionNumber %>  <br> <br></span>
+                      
+                    <% }); %>
+                  <% } else { %>
+                    <!-- No course scheduled -->
+                  <% } %>
+                </td>
+              <% }); %>
+            </tr>
+          <% }); %>
+    </tbody>
+  </table>
+  <% } %>
+</div>
+</div>
+<% } %>
+
+</div>
+
+<!-- Bootstrap JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript to handle adding and removing courses -->
+<script>
+  // Ensure DOM is fully loaded before attaching event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set to store added course codes
+    let addedCourseCodes = new Set();
+
+    // Function to handle add course button click
+    document.querySelectorAll('.add-course-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        let courseCode = btn.getAttribute('data-course-code');
+        if (!addedCourseCodes.has(courseCode)) {
+          let courseRow = btn.closest('tr');
+          let courseData = {
+            CourseCode: courseRow.querySelector('td:nth-child(1)').innerText,
+            CourseName: courseRow.querySelector('td:nth-child(2)').innerText,
+            Credits: courseRow.querySelector('td:nth-child(3)').innerText,
+            Days: courseRow.querySelector('td:nth-child(4)').innerText,
+            Time: courseRow.querySelector('td:nth-child(5)').innerText,
+            Instructor: courseRow.querySelector('td:nth-child(7)').innerText,
+            SectionNumber: courseRow.querySelector('td:nth-child(8)').innerText
+          };
+          addCourseToTable(courseData);
+          addedCourseCodes.add(courseCode);
+        } else {
+          alert('Course already added.');
+        }
+      });
+    });
+
+    // Function to add course to the table
+    function addCourseToTable(course) {
+      let tableBody = document.getElementById('selectedCoursesBody');
+      let row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${course.CourseCode}</td>
+        <td>${course.CourseName}</td>
+        <td>${course.Credits}</td>
+        <td>${course.Days}</td>
+        <td>${course.Time}</td>
+        <td>${course.Instructor}</td>
+        <td>${course.SectionNumber}</td>
+        <td><button class="btn btn-danger btn-sm remove-course-btn">Remove</button></td>
+      `;
+      tableBody.appendChild(row);
+
+      // Add event listener for remove button
+      let removeBtn = row.querySelector('.remove-course-btn');
+      removeBtn.addEventListener('click', function() {
+        row.remove(); // Remove the row from the table
+        addedCourseCodes.delete(course.CourseCode); // Remove from set
+      });
+    }
+
+    // Handle register button click
+    document.getElementById('registerBtn').addEventListener('click', function() {
+      let selectedCourses = [];
+      document.querySelectorAll('#selectedCoursesBody tr').forEach(row => {
+        let courseCode = row.querySelector('td:nth-child(1)').innerText;
+        let sectionNumber = row.querySelector('td:nth-child(7)').innerText;
+        selectedCourses.push({ courseCode, sectionNumber });
+      });
+
+      fetch('/searchAndRegister', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ courses: selectedCourses })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Courses registered successfully!');
+          // Optionally clear the selected courses table
+          document.getElementById('selectedCoursesBody').innerHTML = '';
+          addedCourseCodes.clear();
+        } else {
+          alert('Failed to register courses.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error registering courses.');
+      });
+    });
+  });
+</script>
   <script src="sidebar.js"></script>
 </body>
 

@@ -42,9 +42,9 @@ const getData = async (req, res) => {
             semester = getNextSemester();
         
         console.log(semester);
-        const data = await searchCourse(courseCode, semester);
-        console.log(data);
-        res.render('searchAndRegister', { data }); // Assuming there's a corresponding EJS view file
+        const schedule = await searchCourse(courseCode, semester);
+        console.log(schedule);
+        res.render('registration',{registrationStatus: true, schedule }); // Assuming there's a corresponding EJS view file
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');

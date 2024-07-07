@@ -118,16 +118,7 @@ const loginUser = async (req, res) => {
 
         // Save ID to session
         req.session.ID = user.ID;
-           // Clear the session
-    fs.writeFile('userID.txt', '', (err) => {
-        if (err) {
-            console.log('Error erasing userID.txt:', err);
-        } else {
-            console.log('userID.txt content erased successfully');
-        }
-    });
-
-
+   
         // Save ID to a text file
         try {
             fs.writeFileSync('userID.txt', ID);
@@ -136,14 +127,14 @@ const loginUser = async (req, res) => {
             console.error('Error writing ID to file', err);
             throw err;
         }
-
+        
         // Successful login
         const message = "Login successful";
         console.log(message);
         if (userType === 'admin') {
             // return res.render('mainAdmin', { message })  // Admin main page
         }
-        return res.render('main', { message });
+        return res.redirect('main');
 
     } catch (err) {
         console.error(err.message);
