@@ -1,5 +1,14 @@
 const db = require('../models/index'); // Adjust the path based on your project structure
 const fs = require('fs'); // Require the fs module
+
+const express = require('express');
+const router = express.Router();
+
+
+
+
+
+
 async function getStudentID(studentIdentificationNumber) {
   try {
     const query = `
@@ -91,17 +100,27 @@ function getCurrentSemester() {
 }
 const getData = async (req, res) => {
   try {
-    const studentIdentificationNumber =fs.readFileSync('userID.txt', 'utf8').trim(); // Get studentIdentificationNumber from request parameters or use default
-    //currentSemester = getCurrentSemester(); 
-    currentSemester = "Spring 2024"
-    const data = await getStudentData(studentIdentificationNumber, currentSemester);
-    
+    const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
+    let value;
+
+    if (req.method === 'POST') {
+      // Take user input if it is a POST request
+      value = req.body.value;
+    } else {
+      // Hardcode the value for the initial GET request
+      value = 'Spring 2024';
+    }
+
+    console.log('Selected Semester:', value); // Log to check the selected semester
+
+    const data = await getStudentData(studentIdentificationNumber, value);
+
     console.log(data);
     res.render('courseLoad', { data }); // Assuming there's a corresponding EJS view file
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
   }
-}
+};
 
 module.exports = { getData };
