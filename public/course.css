@@ -51,3 +51,31 @@ body {
     text-align: center;
     border: 1px solid #ddd;
   }
+
+  .container {
+    margin-top: 50px;
+  }
+
+  .search-section {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .search-section .form-control,
+  .search-section .form-select {
+    margin-bottom: 10px;
+  }
+
+  .search-section .btn {
+    margin-top: 10px;
+  }
+
+  .course-list {
+    margin-top: 20px;
+  }
+
+  .course-list .card {
+    margin-bottom: 10px;
+  }
