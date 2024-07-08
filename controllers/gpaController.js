@@ -25,7 +25,7 @@ async function getStudentTranscript(studentID) {
     const query = `
       SELECT crs."CourseCode", crs."Credits", ss."Grade", sec."Semester"
       FROM "StudentSections" ss
-      INNER JOIN "Sections" sec ON ss."CourseID"=sec."CourseID" AND ss."SectionNumber" = sec."SectionNumber"
+      INNER JOIN "Sections" sec ON ss."CourseID"=sec."CourseID" AND ss."SectionNumber" = sec."SectionNumber" AND sec."Semester"=ss."Semester"
       INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
       WHERE ss."StudentID" = :studentID
     `;

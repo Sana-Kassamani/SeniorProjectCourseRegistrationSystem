@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,9 +25,27 @@
             <ul>
               <% function renderCourse(course) { %>
                 <li>
-                  <a href="#" class=" <%= course.isAttended ? 'attend' : 'normal' %>" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title=" <%= course.CourseName %> <%= course.CourseCode%>" data-bs-desc=" <%= course.Description %> ">
-                    <%= course.CourseCode %> <br> <%= course.CourseName %>
-                  </a>
+                  <% if (course.Prerequisites.length > 1){ %>
+                    
+
+                    <a href="#" class=" position-relative <%= course.isAttended ? 'attend' : (course.isAllowed ? 'allowed' : 'normal') %>" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title=" <%= course.CourseName %> <%= course.CourseCode %>" data-bs-desc=" <%= course.Description %>" >
+                      <%= course.CourseCode %> <br> <%= course.CourseName %>
+                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" data-bs-toggle="tooltip" title="
+                      Prerequisites:    
+                      <% course.Prerequisites.forEach(prereqID => { %>
+                        <%= courseMap.get(prereqID).CourseCode %> 
+                      <% }); %>">
+                         <%= course.Prerequisites.length %>
+                        
+                      </span>
+                    </a>
+                 
+                    <% } else {%>
+                   
+                      <a href="#" class=" <%= course.isAttended ? 'attend' : (course.isAllowed ? 'allowed' : 'normal') %>" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title=" <%= course.CourseName %> <%= course.CourseCode%>" data-bs-desc=" <%= course.Description %> ">
+                        <%= course.CourseCode %> <br> <%= course.CourseName %>
+                      </a>
+                      <% } %>
 
                   <!-- Modal -->
                   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -46,9 +62,9 @@
                     </div>
                   </div>
 
-                  <% if (course.Prerequisites.length > 0) { %>
+                  <% if (course.RequiredBy.length > 0) { %>
                     <ul>
-                      <% course.Prerequisites.forEach(prereq => { %>
+                      <% course.RequiredBy.forEach(prereq => { %>
                         <%= renderCourse(prereq) %>
                       <% }); %>
                     </ul>
@@ -69,7 +85,7 @@
   var sum = 0;
   $(".tree ul li a").each(function(){sum += $(this).width()});
   $(".tree").css('width', sum);
-
+  
   var exampleModal = document.getElementById('exampleModal')
   exampleModal.addEventListener('show.bs.modal', function (event) {
   
@@ -84,6 +100,10 @@
   modalTitle.textContent= title
   modalBodyInput.textContent = desc
 })
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
 </script>
 <script src="sidebar.js"></script>
 </body>

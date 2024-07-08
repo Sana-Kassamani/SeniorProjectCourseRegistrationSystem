@@ -23,16 +23,27 @@ const getMajorCourses = async (req, res) => {
     
 
     const courseMap = new Map();
-    courses.forEach(course => {
-      courseMap.set(course.CourseID, {
+    courses.forEach(course=> {
+      const key = course.CourseID;
+      if (!courseMap.has(key)) {
+        // Initialize the section with an empty array for prerequisites
+        courseMap.set(key, {
         CourseCode: course.CourseCode,
         CourseName: course.CourseName,
         Description: course.Description,
-        Prerequisites: [],
+        RequiredBy: [],
+        Prerequisites:[],
         isRoot: true,
-        isAttended: false
-      });
+        isAttended: false,
+        isAllowed: true
+        });
+      }
+      // Add prerequisite if it exists
+      if (course.PrerequisiteID) {
+        courseMap.get(key).Prerequisites.push(course.PrerequisiteID);
+      }
     });
+    
 
     const attendedCourses = await getCoursesAttended(StudentID);
     attendedCourses.forEach(attendedCourse => {
@@ -46,17 +57,26 @@ const getMajorCourses = async (req, res) => {
       if (course.PrerequisiteID) {
         const prerequisiteCourse = courseMap.get(course.PrerequisiteID);
         if (prerequisiteCourse) {
-          prerequisiteCourse.Prerequisites.push(courseMap.get(course.CourseID));
+          prerequisiteCourse.RequiredBy.push(courseMap.get(course.CourseID));
           courseMap.get(course.CourseID).isRoot = false; // Not a root if it has prerequisites
         }
       }
     });
+    courseMap.forEach(course => {
+      if (!course.isAttended && course.Prerequisites.length > 0) {
+        course.isAllowed = course.Prerequisites.every(prereqID => {
+          const prereq = courseMap.get(prereqID);
+          return prereq && prereq.isAttended;
+        });
+      }
+    });
+    
     //console.log(courseMap)
     // Find root courses
     const rootCourses = Array.from(courseMap.values()).filter(course => course.isRoot);
     
     
-    res.render("contractSheet", { rootCourses: rootCourses });
+    res.render("contractSheet", { rootCourses: rootCourses, courseMap });
   } catch (error) {
     console.error('Error fetching courses:', error);
     res.send('Error getting courses from database');
