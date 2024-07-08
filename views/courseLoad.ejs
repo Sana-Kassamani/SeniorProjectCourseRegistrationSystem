@@ -139,13 +139,13 @@
       </div>
     </div>
   </div>
-
+  
   <script src="sidebar.js"></script>
   <script>
 
 
     // Chart initialization code
-    const courseData = <%- JSON.stringify(data) %>;
+    const courseData = JSON.parse('<%- JSON.stringify(data) %>');
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     const courseCount = daysOfWeek.map(day => courseData.filter(course => course.Days.includes(day)).length);
 
