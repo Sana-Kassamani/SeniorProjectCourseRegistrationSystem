@@ -22,8 +22,8 @@ module.exports = async (req, res, next) => {
 
     // Make the credentials available in all views
     res.locals.credentials = {
-      FName: student.FName,
-      LName: student.LName,
+      FName: student.StudentFName,
+      LName: student.StudentLName,
       ProgramName: student.ProgramName
     };
 
