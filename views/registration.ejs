@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registration</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css?v=1.0" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css?v=1.0">
   <link href="main.css" rel="stylesheet">
   <link href="course.css" rel="stylesheet">
+  <style>
+    .toast-error {
+      background-color: #d9534f !important;
+      color: #fff !important;
+    }
+    .toast-success {
+      background-color: #5cb85c !important;
+      color: #fff !important;
+    }
+   
+  </style>
 </head>
-
 <body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js?v=1.0"></script>
 
   <%- include ('NavBar.ejs') -%>
+
   <div id="wrapper">
     <%- include ('SideBar.ejs') -%>
     <% if (!registrationStatus) { %>
@@ -28,7 +41,6 @@
           <h2 class="text-white">Registration</h2>
 
           <!-- Button to go to search page -->
-  
           <div id="Offering">
             <!-- Search Form -->
             <div class="search-container">
@@ -37,7 +49,6 @@
                   <label for="searchInput" class="form-label" style="color: navy;">Course Code</label>
                   <input type="text" id="searchInput" name="CourseCode" class="form-control" placeholder="Search...">
                 </div>
-                
                 <button type="submit" class="btn btn-primary">Search</button>
               </form>
             </div>
@@ -58,7 +69,7 @@
                       <th>Days</th>
                       <th>Time</th>
                       <th>Seats</th>
-                      <th>Reserved Seats</th> <!-- Added column header for Reserved Seats -->
+                      <th>Reserved Seats</th>
                       <th>Instructor</th>
                       <th>Section Number</th>
                       <th>Action</th>
@@ -73,7 +84,7 @@
                         <td><%= course.Days %></td>
                         <td><%= course.Time %></td>
                         <td><%= course.NbOfSeats %></td>
-                        <td><%= course.reserved %></td> <!-- Added reserved seats data -->
+                        <td><%= course.reserved %></td>
                         <td><%= course.FName %> <%= course.LName %></td>
                         <td><%= course.SectionNumber %></td>
                         <td>
@@ -100,7 +111,7 @@
                   <th>Time</th>
                   <th>Instructor</th>
                   <th>Section Number</th>
-                  <th>Reserved Seats</th> <!-- Added column header for Reserved Seats in selected courses table -->
+                  <th>Reserved Seats</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -109,6 +120,7 @@
               </tbody>
             </table>
             <button id="registerBtn" class="btn btn-success">Register</button>
+            <%- req.toastr.render() %>
             <a href="/recommender"><button type="button" class="btn btn-primary">AI Recommend</button></a>
           </div>
         </div>
@@ -116,9 +128,10 @@
     <% } %>
   </div>
 
-  <!-- Bootstrap JavaScript Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+ 
+  
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <!-- JavaScript to handle adding and removing courses -->
   <script>
     // Ensure DOM is fully loaded before attaching event listeners
@@ -150,7 +163,7 @@
             addedCourseCodes.add(courseCode);
             saveCourse(courseData);
           } else {
-            alert('Course already added.');
+             toastr.error('Course already added.');
           }
         });
       });
@@ -212,6 +225,25 @@
           let sectionNumber = row.querySelector('td:nth-child(7)').innerText;
           selectedCourses.push({ courseCode, sectionNumber });
         });
+  
+    $(document).ready(function() {
+      toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      };
 
         fetch('/registration', {
           method: 'POST',
@@ -223,23 +255,23 @@
         .then(response => response.json())
         .then(data => {
           if (data.success) {
-            alert('Courses registered successfully!');
+            toastr.success('Registration successful!');
             // Optionally clear the selected courses table
             document.getElementById('selectedCoursesBody').innerHTML = '';
             addedCourseCodes.clear();
             localStorage.removeItem('selectedCourses'); // Clear local storage
           } else {
-            alert(`Failed to register courses. Note: ${data.message}`);
+            toastr.error(data.message || 'Error registering courses');
           }
         })
         .catch(error => {
+          toastr.error(data.message );
           console.error('Error:', error);
-          alert('Error registering courses.  ${error}');
         });
       });
     });
+  })
   </script>
   <script src="sidebar.js"></script>
 </body>
-
 </html>
