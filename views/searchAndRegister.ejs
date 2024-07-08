@@ -13,7 +13,7 @@
   <link href="course.css" rel="stylesheet">
 </head>
 <body>
-  <%# Include your navigation and sidebar %>
+  
   <%- include('NavBar.ejs') %>
   <div id="wrapper">
     <%# Include Sidebar %>
@@ -36,9 +36,9 @@
 
         <!-- Display Data -->
         <div class="mt-4">
-          <% if (!data) { %>
+          <% if (!schedule) { %>
             <p>No data available.</p>
-          <% } else if (data.length === 0) { %>
+          <% } else if (schedule.length === 0) { %>
             <p>No courses found.</p>
           <% } else { %>
             <table class="table table-striped table-hover">
@@ -56,7 +56,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% data.forEach(course => { %>
+                <% schedule.forEach(course => { %>
                   <tr>
                     <td><%= course.CourseCode %></td>
                     <td><%= course.CourseName %></td>

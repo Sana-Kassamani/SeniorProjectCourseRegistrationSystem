@@ -4,20 +4,26 @@ const { getStudentCredentials } = require('../controllers/credentialsController'
 
 module.exports = async (req, res, next) => {
   try {
+    const excludedPaths = ['/', '/login', '/logout'];
+
+    // Check if the current path is in the excluded paths list
+    if (req.path === '/' || req.path === '/login') {
+      // Do nothing and continue to the next middleware or route handler
+      return next();
+    }
     // Read the studentIdentificationNumber from the text file
     const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
 
     const student = await getStudentCredentials(studentIdentificationNumber);
 
     if (!student) {
-      console.log('Student not found');
-      return res.status(404).send('Student not found');
+      return res.redirect('/login');
     }
 
     // Make the credentials available in all views
     res.locals.credentials = {
-      FName: student.FName,
-      LName: student.LName,
+      FName: student.StudentFName,
+      LName: student.StudentLName,
       ProgramName: student.ProgramName
     };
 

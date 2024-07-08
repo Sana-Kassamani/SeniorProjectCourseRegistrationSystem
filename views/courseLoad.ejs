@@ -87,6 +87,20 @@
       <div id="Load">
         <h2 class="text-white">Timetable</h2>
 
+        <div class="mb-3">
+          <form action="/courseLoad" method="POST">
+            <label for="semesterSelect" class="form-label">Select Semester:</label>
+            <select id="semesterSelect" class="form-select" name="value">
+              <option value="Fall 2024">Fall 2024</option>
+              <option value="Spring 2024">Spring 2024</option>
+              <option value="Summer 2024">Summer 2024</option>
+              <option value="Fall 2023">Fall 2023</option>
+              <option value="Spring 2023">Spring 2023</option>
+              <option value="Summer 2023">Summer 2023</option>
+            </select>
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+          </form>
+        </div>
         <div class="table-responsive">
           <table class="table table-bordered border-dark">
             <thead class="table-dark">
@@ -101,7 +115,8 @@
             </thead>
             <tbody>
               <% const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; %>
-              <% const timeSlots = [...new Set(data.map(course => course.Time))].sort(); %>
+              <% const timeSlots = [...new Set(data.map(course => course.Time))].sort((a, b) => (a > b ? -1 : 1)); %>
+
 
               <% timeSlots.forEach(slot => { %>
                 <tr>
@@ -138,6 +153,8 @@
 
   <script src="sidebar.js"></script>
   <script>
+
+
     // Chart initialization code
     const courseData = <%- JSON.stringify(data) %>;
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];

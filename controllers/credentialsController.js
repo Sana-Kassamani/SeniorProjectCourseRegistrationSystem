@@ -4,10 +4,12 @@ const fs = require('fs'); // Require the fs module
 async function getStudentCredentials(studentIdentificationNumber) {
   try {
     const query = `
-      SELECT s."FName", s."LName", s."EmailAddress", a."ProgramName"
+      SELECT s."FName" AS "StudentFName", s."LName" AS "StudentLName", s."EmailAddress",
+             a."ProgramName", fm."FName" AS "AdvisorFName", fm."LName" AS "AdvisorLName"
       FROM "Students" s
       INNER JOIN "AcademicPrograms" a ON s."ProgramID" = a."ProgramID"
-      WHERE "StudentIdentificationNumber" = :studentIdentificationNumber
+      INNER JOIN "FacultyMembers" fm ON s."MemberID" = fm."MemberID"
+      WHERE s."StudentIdentificationNumber" = :studentIdentificationNumber
     `;
     const [student] = await db.sequelize.query(query, {
       replacements: { studentIdentificationNumber },
@@ -33,7 +35,7 @@ const getData = async (req, res) => {
 
     const data = await getStudentCredentials(studentIdentificationNumber);
     
-    //console.log(data);
+    console.log(data);
     res.render('credentials', { data, studentIdentificationNumber }); // Assuming there's a corresponding EJS view file
   } catch (err) {
     console.error(err);
