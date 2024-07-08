@@ -16,7 +16,7 @@ let days= null
 
 const config = {
     iterations: 800,//TODO change once populated courses
-    size: 100,
+    size: 50,
     crossover: 0.5,
     mutation: 0.6,
     skip: 50,
