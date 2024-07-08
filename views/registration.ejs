@@ -120,7 +120,7 @@
               </tbody>
             </table>
             <button id="registerBtn" class="btn btn-success">Register</button>
-            <%- req.toastr.render() %>
+           
             <a href="/recommender"><button type="button" class="btn btn-primary">AI Recommend</button></a>
           </div>
         </div>
@@ -261,11 +261,11 @@
             addedCourseCodes.clear();
             localStorage.removeItem('selectedCourses'); // Clear local storage
           } else {
-            toastr.error(data.message || 'Error registering courses');
+            toastr.error( 'Error registering courses');
           }
         })
         .catch(error => {
-          toastr.error(data.message );
+          //toastr.error(data.message );
           console.error('Error:', error);
         });
       });
