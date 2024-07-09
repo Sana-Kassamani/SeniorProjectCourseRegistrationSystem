@@ -136,40 +136,40 @@
       <div class="container mt-5 chart-container">
         <h2 class="text-white">Courses Chart</h2>
         <canvas id="courseLoadChart"></canvas>
-      </div>
     </div>
-  </div>
-
-  <script src="sidebar.js"></script>
-  <script>
-
-
-    // Chart initialization code
-    const courseData = <%- JSON.stringify(data) %>;
-    const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-    const courseCount = daysOfWeek.map(day => courseData.filter(course => course.Days.includes(day)).length);
-
-    const ctx = document.getElementById('courseLoadChart').getContext('2d');
-    const courseLoadChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: daysOfWeek,
-        datasets: [{
-          label: 'Number of Courses',
-          data: courseCount,
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
+    
+    <script src="sidebar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Chart initialization code
+        const courseData = <%- JSON.stringify(data) %>;
+        const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        const courseCount = daysOfWeek.map(day => courseData.filter(course => course.Days.includes(day)).length);
+    
+        const ctx = document.getElementById('courseLoadChart').getContext('2d');
+        const courseLoadChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: daysOfWeek,
+            datasets: [{
+              label: 'Number of Courses',
+              data: courseCount,
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 2
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 7,
+                ticks: {
+                  stepSize: 1
+                }
+              }
+            }
           }
-        }
-      }
-    });
-  </script>
-</body>
-</html>
+        });
+    </script>
+    

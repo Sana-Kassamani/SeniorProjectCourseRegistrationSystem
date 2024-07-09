@@ -35,6 +35,7 @@ function getNextSemester() {
 async function getData(req, res) {
     try {
         let semester = getNextSemester(); // Ensure they match the names in your form inputs
+       // let semester='Spring 2025'
         const courseCode = req.query.CourseCode || "";
         if (courseCode === "") {
             semester = "";
@@ -229,6 +230,7 @@ async function registerCourses(courses, req) {
     const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
     const studentID = await getStudentID(studentIdentificationNumber);
     const semester = getNextSemester();
+     //let semester='Spring 2025'
     
     try {
         for (const element of courses) {

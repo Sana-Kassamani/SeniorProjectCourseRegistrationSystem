@@ -26,10 +26,7 @@
       transition: background-color 0.3s, transform 0.3s;
     }
 
-    .quote-container:hover {
-      background-color: #2478b7; /* Change background color on hover */
-      transform: scale(1.05); /* Increase size on hover */
-    }
+   
 
     .quote {
       font-size: 24px;
@@ -42,6 +39,19 @@
       font-size: 18px;
       font-weight: bold;
       color: #777;
+    }
+   
+    .links {
+        display: flex;
+        gap: 10px; /* Adjust the gap between buttons as needed */
+      
+        justify-content: center;
+        align-items: center;
+        height: 10vh;
+        margin: 0;
+    }
+    .links a {
+        text-decoration: none; /* To remove any default link styling */
     }
   </style>
 </head>
@@ -56,12 +66,20 @@
       <div class="quote">
         <p>Welcome to our smart registration system! Your journey starts here, where dreams meet dedication and every course shapes a brighter future.</p>
         <p>Let’s embark on this educational adventure together with enthusiasm and determination.</p>
+        <div class="author">
+<p>-college name</p>
+        </div>
       </div>
-      <div class="author">
-        - College Name
-      </div>
-    </div>
 
+    </div>
+      <div class="links">
+        <a href="/CourseLoad"><button type="button" class="btn btn-primary">check your timetable</button></a>
+        <a href="/recommender"><button type="button" class="btn btn-primary">register your courses with AI</button></a>
+        <a href="/transcript"><button type="button" class="btn btn-primary">view your grades</button></a><br><br>
+        
+      </div>
+   
+    
     <script src="sidebar.js"></script>
   </div>
 </body>

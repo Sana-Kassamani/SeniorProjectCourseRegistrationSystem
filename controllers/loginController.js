@@ -28,29 +28,29 @@ async function getStudentID(studentIdentificationNumber) {
     }
 }
 
-async function getInstructorID(MemberIdentificationNumber) {
-    try {
-        const query = `
-            SELECT "MemberIdentificationNumber", "Password", "refreshToken"
-            FROM "FacultyMembers"
-            WHERE "MemberIdentificationNumber" = :MemberIdentificationNumber
-        `;
-        const [member] = await db.sequelize.query(query, {
-            replacements: { MemberIdentificationNumber },
-            type: db.sequelize.QueryTypes.SELECT
-        });
+// async function getInstructorID(MemberIdentificationNumber) {
+//     try {
+//         const query = `
+//             SELECT "MemberIdentificationNumber", "Password", "refreshToken"
+//             FROM "FacultyMembers"
+//             WHERE "MemberIdentificationNumber" = :MemberIdentificationNumber
+//         `;
+//         const [member] = await db.sequelize.query(query, {
+//             replacements: { MemberIdentificationNumber },
+//             type: db.sequelize.QueryTypes.SELECT
+//         });
 
-        if (!member) {
-            console.log('User not found');
-            return null;
-        }
+//         if (!member) {
+//             console.log('User not found');
+//             return null;
+//         }
 
-        return member;
-    } catch (err) {
-        console.error('Error executing query', err);
-        throw err;
-    }
-}
+//         return member;
+//     } catch (err) {
+//         console.error('Error executing query', err);
+//         throw err;
+//     }
+// }
 
 async function updateRefreshToken(userType, ID, refreshToken) {
     const tableName = userType === 'student' ? 'Students' : 'FacultyMembers';
@@ -85,12 +85,13 @@ const loginUser = async (req, res) => {
 
     try {
         let user;
+        let userType='student'
 
         if (userType === 'student') {
-            user = await getStudentID(ID);
-        } else if (userType === 'admin') {
-            user = await getInstructorID(ID);
-        }
+            user = await getStudentID(ID);}
+        // } else if (userType === 'admin') {
+        //     user = await getInstructorID(ID);
+        // }
         if (!user) {
             const message = "User not found";
             console.log(message);
@@ -131,9 +132,9 @@ const loginUser = async (req, res) => {
         // Successful login
         const message = "Login successful";
         console.log(message);
-        if (userType === 'admin') {
-            // return res.render('mainAdmin', { message })  // Admin main page
-        }
+        // if (userType === 'admin') {
+        //     // return res.render('mainAdmin', { message })  // Admin main page
+        // }
         return res.redirect('main');
 
     } catch (err) {
