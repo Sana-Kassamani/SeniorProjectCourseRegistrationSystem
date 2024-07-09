@@ -27,7 +27,7 @@ async function getStudentID(studentIdentificationNumber) {
 async function getStudentCourses(studentID, currentSemester) {
   try {
     const query = `
-      SELECT crs."CourseCode", fm."FName", fm."LName", sec."Semester", sec."Days", sec."Time"
+      SELECT crs."CourseCode", fm."FName", fm."LName", sec."Semester", sec."Days", sec."Time", crs. "Credits"
       FROM "StudentSections" ss
       INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber" AND ss."CourseID" = sec."CourseID"
       INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
