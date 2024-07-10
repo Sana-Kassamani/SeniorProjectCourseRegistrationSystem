@@ -103,7 +103,7 @@
               </tr>
             </thead>
             <tbody>
-              <% const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; %>
+              <% const daysOfWeek = ['M', 'T', 'W', 'TH', 'F']; %>
               <% const timeSlots = [...new Set(data.map(course => course.Time))].sort((a, b) => (a > b ? -1 : 1)); %>
 
 
@@ -147,7 +147,8 @@
     // Chart initialization code
     const courseData = JSON.parse('<%- JSON.stringify(data) %>');
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-    const courseCount = daysOfWeek.map(day => courseData.filter(course => course.Days.includes(day)).length);
+    const daysInDb=['M', 'T', 'W', 'TH', 'F']
+    const courseCount = daysInDb.map(day => courseData.filter(course => course.Days.includes(day)).length);
 
     const ctx = document.getElementById('courseLoadChart').getContext('2d');
     const courseLoadChart = new Chart(ctx, {
@@ -157,8 +158,8 @@
         datasets: [{
           label: 'Number of Courses',
           data: courseCount,
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(231,173, 153 ,0.2)',
+          borderColor: 'rgba(206, 121, 107 ,1)',
           borderWidth: 2
         }]
       },
