@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   Section.init({
     
     SectionNumber: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       primaryKey: true,
       allowNull: false
     },
