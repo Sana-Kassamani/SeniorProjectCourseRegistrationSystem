@@ -26,11 +26,7 @@ module.exports = {
       }
     });
 
-    // Insert initial rows
-    await queryInterface.bulkInsert('process_status', [
-      { process: 'registration', status: false, createdAt: new Date(), updatedAt: new Date() },
-      { process: 'drop/add', status: false, createdAt: new Date(), updatedAt: new Date() }
-    ]);
+    
   },
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('process_status');
