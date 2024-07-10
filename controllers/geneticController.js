@@ -8,7 +8,7 @@ const ExcelJS = require('exceljs');
 const {getOfferredCourses}=offeredController;
 const {getCoursesAttended}=majorController;
 
-const StudentID=1;
+
 
 let start = 0
 let time = null
@@ -213,10 +213,10 @@ genetic.timeConflict = function (course1, course2) {
 
 genetic.parseTime = function (time) {
     //TODO implement atime of hh:mm and change db values
-    //const [hours, minutes] = time.split(':').map(Number);
-    // return hours * 60 + minutes;
-    const hours = Number(time) ;
-    return hours * 60 ;
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+    // const hours = Number(time) ;
+    // return hours * 60 ;
 };
 
 genetic.hasTakenPrerequisites = function (course, userHistory) {
@@ -306,6 +306,9 @@ const recommendCourses = async function (req,res) {
     try {
         start= Date.now()
         // Fetch courses and user data from the model
+        const {getStudentID}= require(path.join(__dirname,'..','controllers','timetableController'));
+        const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
+        const StudentID= await getStudentID(studentIdentificationNumber);
         const sections = await getOfferredCourses();
         const userCourseHistoryQuery = await getCoursesAttended(StudentID);
         

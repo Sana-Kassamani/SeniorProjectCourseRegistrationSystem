@@ -1,16 +1,19 @@
 const path = require('path');
+const fs= require('fs')
 const { sequelize } = require('../models');
 const Sequelize = require('sequelize');
 const { QueryTypes } = Sequelize;
 const contractSheetController = require(path.join(__dirname, '..', 'controllers', 'getMajorCourses'));
 const {getProgram}=contractSheetController
-const Semester='Spring 2025'// TODO shouldn't be hardcoded
-const StudentID=1// TODO shouldn't be hardcoded
+const Semester='Fall 2024'// TODO shouldn't be hardcoded
+
 
 
 const getOfferredCourses = async () => {
     try {
-        
+      const {getStudentID}= require(path.join(__dirname,'..','controllers','timetableController'));
+      const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
+      const StudentID= await getStudentID(studentIdentificationNumber);
         const program= await getProgram(StudentID);
         console.log("\n\nprogram in getProgram is ",program,"\n\n")
 
