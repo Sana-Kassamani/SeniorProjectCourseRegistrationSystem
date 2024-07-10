@@ -10,6 +10,34 @@ DELETE FROM "StudentSections"
 WHERE "StudentID" = '1'
   AND "SectionNumber"= '1'
 
+  
+ID:20208001
+password:Qrty55..9
+
+ID: 20208002
+Password: 780jjB@.
+
+
+
+async function hashPassword(password) {
+  try {
+    // Generate a salt with 10 rounds (default value)
+    const salt = await bcrypt.genSalt(10);
+
+    // Hash the password using the generated salt
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    console.log("Hashed password:", hashedPassword);
+    return hashedPassword;
+  } catch (err) {
+    console.error("Error hashing password:", err);
+  }
+}
+
+// Example usage
+hashPassword("Qrty55..9");
+
+
 NOTES:
 
 

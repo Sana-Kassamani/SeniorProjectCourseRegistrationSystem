@@ -52,6 +52,9 @@ async function getStudentID(studentIdentificationNumber) {
 //     }
 // }
 
+
+
+
 async function updateRefreshToken(userType, ID, refreshToken) {
     const tableName = userType === 'student' ? 'Students' : 'FacultyMembers';
     const updateQuery = `

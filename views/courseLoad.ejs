@@ -61,9 +61,19 @@
   margin: auto;
   overflow-x: auto;
     }
- #semesterForm {
-      width: 180px; /* Adjust the width as needed */
-    }
+    #semesterForm {
+    display: inline-block;
+    background: transparent; /* Remove white background */
+    border: none; /* Remove border if present */
+  }
+
+  #semesterSelect {
+    background: transparent; /* Ensure select background is transparent */
+    border: none; 
+    color: rgb(14, 14, 14); /* Match the label color */
+    width: 70px;
+  }
+ 
   </style>
 </head>
 
@@ -78,9 +88,11 @@
 
         
           <div class="mb-3">
+            <label id="selectedSemester" class="form-label mt-2" style="color: rgb(14, 14, 14)"></label>
             <form id="semesterForm" action="/courseLoad" method="POST">
+            
               <select id="semesterSelect" class="form-select" name="value">
-                <option value="Fall 2024">Select a semester</option>
+                <option value="Fall 2024">︾</option>
                 <option value="Spring 2025">Spring 2025</option>
                 <option value="Fall 2024">Fall 2024</option>
                 <option value="Spring 2024">Spring 2024</option>
@@ -90,11 +102,9 @@
                 <option value="Summer 2023">Summer 2023</option>
               </select>
             </form>
-            <label id="selectedSemester" class="form-label mt-2"></label>
+          
           </div>
-         <% if(data != 0) { %>
-            <h6>Timetable for Semester: <%=data[0].Semester %></h6>
-          <% } %>
+        
         <div class="table-responsive">
           <table class="table table-bordered border-dark">
             <thead class="table-dark">
@@ -154,23 +164,40 @@
 
   <script src="sidebar.js"></script>
   <script>
-    // Automatically submit form when semester is selected
-    document.getElementById('semesterSelect').addEventListener('change', function() {
-      document.getElementById('semesterForm').submit();
-    });
+// Function to update selected semester label and submit form
+function updateSelectedSemesterAndSubmit() {
+  const semesterSelect = document.getElementById('semesterSelect');
+  const selectedSemesterLabel = document.getElementById('selectedSemester');
+  
+  // Get selected semester
+  const selectedOption = semesterSelect.options[semesterSelect.selectedIndex];
+  const selectedSemester = selectedOption.text;
+  
+  // Update label
+  selectedSemesterLabel.textContent = selectedSemester;
 
-    // Display the selected semester on label
-    const semesterSelect = document.getElementById('semesterSelect');
-    const selectedSemesterLabel = document.getElementById('selectedSemester');
+  // Store selected semester in localStorage
+  localStorage.setItem('selectedSemester', selectedSemester);
 
-    function updateSelectedSemesterLabel() {
-      const selectedSemester = semesterSelect.options[semesterSelect.selectedIndex].text;
- }
+  // Submit form programmatically
+  document.getElementById('semesterForm').submit();
+}
 
-    semesterSelect.addEventListener('change', updateSelectedSemesterLabel);
+// Event listener to submit form on select change
+document.getElementById('semesterSelect').addEventListener('change', updateSelectedSemesterAndSubmit);
 
-    // Initial update of the label
-    updateSelectedSemesterLabel();
+// Initial update of the label from localStorage (if exists)
+document.addEventListener('DOMContentLoaded', function() {
+  const selectedSemester = localStorage.getItem('selectedSemester');
+  if (selectedSemester) {
+    document.getElementById('selectedSemester').textContent = selectedSemester;
+  }
+});
+
+
+
+
+
 
     // Chart initialization code
     const courseData = <%- JSON.stringify(data) %>;
