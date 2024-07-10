@@ -35,13 +35,9 @@ function getNextSemester() {
 async function getData(req, res) {
     try {
         let semester = getNextSemester(); // Ensure they match the names in your form inputs
-       // let semester='Spring 2025'
-        const courseCode = req.query.CourseCode || "";
-        if (courseCode === "") {
-            semester = "";
-        } else {
-            semester = getNextSemester();
-        }
+        //let semester='Spring 2025'
+        const courseCode = req.query.CourseCode ;
+          
         
         console.log(semester);
         const schedule = await searchCourse(courseCode, semester);
