@@ -119,10 +119,25 @@
                             <%= course.CourseCode %>
                           </td>
                           <td>
-                            <input type="number" class="form-control credits" placeholder="Credits" required>
+                            <%= course.Credits %>
                           </td>
                           <td>
-                            <input type="text" class="form-control grade" placeholder="Grade" required>
+                            <select class="form-select grade" required>
+                              <option value="" selected disabled>Select grade</option>
+                              <option value="A+">A+</option>
+                              <option value="A">A</option>
+                              <option value="A-">A-</option>
+                              <option value="B+">B+</option>
+                              <option value="B">B</option>
+                              <option value="B-">B-</option>
+                              <option value="C+">C+</option>
+                              <option value="C">C</option>
+                              <option value="C-">C-</option>
+                              <option value="D+">D+</option>
+                              <option value="D">D</option>
+                              <option value="D-">D-</option>
+                              <option value="F">F</option>
+                            </select>
                           </td>
                         </tr>
                         <% }); %>
@@ -148,10 +163,9 @@
               let totalQualityPoints = 0;
 
               // Loop through each row in the GPA calculation table
-              $('#gpa-calculation-body tr').each(function () {
-                // Get credits and grade entered by user
-                const credits = parseFloat($(this).find('.credits').val());
-                const grade = $(this).find('.grade').val();
+          $('#gpa-calculation-body tr').each(function () {
+            const credits = parseFloat($(this).find('td:nth-child(2)').text());
+            const grade = $(this).find('.grade').val();
 
                 // Convert grade to GPA scale (assuming a simple example)
                 let gradePoint;
