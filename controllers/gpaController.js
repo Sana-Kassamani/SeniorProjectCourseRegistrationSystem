@@ -1,5 +1,7 @@
-const db = require('../models/index'); // Adjust path as needed
-const fs = require('fs');
+const db = require('../models/index');
+const path = require('path') // Adjust path as needed
+const fs = require('fs')
+
 // Helper function to get StudentID based on StudentIdentificationNumber
 async function getStudentID(studentIdentificationNumber) {
   try {
@@ -52,8 +54,7 @@ async function calculateAndUpdateGPA(studentID) {
     transcript.forEach(course => {
       const credits = parseFloat(course.Credits);
       let gradePoint;
-    
-      switch (course.Grade!=null && course.Grade.toUpperCase()) {
+      switch (course.Grade.toUpperCase()) {
         case 'A': gradePoint = 4.0; break;
         case 'B': gradePoint = 3.0; break;
         case 'C': gradePoint = 2.0; break;
@@ -73,7 +74,8 @@ async function calculateAndUpdateGPA(studentID) {
       totalQualityPoints += credits * gradePoint;
     });
 
-    const gpa = totalCredits > 0 ? (totalQualityPoints / totalCredits) : 0;
+    let gpa = totalCredits > 0 ? (totalQualityPoints / totalCredits) : 0;
+    gpa = parseFloat(gpa.toFixed(2)); // Round GPA to 2 decimal places
 
     // Update GPA in the database
     await db.sequelize.query(`
@@ -95,7 +97,7 @@ async function calculateAndUpdateGPA(studentID) {
 // Controller function to render transcript and GPA
 const getTranscript = async (req, res) => {
   try {
-    const studentIdentificationNumber =fs.readFileSync('userID.txt', 'utf8').trim();; // Get studentIdentificationNumber from request parameters or use default
+    const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim(); // Get studentIdentificationNumber from request parameters or use default
     const studentID = await getStudentID(studentIdentificationNumber);
 
     if (!studentID) {

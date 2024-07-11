@@ -123,4 +123,4 @@ const getData = async (req, res) => {
   }
 };
 
-module.exports = { getData };
+module.exports = { getData , getStudentID};

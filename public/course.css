@@ -1,5 +1,5 @@
 body {
-    background-color: #f0f0f0;
+   
     font-family: Arial, sans-serif;
   }
   
@@ -7,8 +7,8 @@ body {
     max-width: 400px;
     margin: 20px auto;
     padding: 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: #d0d6d6;
+    border: 1px solid #d0d6d6;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
@@ -19,18 +19,19 @@ body {
     margin-bottom: 10px;
   }
   
-  .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-  }
-  
-  .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
-  }
+  .btn{
+    background-color:#4c7273 ;
+    border-color: #4c7273;
+    color:#d0d6d6;
+ }
+ .btn:hover{
+    background-color:#042630;
+    border-color: #042630;
+    color:#d0d6d6;
+ }
   
   .table-hover tbody tr:hover {
-    background-color: #f1f1f1;
+    background-color: #d0d6d6;
   }
   
   .table-hover tbody td {
@@ -42,7 +43,7 @@ body {
   }
   
   .table-hover thead th {
-    background-color: #343a40;
+    background-color: #d0d6d6;
     color: white;
   }
   
@@ -57,7 +58,7 @@ body {
   }
 
   .search-section {
-    background-color: #f8f9fa;
+    background-color: #d0d6d6;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

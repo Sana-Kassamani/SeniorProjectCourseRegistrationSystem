@@ -95,15 +95,18 @@ right connector from last child*/
 	-moz-transition: all 0.5s;
 }
 .normal{
-	background: #e9a9a9;
+	/* background: #e9a9a9; */
+	background: #e7ad99;
 }
 .attend{
-	background: #64d8cb;
+	/* background: #64d8cb; */
+	background: #bed4e9;
 	
 }
 .allowed
 {
-	background: #dfdba3;
+	/* background: #dfdba3; */
+	background: #faf1c1;
 
 }
 

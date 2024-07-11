@@ -103,29 +103,29 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    // Begin a transaction for rollback
+    // Begin a transaction
     const transaction = await queryInterface.sequelize.transaction();
-
+  
     try {
-      await queryInterface.bulkDelete('Courses', {
-        CourseCode: [
-          'MAT211',
-          'MAT213',
-          'MAT224',
-          'CSC219',
-          'CSC312',
-          'CSC414',
-          'CSC325',
-          'CSC423',
-          'CSC311'
-        ]
-      }, { transaction });
-      
+      // Delete each course individually
+      await queryInterface.bulkDelete('Courses', { CourseID: 8 }, { transaction });
+      await queryInterface.bulkDelete('Courses', { CourseID: 9 }, { transaction });
+      await queryInterface.bulkDelete('Courses', { CourseID: 10 }, { transaction });
+      await queryInterface.bulkDelete('Courses', { CourseID: 11 }, { transaction });
+      await queryInterface.bulkDelete('Courses', { CourseID: 12 }, { transaction });
+      await queryInterface.bulkDelete('Courses', { CourseID: 13 }, { transaction });
+      await queryInterface.bulkDelete('Courses', { CourseID: 14 }, { transaction });
+      await queryInterface.bulkDelete('Courses', { CourseID: 15 }, { transaction });
+      await queryInterface.bulkDelete('Courses', { CourseID: 16 }, { transaction });
+  
+      // Commit the transaction
+      await transaction.commit();
     } catch (error) {
-      // If an error occurs during rollback, rollback the rollback!
+      // If an error occurs, rollback the transaction
       await transaction.rollback();
-      console.error('Error rolling back seeding:', error);
+      console.error('Error reverting seed data:', error);
       throw error; // re-throw the error to handle it upstream
     }
   }
+  
 };

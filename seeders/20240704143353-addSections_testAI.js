@@ -137,49 +137,49 @@ module.exports = {
       await queryInterface.bulkDelete('Sections', {
         CourseID: 9,
         SectionNumber: 1,
-        Semeseter:'Spring 2025'
+        Semester:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
         CourseID: 9,
         SectionNumber: 2,
-        Semeseter:'Spring 2025'
+        Semester:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
         CourseID: 4,
         SectionNumber: 1,
-        Semeseter:'Spring 2025'
+        Semester:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
         CourseID: 4,
         SectionNumber: 2,
-        Semeseter:'Spring 2025'
+        Semester:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
         CourseID: 5,
         SectionNumber: 1,
-        Semeseter:'Spring 2025'
+        Semester:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
         CourseID: 11,
         SectionNumber: 2,
-        Semeseter:'Spring 2025'
+        Semester:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
         CourseID: 1,
         SectionNumber: 1,
-        Semeseter:'Spring 2025'
+        Semester:'Spring 2025'
       }, { transaction });
 
       await queryInterface.bulkDelete('Sections', {
         CourseID: 2,
         SectionNumber: 1,
-        Semeseter:'Spring 2025'
+        Semester:'Spring 2025'
       }, { transaction });
 
       await transaction.commit();
