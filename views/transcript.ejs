@@ -15,7 +15,7 @@
     .semester-widget {
       margin-bottom: 20px;
       padding: 15px;
-      background-color: #f8f9fa;
+      background-color: #d0d6d6;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -24,7 +24,7 @@
     .semester-heading {
       font-size: 1.5rem;
       margin-bottom: 10px;
-      color: #333;
+      color: #042630;
     }
   </style>
 </head>
@@ -37,7 +37,7 @@
 
         <div id="page-content-wrapper">
           <div id="Transcript">
-            <h2 class="text-white">Transcript</h2>
+            <h2>Transcript</h2>
             <div class="container mt-5">
               <div>
                 <% const semesters={}; data.transcript.forEach(course=> {
@@ -78,6 +78,7 @@
                         </tbody>
                       </table>
                       <h6>GPA: <span class="semester-gpa" data-semester="<%= semester %>">Calculating...</span></h6>
+                      <!-- TODO get semester  -->
                       <% if (semester === 'Spring 2024') { %>
                         <h4 class="mt-4">Cumulative GPA: <span id="gpa-display">
                           <%= data.gpa %>

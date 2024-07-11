@@ -34,13 +34,13 @@ body {
     background-color: #d0d6d6;
   }
   
-  .table-hover tbody td {
+  /* .table-hover tbody td {
     transition: transform 0.2s ease;
   }
   
   .table-hover tbody td:hover {
     transform: scale(1.05);
-  }
+  } */
   
   .table-hover thead th {
     background-color: #d0d6d6;

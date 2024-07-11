@@ -85,7 +85,7 @@ right connector from last child*/
 	font-family: arial, verdana, tahoma;
 	font-size: 12px;
 	display: inline-block; 
-	color: #000; 
+	color: #042630; 
 	border: 1px solid #94a0b4;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
@@ -100,7 +100,8 @@ right connector from last child*/
 }
 .attend{
 	/* background: #64d8cb; */
-	background: #bed4e9;
+	/* background: #b6d1eb; */
+	background:#bddecd;
 	
 }
 .allowed
@@ -112,13 +113,13 @@ right connector from last child*/
 
 
  .normal:hover {
-	background: #ac4444; 
+	background: #df8566;
 } 
 .attend:hover{
-	background: #107c70;
+	background:#85d1a9;
 }
 .allowed:hover{
-	background: #f0e32b;
+	background: #f5e170;
 }
 
 

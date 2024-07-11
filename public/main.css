@@ -1,7 +1,9 @@
 
 body,html{
   
-  
+   font-family: Arial, sans-serif;
+      
+   color: #042630;
   margin: 0;
   padding: 0;
   
@@ -45,9 +47,6 @@ body,html{
 
 
  
-.navbar{
-   background-color: #fff;
-}
 .nav-pills > li > a {
    border-radius: 0;
 }
@@ -119,9 +118,9 @@ body,html{
 }
 .sidebar-nav li a:hover {
    text-decoration: none;
-   color: #fff;
+   color: #d0d6d6;
    background: rgba(255, 255, 255, 0.2);
-   border-left: red 2px solid;
+   border-left: #e7ad99 2px solid;
 }
 .sidebar-nav li a:active,
 .sidebar-nav li a:focus {
@@ -328,18 +327,18 @@ body,html{
 }
 .card.required {
    
-   background-color: #e0b8bb;
+   background-color: #e7ad99;
 }
 .card.needed{
-	background-color: #cfcf8c;
+	background-color: #faf1c1;
    
 }
 .card.attend{
-	background-color: #64d8cb;
+	background-color: #bddecd;
 	
 }
 .card.noneligible
 {
-	background-color: #737676;
+	background-color: #979b9b;
 
 }

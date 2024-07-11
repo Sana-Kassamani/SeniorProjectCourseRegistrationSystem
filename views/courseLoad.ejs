@@ -9,6 +9,10 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Animation CSS -->
   <style>
+    body,html{
+  
+    font-family: Arial, sans-serif;
+    }
     table {
       /* animation: slideInUp 1s ease-out; */
       width: 100%;
@@ -24,8 +28,8 @@
     }
 
     th {
-      background-color: #343a40;
-      color: white;
+      background-color: #042630;
+      color: #d0d6d6;
     }
 
     /* tbody tr:hover {
@@ -72,9 +76,22 @@
   #semesterSelect {
     background: transparent; /* Ensure select background is transparent */
     border: none; 
-    color: rgb(14, 14, 14); /* Match the label color */
+    color: #042630; /* Match the label color */
     width: 70px;
   }
+  /* option{
+    background-color: #fff;
+    color: #042630;
+  } */
+  /* .form-select {
+    background-image: none;
+    background-color:#86b9b0;
+} */
+.form-select option {
+    background-color:#fff;
+    color: #042630;
+} 
+
   </style>
 </head>
 
@@ -86,13 +103,13 @@
 
         <div id="page-content-wrapper">
           <div id="Load">
-            <h2 class="text-white">Timetable</h2>
+            <h2 >Timetable</h2>
 
             <div class="mb-3">
-              <label id="selectedSemester" class="form-label mt-2" style="color: rgb(14, 14, 14)"></label>
+              <label id="selectedSemester" class="form-label mt-2" style="color: #042630"></label>
               <form id="semesterForm" action="/courseLoad" method="POST">
               
-                <select id="semesterSelect" class="form-select" name="value">
+                <select id="semesterSelect" class="form-select" name="value" >
                   <option value="Fall 2024">︾</option>
                   <option value="Fall 2024">Fall 2024</option>
                   <option value="Summer 2024">Summer 2024</option>
@@ -103,8 +120,8 @@
              
             </div>
             <div class="table-responsive">
-              <table class="table table-bordered border-dark">
-                <thead class="table-dark">
+              <table class="table table-bordered "style="color: #042630; font-family: Arial, sans-serif;">
+                <thead class="table-dark" >
                   <tr>
                     <th>Time</th>
                     <th>Monday</th>
@@ -156,16 +173,16 @@
           </div>
 
           <div class="container mt-5 chart-container">
-            <h2 class="text-white">Courses Chart</h2>
+            <h2 >Courses Chart</h2>
             <div style="width: 900px;"> <!-- Adjust width to fit the chart -->
               <canvas id="courseLoadChart" ></canvas>
           </div>
         </div>
-          <button class="btn btn-primary mt-4" onclick="showGpaCalculation()" style="justify-content:left;">Calculate GPA</button>
+          <button class="btn mt-4" onclick="showGpaCalculation()" style="justify-content:left;">Calculate GPA</button>
 
           <!-- GPA Calculation Section -->
           <div id="gpa-calculation" class="mt-5" style="display: none;">
-            <h3 class="text-white">Calculate your GPA for this semester</h3>
+            <h3 >Calculate your GPA for this semester</h3>
             <div class="table-responsive">
               <table class="table">
                 <thead>
@@ -208,8 +225,8 @@
                         <% }); %>
                 </tbody>
               </table>
-              <button class="btn btn-primary" onclick="calculateGPA()">Calculate</button>
-              <h4 class="mt-3 text-white">Semester GPA: <span id="calculated-gpa">N/A</span></h4>
+              <button class="btn " onclick="calculateGPA()">Calculate</button>
+              <h4 class="mt-3 ">Semester GPA: <span id="calculated-gpa">N/A</span></h4>
             </div>
           </div>
         
@@ -274,12 +291,12 @@ document.addEventListener('DOMContentLoaded', function() {
           max: 7,
           ticks: {
             stepSize: 1,
-            color: 'black' // Set the color of the y-axis labels
+            color: 0o042630 // Set the color of the y-axis labels
           }
         },
         x: {
           ticks: {
-            color: 'black' // Set the color of the x-axis labels
+            color: 0o042630  // Set the color of the x-axis labels
           }
         }
       },
@@ -287,7 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
     plugins: {
         legend: {
           labels: {
-            color: 'black' // Set the color of the legend labels
+            color: 0o042630 // Set the color of the legend labels
           }
         }
       }

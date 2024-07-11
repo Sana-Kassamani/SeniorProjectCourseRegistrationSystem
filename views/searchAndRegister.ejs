@@ -16,21 +16,20 @@
   
   <%- include('NavBar.ejs') %>
   <div id="wrapper">
-    <%# Include Sidebar %>
     <%- include('SideBar.ejs') %>
     <div id="page-content-wrapper">
       <div id="Offering">
-        <h2 class="text-white">Course Offering</h2>
+        <h2>Course Offering</h2>
 
         <!-- Search Form -->
         <div class="search-container">
           <form id="searchForm" action="/searchAndRegister" method="GET">
             <div class="mb-3">
-              <label for="searchInput" class="form-label" style="color: navy;">Course Code</label>
+              <label for="searchInput" class="form-label" style="color: #042630">Course Code</label>
               <input type="text" id="searchInput" name="CourseCode" class="form-control" placeholder="Search...">
             </div>
             
-            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="submit" class="btn">Search</button>
           </form>
         </div>
 
@@ -67,7 +66,7 @@
                     <td><%= course.FName %> <%= course.LName %></td>
                     <td><%= course.SectionNumber %></td>
                     <td>
-                      <button class="btn btn-primary btn-sm add-course-btn" data-course-code="<%= course.CourseCode %>" data-section-number="<%= course.SectionNumber %>">Add</button>
+                      <button class="btn btn-sm add-course-btn" data-course-code="<%= course.CourseCode %>" data-section-number="<%= course.SectionNumber %>">Add</button>
                     </td>
                   </tr>
                 <% }); %>
@@ -97,7 +96,7 @@
             <!-- Selected courses will be added here -->
           </tbody>
         </table>
-        <button id="registerBtn" class="btn btn-success">Register</button>
+        <button id="registerBtn" class="btn ">Register</button>
       </div>
     </div>
   </div>
@@ -147,7 +146,7 @@
           <td>${course.Time}</td>
           <td>${course.Instructor}</td>
           <td>${course.SectionNumber}</td>
-          <td><button class="btn btn-danger btn-sm remove-course-btn">Remove</button></td>
+          <td><button class="btn  btn-sm remove-course-btn">Remove</button></td>
         `;
         tableBody.appendChild(row);
 
