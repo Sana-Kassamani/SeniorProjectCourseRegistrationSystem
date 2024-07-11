@@ -74,7 +74,7 @@ async function calculateAndUpdateGPA(studentID) {
       totalQualityPoints += credits * gradePoint;
     });
 
-    const gpa = totalCredits > 0 ? (totalQualityPoints / totalCredits) : 0;
+    let gpa = totalCredits > 0 ? (totalQualityPoints / totalCredits) : 0;
     gpa = parseFloat(gpa.toFixed(2)); // Round GPA to 2 decimal places
 
     // Update GPA in the database
