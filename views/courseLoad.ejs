@@ -7,10 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="main.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Animation CSS -->
   <style>
-    
-
     table {
       animation: slideInUp 1s ease-out;
       width: 100%;
@@ -61,40 +58,55 @@
 
     .chart-container {
       max-width: 600px;
-      margin: auto;
+  margin: auto;
+  overflow-x: auto;
     }
+    #semesterForm {
+    display: inline-block;
+    background: transparent; /* Remove white background */
+    border: none; /* Remove border if present */
+  }
+
+  #semesterSelect {
+    background: transparent; /* Ensure select background is transparent */
+    border: none; 
+    color: rgb(14, 14, 14); /* Match the label color */
+    width: 70px;
+  }
+ 
   </style>
 </head>
 
 <body>
-  <!-- Your navigation and sidebar includes -->
-  <%- include ('NavBar.ejs') -%>
+  <%- include('NavBar.ejs') -%>
   <div id="wrapper">
-    <%- include ('SideBar.ejs') -%>
+    <%- include('SideBar.ejs') -%>
 
     <div id="page-content-wrapper">
       <div id="Load">
         <h2 class="text-white">Timetable</h2>
 
-        <div class="mb-3">
-          <form action="/courseLoad" method="POST">
-            <label for="semesterSelect" class="form-label">Select Semester:</label>
-            <select id="semesterSelect" class="form-select" name="value">
-              <option value="Fall 2024">Fall 2024</option>
-              <option value="Spring 2024">Spring 2024</option>
-              <option value="Summer 2024">Summer 2024</option>
-              <option value="Fall 2023">Fall 2023</option>
-              <option value="Spring 2023">Spring 2023</option>
-              <option value="Summer 2023">Summer 2023</option>
-            </select>
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
-          </form>
-        </div>
+        
+          <div class="mb-3">
+            <label id="selectedSemester" class="form-label mt-2" style="color: rgb(14, 14, 14)"></label>
+            <form id="semesterForm" action="/courseLoad" method="POST">
+            
+              <select id="semesterSelect" class="form-select" name="value">
+                <option value="Fall 2024">︾</option>
+                <option value="Fall 2024">Fall 2024</option>
+                <option value="Summer 2024">Summer 2024</option>
+                <option value="Spring 2024">Spring 2024</option>
+                <option value="Fall 2023">Fall 2023</option>
+              </select>
+            </form>
+           
+          </div>
+        
         <div class="table-responsive">
           <table class="table table-bordered border-dark">
             <thead class="table-dark">
               <tr>
-                <th></th>
+                <th>Time</th>
                 <th>Monday</th>
                 <th>Tuesday</th>
                 <th>Wednesday</th>
@@ -104,8 +116,13 @@
             </thead>
             <tbody>
               <% const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; %>
-              <% const timeSlots = [...new Set(data.map(course => course.Time))].sort((a, b) => (a > b ? -1 : 1)); %>
-
+              <% const timeSlots = [...new Set(data.map(course => course.Time))].sort((a, b) => {
+                const parseTime = time => {
+                  const [hour] = time.split('-').map(Number);
+                  return hour <= 6 ? hour + 12 : hour; // Adjust for the afternoon times
+                };
+                return parseTime(a) - parseTime(b);
+              }); %>
 
               <% timeSlots.forEach(slot => { %>
                 <tr>
@@ -119,6 +136,7 @@
                             <strong><%= course.CourseCode %></strong><br>
                             <%= course.FName %> <%= course.LName %><br>
                             <%= course.Room %>
+                           
                           </div>
                         <% }); %>
                       <% } else { %>
@@ -135,13 +153,47 @@
 
       <div class="container mt-5 chart-container">
         <h2 class="text-white">Courses Chart</h2>
-        <canvas id="courseLoadChart"></canvas>
+        <div style="width: 1000px;"> <!-- Adjust width to fit the chart -->
+          <canvas id="courseLoadChart"></canvas>
+        </div>
       </div>
-    </div>
   </div>
   
   <script src="sidebar.js"></script>
   <script>
+// Function to update selected semester label and submit form
+function updateSelectedSemesterAndSubmit() {
+  const semesterSelect = document.getElementById('semesterSelect');
+  const selectedSemesterLabel = document.getElementById('selectedSemester');
+  
+  // Get selected semester
+  const selectedOption = semesterSelect.options[semesterSelect.selectedIndex];
+  const selectedSemester = selectedOption.text;
+  
+  // Update label
+  selectedSemesterLabel.textContent = selectedSemester;
+
+  // Store selected semester in localStorage
+  localStorage.setItem('selectedSemester', selectedSemester);
+
+  // Submit form programmatically
+  document.getElementById('semesterForm').submit();
+}
+
+// Event listener to submit form on select change
+document.getElementById('semesterSelect').addEventListener('change', updateSelectedSemesterAndSubmit);
+
+// Initial update of the label from localStorage (if exists)
+document.addEventListener('DOMContentLoaded', function() {
+  const selectedSemester = localStorage.getItem('selectedSemester');
+  if (selectedSemester) {
+    document.getElementById('selectedSemester').textContent = selectedSemester;
+  }
+});
+
+
+
+
 
 
     // Chart initialization code
@@ -163,13 +215,32 @@
         }]
       },
       options: {
-        scales: {
-          y: {
-            beginAtZero: true
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 7,
+          ticks: {
+            stepSize: 1,
+            color: 'black' // Set the color of the y-axis labels
+          }
+        },
+        x: {
+          ticks: {
+            color: 'black' // Set the color of the x-axis labels
+          }
+        }
+      },
+    
+    plugins: {
+        legend: {
+          labels: {
+            color: 'black' // Set the color of the legend labels
           }
         }
       }
-    });
-  </script>
+    },
+  });
+</script>
+</script>
 </body>
 </html>
