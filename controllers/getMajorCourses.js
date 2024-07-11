@@ -6,12 +6,13 @@ const Sequelize = require('sequelize');
 const { QueryTypes } = Sequelize;
 
 const {getStudentID}= require(path.join(__dirname,'..','controllers','timetableController'));
-const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
+
 
 
 // Function to get all courses from the database
 const getMajorCourses = async (req, res) => {
   try {
+    const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
     const StudentID = await getStudentID(studentIdentificationNumber);// Assume StudentID is passed as a parameter
     const academicProg = await getProgram(StudentID);
     console.log(StudentID)

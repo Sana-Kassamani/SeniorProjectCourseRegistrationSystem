@@ -10,7 +10,7 @@
   <!-- Animation CSS -->
   <style>
     table {
-      animation: slideInUp 1s ease-out;
+      /* animation: slideInUp 1s ease-out; */
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
@@ -28,19 +28,19 @@
       color: white;
     }
 
-    tbody tr:hover {
+    /* tbody tr:hover {
       background-color: #f1f1f1;
       transition: background-color 0.3s ease;
-    }
+    } */
 
     td {
       position: relative;
       transition: transform 0.2s ease;
     }
 
-    td:hover {
+    /* td:hover {
       transform: scale(1.05);
-    }
+    } */
 
     /*td::before {
       content: '';
@@ -115,7 +115,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <% const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; %>
+                  <% const daysOfWeek = ['M', 'T', 'W', 'TH', 'F']; %>
               <% const timeSlots = [...new Set(data.map(course => course.Time))].sort((a, b) => {
                 const parseTime = time => {
                   const [hour] = time.split('-').map(Number);
@@ -157,11 +157,11 @@
 
           <div class="container mt-5 chart-container">
             <h2 class="text-white">Courses Chart</h2>
-            <div style="width: 1000px;"> <!-- Adjust width to fit the chart -->
-              <canvas id="courseLoadChart"></canvas>
+            <div style="width: 900px;"> <!-- Adjust width to fit the chart -->
+              <canvas id="courseLoadChart" ></canvas>
           </div>
-
-          <button class="btn btn-primary mt-4" onclick="showGpaCalculation()" style="float: right;">Calculate GPA</button>
+        </div>
+          <button class="btn btn-primary mt-4" onclick="showGpaCalculation()" style="justify-content:left;">Calculate GPA</button>
 
           <!-- GPA Calculation Section -->
           <div id="gpa-calculation" class="mt-5" style="display: none;">
@@ -212,7 +212,7 @@
               <h4 class="mt-3 text-white">Semester GPA: <span id="calculated-gpa">N/A</span></h4>
             </div>
           </div>
-        </div>
+        
 
       </div>
     </div>
@@ -262,8 +262,8 @@ document.addEventListener('DOMContentLoaded', function() {
           datasets: [{
             label: 'Number of Courses',
             data: courseCount,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(231, 173, 153, 0.2)',
+            borderColor: 'rgba(206, 121, 107, 1)',
             borderWidth: 2
           }]
         },
