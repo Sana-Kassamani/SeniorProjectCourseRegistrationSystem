@@ -133,13 +133,13 @@
                 </thead>
                 <tbody>
                   <% const daysOfWeek = ['M', 'T', 'W', 'TH', 'F']; %>
-              <% const timeSlots = [...new Set(data.map(course => course.Time))].sort((a, b) => {
-                const parseTime = time => {
-                  const [hour] = time.split('-').map(Number);
-                  return hour <= 6 ? hour + 12 : hour; // Adjust for the afternoon times
-                };
-                return parseTime(a) - parseTime(b);
-              }); %>
+                  <% const timeSlots = [...new Set(data.map(course => course.Time))].sort((a, b) => {
+                    const parseTime = time => {
+                      const [startHour] = time.split('-')[0].split(':').map(Number);
+                      return startHour === 12 ? 0 : (startHour > 6 ? startHour : startHour + 12); 
+                    };
+                    return parseTime(a) - parseTime(b);
+                  }); %>
 
                       <% timeSlots.forEach(slot => { %>
                         <tr>
