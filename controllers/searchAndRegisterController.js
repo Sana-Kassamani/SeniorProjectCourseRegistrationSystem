@@ -268,5 +268,6 @@ const registerCoursesHandler = async (req, res) => {
 
 module.exports = {
     getData,
-    registerCoursesHandler
+    registerCoursesHandler,
+    getNextSemester
 };

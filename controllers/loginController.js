@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fs = require('fs'); // Require the fs module
 
+
 async function getStudentID(studentIdentificationNumber) {
     try {
         const query = `

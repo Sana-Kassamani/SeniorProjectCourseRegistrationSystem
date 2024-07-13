@@ -1,7 +1,11 @@
 const db = require('../models/index');
 const path = require('path') // Adjust path as needed
 const fs = require('fs')
+const SemesteController = require(path.join(__dirname, '..', 'controllers', 'semester'));
+const searchAndRegisterController=require(path.join(__dirname, '..', 'controllers', 'searchAndRegisterController'));
 
+const c_semester=SemesteController.getCurrentSemester()
+const n_semester=searchAndRegisterController.getNextSemester()
 // Helper function to get StudentID based on StudentIdentificationNumber
 async function getStudentID(studentIdentificationNumber) {
   try {
@@ -22,16 +26,15 @@ async function getStudentID(studentIdentificationNumber) {
 }
 
 // Function to fetch student's transcript based on StudentID
-async function getStudentTranscript(studentID) {
+async function getStudentTranscript(studentID, c_semester, n_semester) {
   try {
     const query = `
       SELECT crs."CourseCode", crs."Credits", ss."Grade", sec."Semester"
       FROM "StudentSections" ss
-      INNER JOIN "Sections" sec ON ss."CourseID"=sec."CourseID" AND ss."SectionNumber" = sec."SectionNumber" AND sec."Semester"=ss."Semester"
+      INNER JOIN "Sections" sec ON ss."CourseID" = sec."CourseID" AND ss."SectionNumber" = sec."SectionNumber" AND sec."Semester" = ss."Semester"
       INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
-      WHERE ss."StudentID" = :studentID
+      WHERE ss."StudentID" = :studentID AND ss."Semester" != '${c_semester}' AND ss."Semester" != '${n_semester}'
     `;
-    // TODO add semester as a join condition on sec and ss after updating db accordingly
     return await db.sequelize.query(query, {
       replacements: { studentID },
       type: db.sequelize.QueryTypes.SELECT
@@ -42,11 +45,12 @@ async function getStudentTranscript(studentID) {
   }
 }
 
+
 // Function to calculate GPA and update database
 async function calculateAndUpdateGPA(studentID) {
   try {
     // Fetch transcript data
-    const transcript = await getStudentTranscript(studentID);
+    const transcript =   await getStudentTranscript(studentID,c_semester,n_semester);
 
     // Calculate GPA
     let totalCredits = 0;
@@ -108,7 +112,7 @@ const getTranscript = async (req, res) => {
     const gpa = await calculateAndUpdateGPA(studentID);
 
     // Fetch transcript data
-    const studentTranscript = await getStudentTranscript(studentID);
+    const studentTranscript = await getStudentTranscript(studentID,c_semester,n_semester);
 
     res.render('transcript', { 
       data: { 

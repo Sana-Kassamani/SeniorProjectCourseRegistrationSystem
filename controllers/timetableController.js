@@ -1,11 +1,15 @@
 const db = require('../models/index'); // Adjust the path based on your project structure
 const fs = require('fs'); // Require the fs module
-
+const path=require('path')
 const express = require('express');
 const router = express.Router();
 
 
+const SemesteController = require(path.join(__dirname, '..', 'controllers', 'semester'));
+const searchAndRegisterController=require(path.join(__dirname, '..', 'controllers', 'searchAndRegisterController'));
 
+const c_semester=SemesteController.getCurrentSemester()
+const n_semester=searchAndRegisterController.getNextSemester()
 
 
 
@@ -38,7 +42,7 @@ async function getStudentCourses(studentID, currentSemester) {
     const query = `
       SELECT crs."CourseCode", fm."FName", fm."LName", sec."Semester", sec."Days", sec."Time",crs."Credits"
       FROM "StudentSections" ss
-      INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber" AND ss."CourseID" = sec."CourseID"
+      INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber" AND ss."CourseID" = sec."CourseID" AND ss."Semester" = sec."Semester"
       INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
       INNER JOIN "FacultyMembers" fm ON sec."InstructorID" = fm."MemberID"
       WHERE ss."StudentID" = :studentID 
@@ -98,6 +102,7 @@ function getCurrentSemester() {
 
   return 'Unknown'; // Return default if no matching semester found
 }
+
 const getData = async (req, res) => {
   try {
     const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
@@ -106,9 +111,10 @@ const getData = async (req, res) => {
     if (req.method === 'POST') {
       // Take user input if it is a POST request
       value = req.body.value;
+      console.log(value)
     } else {
       // Hardcode the value for the initial GET request
-      value = 'Spring 2024';
+      value = ' ';
     }
 
     console.log('Selected Semester:', value); // Log to check the selected semester
@@ -116,7 +122,7 @@ const getData = async (req, res) => {
     const data = await getStudentData(studentIdentificationNumber, value);
 
     console.log(data);
-    res.render('courseLoad', { data }); // Assuming there's a corresponding EJS view file
+    res.render('courseLoad', { data,c_semester,n_semester }); // Assuming there's a corresponding EJS view file
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');
