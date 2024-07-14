@@ -97,7 +97,35 @@ async function calculateAndUpdateGPA(studentID) {
     throw err;
   }
 }
+function getPreviousSemester() {
+  const currentDate = new Date(); // Get current date
+  
+  // Define semester start and end dates (example rules)
+  const semesterRules = [
+    { name: 'Spring', startMonth: 1, startDay: 1, endMonth: 5, endDay: 31 },
+    { name: 'Summer', startMonth: 6, startDay: 1, endMonth: 8, endDay: 31 },
+    { name: 'Fall', startMonth: 9, startDay: 1, endMonth: 12, endDay: 31 }
+    // Add more rules as needed
+  ];
 
+  // Find the current semester based on current date
+  for (let i = 0; i < semesterRules.length; i++) {
+    const rule = semesterRules[i];
+    const start = new Date(currentDate.getFullYear(), rule.startMonth - 1, rule.startDay);
+    const end = new Date(currentDate.getFullYear(), rule.endMonth - 1, rule.endDay);
+
+    if (currentDate >= start && currentDate <= end) {
+      const prevIndex = (i - 1 + semesterRules.length) % semesterRules.length;
+      const prevSemester = semesterRules[prevIndex];
+      const prevYear = prevIndex === semesterRules.length - 1 ? currentDate.getFullYear() - 1 : currentDate.getFullYear();
+      return `${prevSemester.name} ${prevYear}`; // Return previous semester name and year
+    }
+  }
+
+  // Handle case when the current date doesn't match any defined semesters
+  return 'Unknown';
+}
+const semes=getPreviousSemester()
 // Controller function to render transcript and GPA
 const getTranscript = async (req, res) => {
   try {
@@ -117,7 +145,9 @@ const getTranscript = async (req, res) => {
     res.render('transcript', { 
       data: { 
         transcript: studentTranscript, 
-        gpa: gpa 
+        gpa: gpa ,
+        p_semester:semes
+        
       } 
     }); // Render transcript with updated GPA
   } catch (err) {
