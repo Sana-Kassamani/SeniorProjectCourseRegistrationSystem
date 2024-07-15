@@ -270,11 +270,15 @@
             localStorage.removeItem('selectedCourses'); // Clear local storage
           } else {
             toastr.error( 'Error registering courses');
+            addedCourseCodes.clear();
+            localStorage.removeItem('selectedCourses'); 
           }
         })
         .catch(error => {
           //toastr.error(data.message );
           console.error('Error:', error);
+          addedCourseCodes.clear();
+          localStorage.removeItem('selectedCourses'); 
         });
       });
     });

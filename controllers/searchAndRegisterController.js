@@ -99,12 +99,17 @@ async function getCourseID(courseCode) {
 
 async function getStudentTranscript(studentID) {
     try {
+        // SELECT crs."CourseID"
+        //     FROM "StudentSections" ss
+        //     INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber" AND  ss."CourseID" = sec."CourseID"
+        //     INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
+        //     WHERE ss."StudentID" = :studentID AND ss."Grade"
         const query = `
-            SELECT crs."CourseID"
+            SELECT crs.*, ss.*
             FROM "StudentSections" ss
-            INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber" AND  ss."CourseID" = sec."CourseID"
+            INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber" AND  ss."CourseID" = sec."CourseID" AND sec."Semester"=ss."Semester"
             INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
-            WHERE ss."StudentID" = :studentID
+            WHERE ss."StudentID" = :studentID AND ss."Grade" IS NOT null 
         `;
         const studentTranscript = await db.sequelize.query(query, {
             replacements: { studentID },
