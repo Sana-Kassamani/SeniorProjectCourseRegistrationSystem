@@ -54,7 +54,7 @@ const getOfferedCourses = async (req, res) => {
         if( request.courseCode)
             {
                 console.log("filtered course")
-                offeredCourses=offeredCourses.filter(section => section.CourseCode === request.courseCode)
+                offeredCourses=offeredCourses.filter(section => section.CourseCode.includes(request.courseCode.toUpperCase()))
             }
         if( request.instructor)
             {
@@ -137,12 +137,21 @@ const withinTime = function(definedtime,time1,time2){
 }
 
 const parseTime = function (time) {
-    //TODO implement atime of hh:mm and change db values
-    //const [hours, minutes] = time.split(':').map(Number);
-    // return hours * 60 + minutes;
+    
     try{
-        const hours = Number(time) ;
-        return hours * 60 ;
+        const [hours, minutes] = time.split(':').map(Number);
+        if (hours != null && minutes != null){
+            return hours * 60 + minutes;
+        }
+        
+
+        else if (minutes == null) {
+            return hours* 60
+        }
+        else {
+            return null;
+        }
+        
     }
     catch{
         return null;
