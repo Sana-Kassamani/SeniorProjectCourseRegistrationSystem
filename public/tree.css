@@ -1,9 +1,10 @@
 /*Now the CSS*/
-* {margin: 0; padding: 0;}
+* {margin: 0; padding: 0; }
 
   
 .tree {
-    overflow-x:auto;
+	
+    
 }
 .tree ul {
 	padding-top: 20px; 
@@ -97,6 +98,7 @@ right connector from last child*/
 .normal{
 	/* background: #e9a9a9; */
 	background: #e7ad99;
+	
 }
 .attend{
 	/* background: #64d8cb; */
@@ -104,6 +106,10 @@ right connector from last child*/
 	background:#bddecd;
 	
 }
+.allowed.has-failed{
+	border: 3px solid  #cc3d0d ;
+}
+
 .allowed
 {
 	/* background: #dfdba3; */
@@ -122,14 +128,39 @@ right connector from last child*/
 	background: #f5e170;
 }
 
+.legend {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	padding: 10px;
+	max-width: 100vh;
+}
 
-/* Connector styles on hover
-.tree li a:hover+ul li::after, 
-.tree li a:hover+ul li::before, 
-.tree li a:hover+ul::before, 
-.tree li a:hover+ul ul::before{
-	border-color:  #94a0b4;
-}  */
+.legend-item {
+	display: flex;
+	align-items: center;
+	margin-bottom: 5px;
+}
 
-/*Thats all. I hope you enjoyed it.
-Thanks :)*/
+.color-box {
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+}
+
+.allowed-box {
+	background-color:  #faf1c1;
+	;
+}
+
+.normal-box {
+	background-color:#e7ad99;
+}
+
+.attend-box {
+	background-color:#bddecd;
+}
+.failed-box {
+	background-color: #dfdba3;
+	border: 3px solid  #cc3d0d ;
+}

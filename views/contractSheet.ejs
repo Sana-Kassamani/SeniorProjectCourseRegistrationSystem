@@ -19,9 +19,29 @@
 
 <div id="page-content-wrapper">
   <div id="Contract">
-    <div class="scrollable-div" style="height: 550px; overflow-y: auto;">
+    <div class="scrollable-div" style="height:100vh; overflow-y:hidden ; overflow-x: auto;">
       <h2 >Student Plan</h2><br>
+      
           <div class="tree">
+            <div class="legend ">
+              <div class="legend-item">
+                <div class="color-box attend-box"></div>
+                <span>Completed</span>
+            </div>
+            <div class="legend-item">
+              <div class="color-box failed-box"></div>
+              <span>Failed</span>
+          </div>
+              <div class="legend-item">
+                  <div class="color-box allowed-box"></div>
+                  <span>Eligible for</span>
+              </div>
+              <div class="legend-item">
+                  <div class="color-box normal-box"></div>
+                  <span>Need prerequisite</span>
+              </div>
+              
+             </div>
             <ul>
               <% function renderCourse(course) { %>
                 <li>
@@ -44,6 +64,12 @@
                    
                       <a href="#" class=" <%= course.isAttended ? 'attend' : (course.isAllowed ? 'allowed' : 'normal') %>" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-title=" <%= course.CourseName %> <%= course.CourseCode%>" data-bs-desc=" <%= course.Description %> ">
                         <%= course.CourseCode %> <br> <%= course.CourseName %>
+                        <% if (course.isAttended) { %>
+                          <br> <%= course.Grade %>
+                         
+                          <% } else if (course.Grade === 'F') { %>
+                            <br> <span class="failed"> <%= course.Grade %></span>
+                            <% } %>
                       </a>
                       <% } %>
 
@@ -104,6 +130,16 @@ var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggl
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
   })
+document.addEventListener("DOMContentLoaded", function() {
+    var parents = document.querySelectorAll('.allowed');
+
+    parents.forEach(function(parent) {
+        if (parent.querySelector('.failed')) {
+            parent.classList.add('has-failed');
+        }
+    });
+});
+
 </script>
 <script src="sidebar.js"></script>
 </body>
