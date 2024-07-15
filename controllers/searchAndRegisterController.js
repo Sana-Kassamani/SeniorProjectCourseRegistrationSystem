@@ -109,7 +109,7 @@ async function getStudentTranscript(studentID) {
             FROM "StudentSections" ss
             INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber" AND  ss."CourseID" = sec."CourseID" AND sec."Semester"=ss."Semester"
             INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
-            WHERE ss."StudentID" = :studentID AND ss."Grade" IS NOT null 
+            WHERE ss."StudentID" = :studentID AND ss."Grade" IS NOT null AND ss."Grade" <> 'F'
         `;
         const studentTranscript = await db.sequelize.query(query, {
             replacements: { studentID },
