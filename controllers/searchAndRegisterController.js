@@ -78,7 +78,7 @@ async function getCourseID(courseCode) {
         const query = `
             SELECT "CourseID"
             FROM "Courses"
-            WHERE "CourseCode" = :courseCode
+            WHERE TRIM("CourseCode") = :courseCode
         `;
         const [course] = await db.sequelize.query(query, {
             replacements: { courseCode },
@@ -154,7 +154,7 @@ async function registerStudentInCourse(req, studentID, courseID, sectionNumber, 
         const duplicateCheckQuery = `
             SELECT *
             FROM "StudentSections"
-            WHERE "StudentID" = :studentID AND "CourseID" = :courseID AND "SectionNumber" = :sectionNumber AND "Semester" = :semester
+            WHERE "StudentID" = :studentID AND "CourseID" = :courseID  AND "Semester" = :semester
         `;
         const [existingRegistration] = await db.sequelize.query(duplicateCheckQuery, {
             replacements: { studentID, courseID, sectionNumber, semester },
