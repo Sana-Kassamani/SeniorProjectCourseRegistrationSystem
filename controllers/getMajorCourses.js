@@ -44,7 +44,8 @@ const getMajorCourses = async (req, res) => {
         Prerequisites:[],
         isRoot: true,
         isAttended: false,
-        isAllowed: true
+        isAllowed: true,
+        Grade: null
         });
       }
       // Add prerequisite if it exists
@@ -57,8 +58,13 @@ const getMajorCourses = async (req, res) => {
     const attendedCourses = await getCoursesAttended(StudentID);
     attendedCourses.forEach(attendedCourse => {
       const course = courseMap.get(attendedCourse.CourseID);
-      if (course) {
+      if (course && attendedCourse.Grade != "F" ) {
         course.isAttended = true;
+        course.Grade = attendedCourse.Grade
+      }
+      else if ( course && attendedCourse.Grade == "F" )
+      {
+        course.Grade = attendedCourse.Grade
       }
     });
 
@@ -80,7 +86,7 @@ const getMajorCourses = async (req, res) => {
       }
     });
     
-    //console.log(courseMap)
+    // console.log(courseMap)
     // Find root courses
     const rootCourses = Array.from(courseMap.values()).filter(course => course.isRoot);
     
@@ -95,10 +101,10 @@ const getMajorCourses = async (req, res) => {
 const getCoursesAttended = async (StudentID) => {
   try {
     const coursesAttended = await sequelize.query(
-      `SELECT sec."CourseID" 
+      `SELECT sec."CourseID" , ss."Grade"
        FROM "StudentSections" as ss
-       INNER JOIN "Sections" as sec On ss."CourseID" = sec."CourseID" AND ss."SectionNumber" = sec."SectionNumber"
-       WHERE ss."StudentID" = :studentID`,
+       INNER JOIN "Sections" as sec On ss."CourseID" = sec."CourseID" AND ss."SectionNumber" = sec."SectionNumber" AND ss."Semester" = sec."Semester"
+       WHERE ss."StudentID" = :studentID AND ss."Grade" IS NOT null `,
       {
         type: QueryTypes.SELECT,
         replacements: { studentID: StudentID }

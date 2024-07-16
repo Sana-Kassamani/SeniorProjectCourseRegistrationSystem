@@ -5,10 +5,10 @@ const express = require('express');
 const router = express.Router();
 
 
-const SemesteController = require(path.join(__dirname, '..', 'controllers', 'semester'));
+const SemesterController = require(path.join(__dirname, '..', 'controllers', 'semester'));
 const searchAndRegisterController=require(path.join(__dirname, '..', 'controllers', 'searchAndRegisterController'));
 
-const c_semester=SemesteController.getCurrentSemester()
+const c_semester=SemesterController.getCurrentSemester()
 const n_semester=searchAndRegisterController.getNextSemester()
 
 
@@ -114,7 +114,7 @@ const getData = async (req, res) => {
       console.log(value)
     } else {
       // Hardcode the value for the initial GET request
-      value = ' ';
+      value = c_semester;
     }
 
     console.log('Selected Semester:', value); // Log to check the selected semester
@@ -122,7 +122,7 @@ const getData = async (req, res) => {
     const data = await getStudentData(studentIdentificationNumber, value);
 
     console.log(data);
-    res.render('courseLoad', { data,c_semester,n_semester }); // Assuming there's a corresponding EJS view file
+    res.render('courseLoad', { data,c_semester,n_semester,value }); // Assuming there's a corresponding EJS view file
   } catch (err) {
     console.error(err);
     res.status(500).send('Server Error');

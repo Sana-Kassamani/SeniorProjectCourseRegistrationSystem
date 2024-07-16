@@ -106,10 +106,10 @@
             <h2 >Timetable</h2>
 
             <div class="mb-3">
-              <label id="selectedSemester" class="form-label mt-2" style="color: #042630"></label>
+              <label id="selectedSemester" class="form-label mt-2" style="color: #042630"> <%= value %></label>
               <form id="semesterForm" action="/courseLoad" method="POST">
                 <select id="semesterSelect" class="form-select" name="value" >
-                  <option value=" ">︾</option>
+                  <option value="">︾</option>
                   <option value="Fall 2024">Fall 2024</option>
                   <option value="Summer 2024">Summer 2024</option>
                   <option value="Spring 2024">Spring 2024</option>
@@ -225,7 +225,7 @@
                 </tbody>
               </table>
               <button class="btn " onclick="calculateGPA()">Calculate</button>
-              <h4 class="mt-3 ">Semester GPA: <span id="calculated-gpa">0.00</span></h4>
+              <h4 class="mt-3" id="gpa" style="display: none;">Semester GPA: <span id="calculated-gpa">0.00</span></h4>
             </div>
           </div>
         
@@ -242,6 +242,8 @@
     </div>
     <script src="sidebar.js"></script>
     <script>
+      
+  // const c_semester = JSON.parse('<%- JSON.stringify(c_semester) %>');
 // Function to update selected semester label and submit form
 function updateSelectedSemesterAndSubmit() {
   const semesterSelect = document.getElementById('semesterSelect');
@@ -265,12 +267,13 @@ function updateSelectedSemesterAndSubmit() {
 document.getElementById('semesterSelect').addEventListener('change', updateSelectedSemesterAndSubmit);
 
 // Initial update of the label from localStorage (if exists)
-document.addEventListener('DOMContentLoaded', function() {
-  const selectedSemester = localStorage.getItem('selectedSemester');
-  if (selectedSemester) {
-    document.getElementById('selectedSemester').textContent = selectedSemester;
-  }
-});
+// document.addEventListener('DOMContentLoaded', function() {
+//   const selectedSemester = localStorage.getItem('selectedSemester');
+//   if (selectedSemester) {
+//     document.getElementById('selectedSemester').textContent = selectedSemester;
+//   }
+// });
+
 
       // Chart initialization code
       const courseData = JSON.parse('<%- JSON.stringify(data) %>');
@@ -286,8 +289,8 @@ document.addEventListener('DOMContentLoaded', function() {
           datasets: [{
             label: 'Number of Courses',
             data: courseCount,
-            backgroundColor: 'rgba(231, 173, 153, 0.2)',
-            borderColor: 'rgba(206, 121, 107, 1)',
+            backgroundColor: 'rgba(20, 99, 85, 0.3)',
+            borderColor: 'rgba(4, 38, 48, 1)',
             borderWidth: 2
           }]
         },
@@ -392,7 +395,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const gpa = totalQualityPoints / totalCredits;
 
         // Display calculated GPA
+        document.getElementById('gpa').style.display='block'
         $('#calculated-gpa').text(gpa.toFixed(2));
+
       }
 
     </script>

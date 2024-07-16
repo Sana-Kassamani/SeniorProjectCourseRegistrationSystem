@@ -15,10 +15,10 @@ let time = null
 let days= null
 
 const config = {
-    iterations: 800,//TODO change once populated courses
+    iterations: 800,
     size: 50,
-    crossover: 0.5,
-    mutation: 0.6,
+    crossover: 0.6,
+    mutation: 0.7,
     skip: 50,
     elitism: true,
     creditCount : 12,
@@ -77,24 +77,48 @@ genetic.seed = function () {
 };
 
 
-genetic.mutate = function (schedule) {
+// genetic.mutate = function (schedule) {
+//     if (!Array.isArray(this.userData.sections) || this.userData.sections.length === 0) {
+//         console.error("Error: userData.sections is not a valid array or is empty.");
+//         return schedule;
+//     }
+
+//     const scheduleSet = new Set(schedule);
+//     const section = this.userData.sections[Math.floor(Math.random() * this.userData.sections.length)];
+
+//     if (scheduleSet.has(section)) {
+//         scheduleSet.delete(section);
+//     } else {
+//         scheduleSet.add(section);
+//     }
+
+//     return Array.from(scheduleSet);
+// };
+
+genetic.mutate = function(schedule) {
     if (!Array.isArray(this.userData.sections) || this.userData.sections.length === 0) {
         console.error("Error: userData.sections is not a valid array or is empty.");
         return schedule;
     }
 
-    const scheduleSet = new Set(schedule);
-    const section = this.userData.sections[Math.floor(Math.random() * this.userData.sections.length)];
+    // Clone the schedule array to avoid modifying the original directly
+    const mutatedSchedule = [...schedule];
 
-    if (scheduleSet.has(section)) {
-        scheduleSet.delete(section);
-    } else {
-        scheduleSet.add(section);
+    // Randomly select two distinct indices to swap
+    const index1 = Math.floor(Math.random() * mutatedSchedule.length);
+    let index2 = Math.floor(Math.random() * mutatedSchedule.length);
+    
+    while (index2 === index1) {
+        index2 = Math.floor(Math.random() * mutatedSchedule.length);
     }
 
-    return Array.from(scheduleSet);
-};
+    // Swap sections at index1 and index2
+    const temp = mutatedSchedule[index1];
+    mutatedSchedule[index1] = mutatedSchedule[index2];
+    mutatedSchedule[index2] = temp;
 
+    return mutatedSchedule;
+};
 
 genetic.crossover = function (mother, father) {
     const pivot = Math.floor(Math.random() * mother.length );
@@ -138,6 +162,11 @@ genetic.fitness = function (schedule) {
                 fitness -= 100
                 //console.log("a5du")
             }
+            if(Number(schedule[i].NbOfSeats) == Number(schedule[i].reserved))
+            {
+                fitness -=100
+            }
+                
         for (let j = i + 1; j < schedule.length; j++) {
             
             if(schedule[i].CourseID == schedule[j].CourseID)
@@ -173,7 +202,7 @@ genetic.fitness = function (schedule) {
             //fitness += 1000
         }
     }
-    if (creditCount > desiredCreditCount)
+    if (creditCount != desiredCreditCount)
         {
             fitness-= 200
         }
@@ -186,7 +215,8 @@ genetic.fitness = function (schedule) {
                 }
                 if(config.days)
                     {
-                        if(schedule[i].days.include(config.days))
+                        
+                        if(schedule[i].Days.includes(config.days))
                             fitness +=20
                         else {
                             fitness -=10
@@ -212,7 +242,7 @@ genetic.timeConflict = function (course1, course2) {
 };
 
 genetic.parseTime = function (time) {
-    //TODO implement atime of hh:mm and change db values
+    
     const [hours, minutes] = time.split(':').map(Number);
     return hours * 60 + minutes;
     // const hours = Number(time) ;
@@ -298,7 +328,9 @@ const saveResultsToExcel = async (config, bestFitness,runtime) => {
 };
 
 
-
+const filterOutFailingGrades = (courseHistory) => {
+    return courseHistory.filter(course => course.Grade !== 'F');
+};
 
 
 // Controller function to recommend courses
@@ -312,14 +344,17 @@ const recommendCourses = async function (req,res) {
         const sections = await getOfferredCourses();
         const userCourseHistoryQuery = await getCoursesAttended(StudentID);
         
-        const userCourseHistory= userCourseHistoryQuery.map(obj => Object.values(obj)[0]);
+        const non_failing_grades = filterOutFailingGrades(userCourseHistoryQuery);
+        
+        const userCourseHistory = non_failing_grades.map(obj => Object.values(obj)[0])
 
+        // console.log(userCourseHistory)
         const userData = {
             sections,
-            userCourseHistory
+           userCourseHistory
         };
         
-        // console.log(userData.userCourseHistory,"\n\n")
+        // console.log("Sections are",userData.sections,"\n\n")
        
         
         genetic.userData = userData;
@@ -333,7 +368,7 @@ const recommendCourses = async function (req,res) {
         res.send('Error recommending courses');
     }
 };
-module.exports = { recommendCourses };
+module.exports = { recommendCourses,filterOutFailingGrades };
 
 
 

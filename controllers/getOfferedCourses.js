@@ -5,21 +5,24 @@ const Sequelize = require('sequelize');
 const { QueryTypes } = Sequelize;
 const contractSheetController = require(path.join(__dirname, '..', 'controllers', 'getMajorCourses'));
 const {getProgram}=contractSheetController
-const Semester='Fall 2024'// TODO shouldn't be hardcoded
+const {getStudentID}= require(path.join(__dirname,'..','controllers','timetableController'));
+const {getNextSemester}=require(path.join(__dirname, '..', 'controllers', 'searchAndRegisterController'));
+const Semester= getNextSemester()
+
 
 
 
 const getOfferredCourses = async () => {
     try {
-      const {getStudentID}= require(path.join(__dirname,'..','controllers','timetableController'));
+      
       const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
       const StudentID= await getStudentID(studentIdentificationNumber);
-        const program= await getProgram(StudentID);
-        console.log("\n\nprogram in getProgram is ",program,"\n\n")
+      const program= await getProgram(StudentID);
+      // console.log("\n\nprogram in getProgram is ",program,"\n\n")
 
     // Convert map values back to an array of sections
     const processedSections = await getAllOfferedCourses()
-    const processedSectionsInProgram = processedSections.filter(section => section.ProgramID === program[0].ProgramID)
+    const processedSectionsInProgram = processedSections.filter(section => section.ProgramID.includes(program[0].ProgramID))
     return processedSectionsInProgram;
     }
     catch(error){
@@ -45,11 +48,13 @@ const getAllOfferedCourses = async ()=>{
   const processedSectionsMap = new Map();
 
   offeredSections.forEach(section => {
-    const key = `${section.CourseID}_${section.SectionNumber}`;
+    const key = `${section.CourseID}_${section.SectionNumber}_${section.Semester}`;
     if (!processedSectionsMap.has(key)) {
+      const { ProgramID, ...sectionAttributes } = section; // Destructure to exclude programID
       // Initialize the section with an empty array for prerequisites
       processedSectionsMap.set(key, {
-        ...section,
+        ...sectionAttributes,
+        ProgramID: [],
         prerequisites: [],
       });
     }
@@ -57,11 +62,15 @@ const getAllOfferedCourses = async ()=>{
   if (section.PrerequisiteID) {
     processedSectionsMap.get(key).prerequisites.push(section.PrerequisiteID);
   }
+  if(section.ProgramID)
+  {
+    processedSectionsMap.get(key).ProgramID.push(section.ProgramID)
+  }
 });
 
 // Convert map values back to an array of sections
 const processedSections = Array.from(processedSectionsMap.values());
-
+// console.log(processedSections)
   return processedSections
 }
 catch(error){

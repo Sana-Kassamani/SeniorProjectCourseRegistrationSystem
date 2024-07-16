@@ -86,6 +86,7 @@ body,html{
    padding: 15px;
    width: 100%;
    overflow-x: hidden;
+   
 }
 .xyz {
    min-width: 360px;
@@ -341,4 +342,51 @@ body,html{
 {
 	background-color: #979b9b;
 
+}
+
+.legend {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	padding: 10px;
+   min-width: max-content;
+	max-width: 100vh;
+}
+
+
+.legend-item {
+	display: flex;
+	align-items: center;
+	margin-bottom: 5px;
+}
+
+.color-box {
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+}
+
+.allowed-box {
+	background-color:  #faf1c1;
+	;
+}
+
+.normal-box {
+	background-color:#e7ad99;
+}
+
+.attend-box {
+	background-color:#bddecd;
+}
+.failed-box {
+	background-color: #dfdba3;
+	border: 3px solid  #cc3d0d ;
+}
+.not-required-box{
+   background-color: #979b9b;
+}
+@media (max-width: 800px) {
+   .legend.card{
+      flex-direction: column;
+   }
 }
