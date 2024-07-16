@@ -103,7 +103,7 @@ const getCoursesAttended = async (StudentID) => {
     const coursesAttended = await sequelize.query(
       `SELECT sec."CourseID" , ss."Grade"
        FROM "StudentSections" as ss
-       INNER JOIN "Sections" as sec On ss."CourseID" = sec."CourseID" AND ss."SectionNumber" = sec."SectionNumber"
+       INNER JOIN "Sections" as sec On ss."CourseID" = sec."CourseID" AND ss."SectionNumber" = sec."SectionNumber" AND ss."Semester" = sec."Semester"
        WHERE ss."StudentID" = :studentID AND ss."Grade" IS NOT null `,
       {
         type: QueryTypes.SELECT,

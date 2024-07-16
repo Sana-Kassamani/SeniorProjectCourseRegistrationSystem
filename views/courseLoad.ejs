@@ -106,10 +106,10 @@
             <h2 >Timetable</h2>
 
             <div class="mb-3">
-              <label id="selectedSemester" class="form-label mt-2" style="color: #042630"></label>
+              <label id="selectedSemester" class="form-label mt-2" style="color: #042630"> <%= value %></label>
               <form id="semesterForm" action="/courseLoad" method="POST">
                 <select id="semesterSelect" class="form-select" name="value" >
-                  <option value=" ">︾</option>
+                  <option value="">︾</option>
                   <option value="Fall 2024">Fall 2024</option>
                   <option value="Summer 2024">Summer 2024</option>
                   <option value="Spring 2024">Spring 2024</option>
@@ -242,6 +242,8 @@
     </div>
     <script src="sidebar.js"></script>
     <script>
+      
+  // const c_semester = JSON.parse('<%- JSON.stringify(c_semester) %>');
 // Function to update selected semester label and submit form
 function updateSelectedSemesterAndSubmit() {
   const semesterSelect = document.getElementById('semesterSelect');
@@ -265,12 +267,13 @@ function updateSelectedSemesterAndSubmit() {
 document.getElementById('semesterSelect').addEventListener('change', updateSelectedSemesterAndSubmit);
 
 // Initial update of the label from localStorage (if exists)
-document.addEventListener('DOMContentLoaded', function() {
-  const selectedSemester = localStorage.getItem('selectedSemester');
-  if (selectedSemester) {
-    document.getElementById('selectedSemester').textContent = selectedSemester;
-  }
-});
+// document.addEventListener('DOMContentLoaded', function() {
+//   const selectedSemester = localStorage.getItem('selectedSemester');
+//   if (selectedSemester) {
+//     document.getElementById('selectedSemester').textContent = selectedSemester;
+//   }
+// });
+
 
       // Chart initialization code
       const courseData = JSON.parse('<%- JSON.stringify(data) %>');

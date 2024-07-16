@@ -13,6 +13,7 @@
   <link href="main.css" rel="stylesheet">
   <style>
     .semester-widget {
+      min-width: fit-content;
       margin-bottom: 20px;
       padding: 15px;
       background-color: #d0d6d6;
@@ -39,7 +40,7 @@
           <div id="Transcript">
             <h2>Transcript</h2>
             <div class="container mt-5">
-              <div>
+              <div class="table-responsive">
                 <% const semesters={}; data.transcript.forEach(course=> {
                   if (!semesters[course.Semester]) {
                   semesters[course.Semester] = [];

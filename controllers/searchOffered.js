@@ -1,14 +1,14 @@
 const path = require('path');
+const fs = require('fs')
 const { sequelize } = require('../models');
 const Sequelize = require('sequelize');
 const {getAllOfferedCourses } = require('./getOfferedCourses');
-const offeredController=require(path.join(__dirname,'..','controllers','getOfferedCourses'));
-const majorController=require(path.join(__dirname,'..','controllers','getMajorCourses'));
-const contractSheetController = require(path.join(__dirname, '..', 'controllers', 'getMajorCourses'));
-const {getProgram}=contractSheetController
-const {getOfferredCourses}=offeredController;
-const {getCoursesAttended}=majorController;
-const StudentID=1
+const {getOfferredCourses}=require(path.join(__dirname,'..','controllers','getOfferedCourses'));
+const {getCoursesAttended}=require(path.join(__dirname,'..','controllers','getMajorCourses'));
+const {getProgram}= require(path.join(__dirname, '..', 'controllers', 'getMajorCourses'));
+const {getStudentID}= require(path.join(__dirname,'..','controllers','timetableController'));
+const {filterOutFailingGrades}= require(path.join(__dirname,'..','controllers','geneticController'));
+
 
 const getAllInstructors= async ()=>{
     try {
@@ -47,7 +47,6 @@ const getOfferedCourses = async (req, res) => {
         // Fetch offered courses
         let offeredCourses = await getAllOfferedCourses();
 
-        
         console.log("request is:")
         console.log(request)
 
@@ -170,13 +169,18 @@ const checkEligibility= async (offeredCourses)=>{
         course.isTaken= false;
         course.isRequired = false;
     });
-
+    const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
+    const StudentID = await getStudentID(studentIdentificationNumber); 
+    // console.log(StudentID)
     const program= await getProgram(StudentID);
-    const userCourseHistoryQuery = await getCoursesAttended(StudentID);
-    const userCourseHistory= userCourseHistoryQuery.map(obj => Object.values(obj)[0]);
+    // console.log(program)
+    const userCourseHistoryQuery = await getCoursesAttended(StudentID)
+    const filteredCourses = filterOutFailingGrades(userCourseHistoryQuery)
+    const userCourseHistory= filteredCourses.map(obj => Object.values(obj)[0]);
+    // console.log(offeredCourses)
 
     offeredCourses.forEach(course=>{
-        if (course.ProgramID === program[0].ProgramID)
+        if (course.ProgramID.includes(program[0].ProgramID))
             course.isRequired=true
             if ( userCourseHistory.includes(course.CourseID))
                 {

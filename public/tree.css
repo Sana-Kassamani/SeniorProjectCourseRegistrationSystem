@@ -128,39 +128,3 @@ right connector from last child*/
 	background: #f5e170;
 }
 
-.legend {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-evenly;
-	padding: 10px;
-	max-width: 100vh;
-}
-
-.legend-item {
-	display: flex;
-	align-items: center;
-	margin-bottom: 5px;
-}
-
-.color-box {
-	width: 20px;
-	height: 20px;
-	margin-right: 10px;
-}
-
-.allowed-box {
-	background-color:  #faf1c1;
-	;
-}
-
-.normal-box {
-	background-color:#e7ad99;
-}
-
-.attend-box {
-	background-color:#bddecd;
-}
-.failed-box {
-	background-color: #dfdba3;
-	border: 3px solid  #cc3d0d ;
-}

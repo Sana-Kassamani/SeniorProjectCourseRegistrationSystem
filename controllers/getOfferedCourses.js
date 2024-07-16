@@ -45,11 +45,13 @@ const getAllOfferedCourses = async ()=>{
   const processedSectionsMap = new Map();
 
   offeredSections.forEach(section => {
-    const key = `${section.CourseID}_${section.SectionNumber}`;
+    const key = `${section.CourseID}_${section.SectionNumber}_${section.Semester}`;
     if (!processedSectionsMap.has(key)) {
+      const { ProgramID, ...sectionAttributes } = section; // Destructure to exclude programID
       // Initialize the section with an empty array for prerequisites
       processedSectionsMap.set(key, {
-        ...section,
+        ...sectionAttributes,
+        ProgramID: [],
         prerequisites: [],
       });
     }
@@ -57,11 +59,15 @@ const getAllOfferedCourses = async ()=>{
   if (section.PrerequisiteID) {
     processedSectionsMap.get(key).prerequisites.push(section.PrerequisiteID);
   }
+  if(section.ProgramID)
+  {
+    processedSectionsMap.get(key).ProgramID.push(section.ProgramID)
+  }
 });
 
 // Convert map values back to an array of sections
 const processedSections = Array.from(processedSectionsMap.values());
-
+console.log(processedSections)
   return processedSections
 }
 catch(error){

@@ -89,6 +89,25 @@
               <div class="course-list">
                 <% if (offeredCourses) { %>
                   <% if (offeredCourses.length > 0) { %>
+                    <div class="legend card">
+                      <div class="legend-item">
+                        <div class="color-box attend-box"></div>
+                        <span class="card-text">Completed</span>
+                    </div>
+                    
+                      <div class="legend-item">
+                          <div class="color-box allowed-box"></div>
+                          <span class="card-text">Eligible for</span>
+                      </div>
+                      <div class="legend-item">
+                          <div class="color-box normal-box"></div>
+                          <span class="card-text">Need prerequisite</span>
+                      </div>
+                      <div class="legend-item">
+                        <div class="color-box not-required-box"></div>
+                        <span class="card-text">Not required</span>
+                    </div>
+                     </div>
                   <% offeredCourses.forEach(course=> { %>
                     <div class="card <%= !course.isRequired ? 'noneligible' : (course.isTaken ? 'attend' : (course.isEligible ? 'needed' :'required')) %>" >
                       <div class="card-body">
