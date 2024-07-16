@@ -234,6 +234,8 @@ async function registerCourses(courses, req) {
      //let semester='Spring 2025'
     
     try {
+        if (courses.length==0)
+            return false;
         for (const element of courses) {
             const courseID = await getCourseID(element.courseCode);
             const result = await registerStudentInCourse(req, studentID, courseID, element.sectionNumber, semester);
