@@ -91,7 +91,9 @@
     background-color:#fff;
     color: #042630;
 } 
-
+div[class*="overlap"] {
+  background-color:#e7ad99 !important; /* Use !important as a last resort */
+}
   </style>
 </head>
 
@@ -138,37 +140,35 @@
                     };
                     return parseTime(a) - parseTime(b);
                   }); %>
-
-                      <% timeSlots.forEach(slot => { %>
-                        <tr>
-                          <td>
-                            <%= slot %>
-                          </td>
-                          <% daysOfWeek.forEach(day=> { %>
-                            <% const coursesForSlot=data.filter(course=> course.Days.includes(day) && course.Time === slot); %>
-                              <td>
-                                <% if (coursesForSlot.length> 0) { %>
-                                  <% coursesForSlot.forEach(course=> { %>
-                                    <div>
-                                      <strong>
-                                        <%= course.CourseCode %>
-                                      </strong><br>
-                                      <%= course.FName %>
-                                        <%= course.LName %><br>
-                                          <%= course.Room %>
-                                         
-                                    </div>
-                                   
-                                    <% }); %>
-                                      <% } else { %>
-                                        <div>No course scheduled</div>
-                                        <% } %>
-                              </td>
-                              <% }); %>
-                        </tr>
-                        <% }); %>
+                
+                  <% timeSlots.forEach(slot => { %>
+                    <tr>
+                      <td>
+                        <%= slot %>
+                      </td>
+                      <% daysOfWeek.forEach(day=> { %>
+                        <% const coursesForSlot = data.filter(course => course.Days.includes(day) && course.Time === slot); %>
+                        <td >
+                          <% if (coursesForSlot.length > 0) { %>
+                            <% coursesForSlot.forEach(course => { %>
+                              <div class="<%= coursesForSlot.length>1 ? 'overlap' : '' %>">
+                                <strong>
+                                  <%= course.CourseCode %>
+                                </strong><br>
+                                <%= course.FName %>
+                                <%= course.LName %><br>
+                                <%= course.Room %>
+                              </div>
+                            <% }); %>
+                          <% } else { %>
+                            <div>No course scheduled</div>
+                          <% } %>
+                        </td>
+                      <% }); %>
+                    </tr>
+                  <% }); %>
                 </tbody>
-              </table>
+                </table>
             </div>
           </div>
           <% if (!data || data.length === 0) { %>

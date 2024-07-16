@@ -167,14 +167,11 @@ async function registerStudentInCourse(req, studentID, courseID, sectionNumber, 
             type: db.sequelize.QueryTypes.SELECT
         });
         
-    if (creditsAlreadyRegistered.TotalCredits+nbOfCredits>18){
+    if ((parseInt(creditsAlreadyRegistered.TotalCredits) + parseInt(nbOfCredits))>18){
         req.toastr.error('Total number of credits greater than allowed');
         return { success: false, message: 'Total number of credits greater than allowed' };
 
     }
-
-
-
 
         // Check if the student is already registered for this course in the same semester
         const duplicateCheckQuery = `
