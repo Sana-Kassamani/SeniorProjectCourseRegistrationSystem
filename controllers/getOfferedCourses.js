@@ -5,21 +5,22 @@ const Sequelize = require('sequelize');
 const { QueryTypes } = Sequelize;
 const contractSheetController = require(path.join(__dirname, '..', 'controllers', 'getMajorCourses'));
 const {getProgram}=contractSheetController
+const {getStudentID}= require(path.join(__dirname,'..','controllers','timetableController'));
 const Semester='Fall 2024'// TODO shouldn't be hardcoded
 
 
 
 const getOfferredCourses = async () => {
     try {
-      const {getStudentID}= require(path.join(__dirname,'..','controllers','timetableController'));
+      
       const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
       const StudentID= await getStudentID(studentIdentificationNumber);
-        const program= await getProgram(StudentID);
-        console.log("\n\nprogram in getProgram is ",program,"\n\n")
+      const program= await getProgram(StudentID);
+      // console.log("\n\nprogram in getProgram is ",program,"\n\n")
 
     // Convert map values back to an array of sections
     const processedSections = await getAllOfferedCourses()
-    const processedSectionsInProgram = processedSections.filter(section => section.ProgramID === program[0].ProgramID)
+    const processedSectionsInProgram = processedSections.filter(section => section.ProgramID.includes(program[0].ProgramID))
     return processedSectionsInProgram;
     }
     catch(error){
@@ -67,7 +68,7 @@ const getAllOfferedCourses = async ()=>{
 
 // Convert map values back to an array of sections
 const processedSections = Array.from(processedSectionsMap.values());
-console.log(processedSections)
+// console.log(processedSections)
   return processedSections
 }
 catch(error){

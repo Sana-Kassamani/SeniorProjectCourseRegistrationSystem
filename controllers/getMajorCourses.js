@@ -86,7 +86,7 @@ const getMajorCourses = async (req, res) => {
       }
     });
     
-    console.log(courseMap)
+    // console.log(courseMap)
     // Find root courses
     const rootCourses = Array.from(courseMap.values()).filter(course => course.isRoot);
     

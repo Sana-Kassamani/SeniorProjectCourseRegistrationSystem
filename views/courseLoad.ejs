@@ -225,7 +225,7 @@
                 </tbody>
               </table>
               <button class="btn " onclick="calculateGPA()">Calculate</button>
-              <h4 class="mt-3 ">Semester GPA: <span id="calculated-gpa">0.00</span></h4>
+              <h4 class="mt-3" id="gpa" style="display: none;">Semester GPA: <span id="calculated-gpa">0.00</span></h4>
             </div>
           </div>
         
@@ -395,7 +395,9 @@ document.getElementById('semesterSelect').addEventListener('change', updateSelec
         const gpa = totalQualityPoints / totalCredits;
 
         // Display calculated GPA
+        document.getElementById('gpa').style.display='block'
         $('#calculated-gpa').text(gpa.toFixed(2));
+
       }
 
     </script>

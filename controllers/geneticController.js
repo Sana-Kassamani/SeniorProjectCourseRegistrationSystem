@@ -348,13 +348,13 @@ const recommendCourses = async function (req,res) {
         
         const userCourseHistory = non_failing_grades.map(obj => Object.values(obj)[0])
 
-        console.log(userCourseHistory)
+        // console.log(userCourseHistory)
         const userData = {
             sections,
            userCourseHistory
         };
         
-        // console.log(userData.userCourseHistory,"\n\n")
+        // console.log("Sections are",userData.sections,"\n\n")
        
         
         genetic.userData = userData;
