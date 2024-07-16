@@ -6,7 +6,9 @@ const { QueryTypes } = Sequelize;
 const contractSheetController = require(path.join(__dirname, '..', 'controllers', 'getMajorCourses'));
 const {getProgram}=contractSheetController
 const {getStudentID}= require(path.join(__dirname,'..','controllers','timetableController'));
-const Semester='Fall 2024'// TODO shouldn't be hardcoded
+const {getNextSemester}=require(path.join(__dirname, '..', 'controllers', 'searchAndRegisterController'));
+const Semester= getNextSemester()
+
 
 
 

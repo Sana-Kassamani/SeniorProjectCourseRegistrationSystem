@@ -15,7 +15,7 @@ let time = null
 let days= null
 
 const config = {
-    iterations: 800,//TODO change once populated courses
+    iterations: 800,
     size: 50,
     crossover: 0.6,
     mutation: 0.7,
@@ -242,7 +242,7 @@ genetic.timeConflict = function (course1, course2) {
 };
 
 genetic.parseTime = function (time) {
-    //TODO implement atime of hh:mm and change db values
+    
     const [hours, minutes] = time.split(':').map(Number);
     return hours * 60 + minutes;
     // const hours = Number(time) ;
