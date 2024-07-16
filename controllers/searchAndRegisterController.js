@@ -153,8 +153,29 @@ async function checkPrerequisites(studentID, courseID) {
     }
 }
 
-async function registerStudentInCourse(req, studentID, courseID, sectionNumber, semester) {
+async function registerStudentInCourse(req, studentID, courseID, sectionNumber, semester,nbOfCredits) {
     try {
+        //check if courses exceed 18
+      const creditsAlreadyRegisteredQuery = `
+            SELECT SUM(c."Credits") AS "TotalCredits"
+            FROM "StudentSections" ss
+            INNER JOIN "Courses" c ON ss."CourseID" = c."CourseID"
+            WHERE ss."StudentID" = :studentID AND ss."Semester" = :semester
+        `;
+        const [creditsAlreadyRegistered] = await db.sequelize.query( creditsAlreadyRegisteredQuery, {
+            replacements: { studentID, semester },
+            type: db.sequelize.QueryTypes.SELECT
+        });
+        
+    if (creditsAlreadyRegistered.TotalCredits+nbOfCredits>18){
+        req.toastr.error('Total number of credits greater than allowed');
+        return { success: false, message: 'Total number of credits greater than allowed' };
+
+    }
+
+
+
+
         // Check if the student is already registered for this course in the same semester
         const duplicateCheckQuery = `
             SELECT *
@@ -227,10 +248,41 @@ async function registerStudentInCourse(req, studentID, courseID, sectionNumber, 
     }
 }
 
+async function getCredits(courseID){
+    const courseCreditsQuery = `
+            SELECT "Credits"
+            FROM "Courses"
+            WHERE "CourseID" = :courseID
+        `;
+        const [courseCreditsResult] = await db.sequelize.query(courseCreditsQuery, {
+            replacements: { courseID },
+            type: db.sequelize.QueryTypes.SELECT
+        });
+        if (courseCreditsResult.length === 0) {
+            console.log('Course not found');
+            return null;
+        }
+
+        const credits = courseCreditsResult.Credits;
+        return credits;
+        
+    }
+async function getNumberOfCredits(courses){
+    let total=0;
+    for (const course of courses){
+      const courseID = await getCourseID(course.courseCode);
+      total=  total+await getCredits(courseID)
+    }
+    return total;
+
+
+
+}
 async function registerCourses(courses, req) {
     const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
     const studentID = await getStudentID(studentIdentificationNumber);
     const semester = getNextSemester();
+    const nbOfCredits=await getNumberOfCredits(courses);
      //let semester='Spring 2025'
     
     try {
@@ -238,7 +290,7 @@ async function registerCourses(courses, req) {
             return false;
         for (const element of courses) {
             const courseID = await getCourseID(element.courseCode);
-            const result = await registerStudentInCourse(req, studentID, courseID, element.sectionNumber, semester);
+            const result = await registerStudentInCourse(req, studentID, courseID, element.sectionNumber, semester,nbOfCredits);
             if (!result.success) {
                 throw new Error(result.message);
             }
