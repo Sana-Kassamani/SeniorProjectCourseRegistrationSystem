@@ -69,16 +69,16 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Course Code</th>
-          <th>Course Name</th>
-          <th>Credits</th>
-          <th>Days</th>
-          <th>Time</th>
-          <th>Seats</th>
-          <th>Reserved Seats</th>
-          <th>Instructor</th>
-          <th>Section Number</th>
-          <th>Action</th>
+          <th class="align-top">Course Code</th>
+          <th class="align-top">Course Name</th>
+          <th class="align-top">Credits</th>
+          <th class="align-top">Days</th>
+          <th class="align-top">Time</th>
+          <th class="align-top">Seats</th>
+          <th class="align-top">Reserved Seats</th>
+          <th class="align-top">Instructor</th>
+          <th class="align-top">Section Number</th>
+          <th class="align-top">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -109,15 +109,15 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Course Code</th>
-        <th>Course Name</th>
-        <th>Credits</th>
-        <th>Days</th>
-        <th>Time</th>
-        <th>Instructor</th>
-        <th>Section Number</th>
-        <th>Reserved Seats</th>
-        <th>Action</th>
+        <th class="align-top">Course Code</th>
+        <th class="align-top">Course Name</th>
+        <th class="align-top">Credits</th>
+        <th class="align-top">Days</th>
+        <th class="align-top">Time</th>
+        <th class="align-top">Instructor</th>
+        <th class="align-top">Section Number</th>
+        <th class="align-top">Reserved Seats</th>
+        <th class="align-top">Action</th>
       </tr>
     </thead>
     <tbody id="selectedCoursesBody">
@@ -167,14 +167,27 @@
               Instructor: courseRow.querySelector('td:nth-child(8)').innerText,
               SectionNumber: courseRow.querySelector('td:nth-child(9)').innerText
             };
-            addCourseToTable(courseData);
-            addedCourseCodes.add(courseCode);
-            saveCourse(courseData);
+            if (calculateTotalCredits() + courseData.Credits <= 18) {
+              addCourseToTable(courseData);
+              addedCourseCodes.add(courseCode);
+              saveCourse(courseData);
+            } else {
+              toastr.error('Cannot register more than 18 credits.');
+            }
           } else {
-             toastr.error('Course already added.');
+            toastr.error('Course already added.');
           }
         });
       });
+
+      // Function to calculate total credits
+      function calculateTotalCredits() {
+        let totalCredits = 0;
+        document.querySelectorAll('#selectedCoursesBody tr').forEach(row => {
+          totalCredits += parseFloat(row.querySelector('td:nth-child(3)').innerText);
+        });
+        return totalCredits;
+      }
 
       // Function to add course to the table
       function addCourseToTable(course) {
@@ -233,6 +246,11 @@
           let sectionNumber = row.querySelector('td:nth-child(7)').innerText;
           selectedCourses.push({ courseCode, sectionNumber });
         });
+
+        if (calculateTotalCredits() > 18) {
+          toastr.error('Cannot register more than 18 credits.');
+          return;
+        }
   
     $(document).ready(function() {
       toastr.options = {
@@ -269,7 +287,8 @@
             addedCourseCodes.clear();
             localStorage.removeItem('selectedCourses'); // Clear local storage
           } else {
-            toastr.error( 'Error registering courses');
+            toastr.error( 'Error registering');
+            toastr.error( 'Possible problems: time conflict / required prerequisite');
             addedCourseCodes.clear();
             localStorage.removeItem('selectedCourses'); 
           }
