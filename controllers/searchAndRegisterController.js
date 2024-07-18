@@ -34,15 +34,14 @@ function getNextSemester() {
 
 async function getData(req, res) {
     try {
-        let semester = getNextSemester(); // Ensure they match the names in your form inputs
+        let semester = getNextSemester(); 
         //let semester='Spring 2025'
         const courseCode = req.query.CourseCode ;
-          
-        
+           
         console.log(semester);
         const schedule = await searchCourse(courseCode, semester);
         console.log(schedule);
-        res.render('registration', { registrationStatus: true, schedule, req }); // Assuming there's a corresponding EJS view file
+        res.render('registration', { registrationStatus: true, schedule, req }); 
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');
@@ -99,11 +98,7 @@ async function getCourseID(courseCode) {
 
 async function getStudentTranscript(studentID) {
     try {
-        // SELECT crs."CourseID"
-        //     FROM "StudentSections" ss
-        //     INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber" AND  ss."CourseID" = sec."CourseID"
-        //     INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
-        //     WHERE ss."StudentID" = :studentID AND ss."Grade"
+        
         const query = `
             SELECT crs.*, ss.*
             FROM "StudentSections" ss
@@ -152,6 +147,30 @@ async function checkPrerequisites(studentID, courseID) {
         throw err;
     }
 }
+async function getCurrentlyRegisteredCourses(studentID,semester){
+    const CurrentlyRegisteredCoursesQuery = `
+            SELECT s."Time",s."Days"
+            FROM "StudentSections" ss
+            INNER JOIN "Sections" s ON ss."CourseID" = s."CourseID" AND ss."SectionNumber"=s."SectionNumber" AND ss."Semester"=s."Semester"
+            WHERE ss."StudentID" = :studentID AND ss."Semester" = :semester
+        `;
+        const CurrentlyRegisteredTimes = await db.sequelize.query( CurrentlyRegisteredCoursesQuery, {
+            replacements: { studentID, semester },
+            type: db.sequelize.QueryTypes.SELECT
+        });
+   
+    return CurrentlyRegisteredTimes
+}
+
+
+
+
+
+
+
+
+
+
 
 async function registerStudentInCourse(req, studentID, courseID, sectionNumber, semester,nbOfCredits) {
     try {
@@ -216,34 +235,57 @@ async function registerStudentInCourse(req, studentID, courseID, sectionNumber, 
             return { success: false, message: 'No available seats' };
         }
 
-        // Register student in the course
-        const registerQuery = `
-            INSERT INTO "StudentSections" ("StudentID", "CourseID", "SectionNumber", "Semester", "createdAt", "updatedAt") 
-            VALUES (:studentID, :courseID, :sectionNumber, :semester, NOW(), NOW())
-        `;
-        await db.sequelize.query(registerQuery, {
-            replacements: { studentID, courseID, sectionNumber, semester },
-            type: db.sequelize.QueryTypes.INSERT
-        });
-
-        // Update reserved seats
-        const updateQuery = `
-            UPDATE "Sections"
-            SET "reserved" = "reserved" + 1
-            WHERE "CourseID" = :courseID AND "SectionNumber" = :sectionNumber  AND "Semester" = :semester
-        `;
-        await db.sequelize.query(updateQuery, {
-            replacements: { courseID, sectionNumber, semester },
-            type: db.sequelize.QueryTypes.UPDATE
-        });
-
-        req.toastr.success('Registration successful');
-        return { success: true, message: 'Registration successful' };
+        return  { success: true, message: ' ' };
     } catch (err) {
         console.error('Error saving course registration', err);
         throw err;
     }
 }
+
+
+
+
+async function saveRegistration(req, studentID, courseID, sectionNumber, semester){
+    // Register student in the course
+const registerQuery = `
+    INSERT INTO "StudentSections" ("StudentID", "CourseID", "SectionNumber", "Semester", "createdAt", "updatedAt") 
+    VALUES (:studentID, :courseID, :sectionNumber, :semester, NOW(), NOW())
+`;
+await db.sequelize.query(registerQuery, {
+    replacements: { studentID, courseID, sectionNumber, semester },
+    type: db.sequelize.QueryTypes.INSERT
+});
+
+// Update reserved seats
+const updateQuery = `
+    UPDATE "Sections"
+    SET "reserved" = "reserved" + 1
+    WHERE "CourseID" = :courseID AND "SectionNumber" = :sectionNumber  AND "Semester" = :semester
+`;
+await db.sequelize.query(updateQuery, {
+    replacements: { courseID, sectionNumber, semester },
+    type: db.sequelize.QueryTypes.UPDATE
+});
+
+req.toastr.success('Registration successful');
+return { success: true, message: 'Registration successful' };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 async function getCredits(courseID){
     const courseCreditsQuery = `
@@ -264,6 +306,7 @@ async function getCredits(courseID){
         return credits;
         
     }
+
 async function getNumberOfCredits(courses){
     let total=0;
     for (const course of courses){
@@ -275,30 +318,53 @@ async function getNumberOfCredits(courses){
 
 
 }
+
+
+
+
 async function registerCourses(courses, req) {
     const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
     const studentID = await getStudentID(studentIdentificationNumber);
     const semester = getNextSemester();
     const nbOfCredits=await getNumberOfCredits(courses);
-     //let semester='Spring 2025'
-    
+    //////////////////////////////////////
+    const registered=await getCurrentlyRegisteredCourses( studentID,semester)
+    console.log(registered)
+    ////////////////////////////////////
+    let times=[]
     try {
+
         if (courses.length==0)
             return false;
         for (const element of courses) {
             const courseID = await getCourseID(element.courseCode);
             const result = await registerStudentInCourse(req, studentID, courseID, element.sectionNumber, semester,nbOfCredits);
+            times.push(element.Time,element.Days)
             if (!result.success) {
                 throw new Error(result.message);
             }
         }
-        
+        console.log(times)
+        for (const element of courses) {
+            const courseID = await getCourseID(element.courseCode);
+            const saveResult = await saveRegistration(req, studentID, courseID, element.sectionNumber, semester);}
         return true;
+
     } catch (error) {
         console.error(error);
         throw error;
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 const registerCoursesHandler = async (req, res) => {
     try {
