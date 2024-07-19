@@ -162,6 +162,75 @@ async function getCurrentlyRegisteredCourses(studentID,semester){
     return CurrentlyRegisteredTimes
 }
 
+async function checkTimeConflict(times, registered) {
+    function parseTimeRange(timeRange) {
+        const [start, end] = timeRange.split('-').map(time => {
+            const [hours, minutes] = time.split(':').map(Number);
+            return hours * 60 + minutes; // Convert to minutes since midnight
+        });
+        return { start, end };
+    }
+
+    function daysOverlap(days1, days2) {
+        const daysSet1 = new Set(days1);
+        const daysSet2 = new Set(days2);
+        for (let day of daysSet1) {
+            if (daysSet2.has(day)) return true;
+        }
+        return false;
+    }
+
+    // Convert the 'times' array to a more convenient format
+    const newCourses = [];
+    for (let i = 0; i < times.length; i += 2) {
+        newCourses.push({ Time: times[i], Days: times[i + 1] });
+    }
+
+    // Check for conflicts within the new courses
+    for (let i = 0; i < newCourses.length; i++) {
+        const newCourseA = newCourses[i];
+        const newCourseATime = parseTimeRange(newCourseA.Time);
+        
+        for (let j = i + 1; j < newCourses.length; j++) {
+            const newCourseB = newCourses[j];
+            const newCourseBTime = parseTimeRange(newCourseB.Time);
+
+            if (daysOverlap(newCourseA.Days, newCourseB.Days)) {
+                const conflict =
+                    (newCourseATime.start < newCourseBTime.end && newCourseATime.start >= newCourseBTime.start) ||
+                    (newCourseATime.end > newCourseBTime.start && newCourseATime.end <= newCourseBTime.end) ||
+                    (newCourseATime.start <= newCourseBTime.start && newCourseATime.end >= newCourseBTime.end);
+
+                if (conflict) {
+                    req.toastr.error('time conflict detected in new courses');
+                    return { success: false, message: ' time conflict detected in new courses' };
+                }
+            }
+        }
+    }
+
+    // Check for conflicts between new courses and registered courses
+    for (const newCourse of newCourses) {
+        const newCourseTime = parseTimeRange(newCourse.Time);
+        for (const regCourse of registered) {
+            if (daysOverlap(newCourse.Days, regCourse.Days)) {
+                const regCourseTime = parseTimeRange(regCourse.Time);
+                const conflict =
+                    (newCourseTime.start < regCourseTime.end && newCourseTime.start >= regCourseTime.start) ||
+                    (newCourseTime.end > regCourseTime.start && newCourseTime.end <= regCourseTime.end) ||
+                    (newCourseTime.start <= regCourseTime.start && newCourseTime.end >= regCourseTime.end);
+
+                if (conflict) {
+                    req.toastr.error('Time conflict detected with registered courses');
+                    return { success: false, message: 'Time conflict detected with registered courses' };
+                }
+            }
+        }
+    }
+
+    return { success: true, message: 'No time conflict' };
+}
+
 
 
 
@@ -277,16 +346,6 @@ return { success: true, message: 'Registration successful' };
 
 
 
-
-
-
-
-
-
-
-
-
-
 async function getCredits(courseID){
     const courseCreditsQuery = `
             SELECT "Credits"
@@ -327,10 +386,7 @@ async function registerCourses(courses, req) {
     const studentID = await getStudentID(studentIdentificationNumber);
     const semester = getNextSemester();
     const nbOfCredits=await getNumberOfCredits(courses);
-    //////////////////////////////////////
-    const registered=await getCurrentlyRegisteredCourses( studentID,semester)
-    console.log(registered)
-    ////////////////////////////////////
+   
     let times=[]
     try {
 
@@ -345,6 +401,13 @@ async function registerCourses(courses, req) {
             }
         }
         console.log(times)
+        const registered=await getCurrentlyRegisteredCourses( studentID,semester)
+        console.log(registered)
+        const timeConflictResult= await checkTimeConflict(times,registered)
+
+        if (!timeConflictResult.success) {
+            throw new Error(timeConflictResult.message);
+        }
         for (const element of courses) {
             const courseID = await getCourseID(element.courseCode);
             const saveResult = await saveRegistration(req, studentID, courseID, element.sectionNumber, semester);}
