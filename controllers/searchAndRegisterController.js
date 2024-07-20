@@ -34,15 +34,14 @@ function getNextSemester() {
 
 async function getData(req, res) {
     try {
-        let semester = getNextSemester(); // Ensure they match the names in your form inputs
+        let semester = getNextSemester(); 
         //let semester='Spring 2025'
         const courseCode = req.query.CourseCode ;
-          
-        
+           
         console.log(semester);
         const schedule = await searchCourse(courseCode, semester);
         console.log(schedule);
-        res.render('registration', { registrationStatus: true, schedule, req }); // Assuming there's a corresponding EJS view file
+        res.render('registration', { registrationStatus: true, schedule, req }); 
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');
@@ -99,11 +98,7 @@ async function getCourseID(courseCode) {
 
 async function getStudentTranscript(studentID) {
     try {
-        // SELECT crs."CourseID"
-        //     FROM "StudentSections" ss
-        //     INNER JOIN "Sections" sec ON ss."SectionNumber" = sec."SectionNumber" AND  ss."CourseID" = sec."CourseID"
-        //     INNER JOIN "Courses" crs ON sec."CourseID" = crs."CourseID"
-        //     WHERE ss."StudentID" = :studentID AND ss."Grade"
+        
         const query = `
             SELECT crs.*, ss.*
             FROM "StudentSections" ss
@@ -152,6 +147,92 @@ async function checkPrerequisites(studentID, courseID) {
         throw err;
     }
 }
+async function getCurrentlyRegisteredCourses(studentID,semester){
+    const CurrentlyRegisteredCoursesQuery = `
+            SELECT s."Time",s."Days"
+            FROM "StudentSections" ss
+            INNER JOIN "Sections" s ON ss."CourseID" = s."CourseID" AND ss."SectionNumber"=s."SectionNumber" AND ss."Semester"=s."Semester"
+            WHERE ss."StudentID" = :studentID AND ss."Semester" = :semester
+        `;
+        const CurrentlyRegisteredTimes = await db.sequelize.query( CurrentlyRegisteredCoursesQuery, {
+            replacements: { studentID, semester },
+            type: db.sequelize.QueryTypes.SELECT
+        });
+   
+    return CurrentlyRegisteredTimes
+}
+
+async function checkTimeConflict(req,times, registered) {
+    function parseTimeRange(timeRange) {
+        const [start, end] = timeRange.split('-').map(time => {
+            const [hours, minutes] = time.split(':').map(Number);
+            return hours * 60 + minutes; // Convert to minutes 
+        });
+        return { start, end };
+    }
+
+    function daysOverlap(days1, days2) {
+        const daysSet1 = new Set(days1);
+        const daysSet2 = new Set(days2);
+        for (let day of daysSet1) {
+            if (daysSet2.has(day)) return true;
+        }
+        return false;
+    }
+
+    // Convert the 'times' array to a more convenient format
+    const newCourses = [];
+    for (let i = 0; i < times.length; i += 2) {
+        newCourses.push({ Time: times[i], Days: times[i + 1] });
+    }
+
+    // Check for conflicts within the new courses
+    for (let i = 0; i < newCourses.length; i++) {
+        const newCourseA = newCourses[i];
+        const newCourseATime = parseTimeRange(newCourseA.Time);
+        
+        for (let j = i + 1; j < newCourses.length; j++) {
+            const newCourseB = newCourses[j];
+            const newCourseBTime = parseTimeRange(newCourseB.Time);
+
+            if (daysOverlap(newCourseA.Days, newCourseB.Days)) {
+                const conflict =
+                    (newCourseATime.start < newCourseBTime.end && newCourseATime.start >= newCourseBTime.start) ||
+                    (newCourseATime.end > newCourseBTime.start && newCourseATime.end <= newCourseBTime.end) ||
+                    (newCourseATime.start <= newCourseBTime.start && newCourseATime.end >= newCourseBTime.end);
+
+                if (conflict) {
+                    req.toastr.error('time conflict detected in new courses');
+                    return { success: false, message: ' time conflict detected in new courses' };
+                }
+            }
+        }
+    }
+
+    // Check for conflicts between new courses and registered courses
+    for (const newCourse of newCourses) {
+        const newCourseTime = parseTimeRange(newCourse.Time);
+        for (const regCourse of registered) {
+            if (daysOverlap(newCourse.Days, regCourse.Days)) {
+                const regCourseTime = parseTimeRange(regCourse.Time);
+                const conflict =
+                    (newCourseTime.start < regCourseTime.end && newCourseTime.start >= regCourseTime.start) ||
+                    (newCourseTime.end > regCourseTime.start && newCourseTime.end <= regCourseTime.end) ||
+                    (newCourseTime.start <= regCourseTime.start && newCourseTime.end >= regCourseTime.end);
+
+                if (conflict) {
+                    req.toastr.error('Time conflict detected with registered courses');
+                    return { success: false, message: 'Time conflict detected with registered courses' };
+                }
+            }
+        }
+    }
+
+    return { success: true, message: 'No time conflict' };
+}
+
+
+
 
 async function registerStudentInCourse(req, studentID, courseID, sectionNumber, semester,nbOfCredits) {
     try {
@@ -216,34 +297,45 @@ async function registerStudentInCourse(req, studentID, courseID, sectionNumber, 
             return { success: false, message: 'No available seats' };
         }
 
-        // Register student in the course
-        const registerQuery = `
-            INSERT INTO "StudentSections" ("StudentID", "CourseID", "SectionNumber", "Semester", "createdAt", "updatedAt") 
-            VALUES (:studentID, :courseID, :sectionNumber, :semester, NOW(), NOW())
-        `;
-        await db.sequelize.query(registerQuery, {
-            replacements: { studentID, courseID, sectionNumber, semester },
-            type: db.sequelize.QueryTypes.INSERT
-        });
-
-        // Update reserved seats
-        const updateQuery = `
-            UPDATE "Sections"
-            SET "reserved" = "reserved" + 1
-            WHERE "CourseID" = :courseID AND "SectionNumber" = :sectionNumber  AND "Semester" = :semester
-        `;
-        await db.sequelize.query(updateQuery, {
-            replacements: { courseID, sectionNumber, semester },
-            type: db.sequelize.QueryTypes.UPDATE
-        });
-
-        req.toastr.success('Registration successful');
-        return { success: true, message: 'Registration successful' };
+        return  { success: true, message: ' ' };
     } catch (err) {
         console.error('Error saving course registration', err);
         throw err;
     }
 }
+
+
+
+
+async function saveRegistration(req, studentID, courseID, sectionNumber, semester){
+    // Register student in the course
+    const registerQuery = `
+        INSERT INTO "StudentSections" ("StudentID", "CourseID", "SectionNumber", "Semester", "createdAt", "updatedAt") 
+        VALUES (:studentID, :courseID, :sectionNumber, :semester, NOW(), NOW())
+    `;
+    await db.sequelize.query(registerQuery, {
+        replacements: { studentID, courseID, sectionNumber, semester },
+        type: db.sequelize.QueryTypes.INSERT
+    });
+
+    // Update reserved seats
+    const updateQuery = `
+        UPDATE "Sections"
+        SET "reserved" = "reserved" + 1
+        WHERE "CourseID" = :courseID AND "SectionNumber" = :sectionNumber  AND "Semester" = :semester
+    `;
+    await db.sequelize.query(updateQuery, {
+        replacements: { courseID, sectionNumber, semester },
+        type: db.sequelize.QueryTypes.UPDATE
+    });
+
+    req.toastr.success('Registration successful');
+    return { success: true, message: 'Registration successful' };
+    }
+
+
+
+
 
 async function getCredits(courseID){
     const courseCreditsQuery = `
@@ -264,6 +356,7 @@ async function getCredits(courseID){
         return credits;
         
     }
+
 async function getNumberOfCredits(courses){
     let total=0;
     for (const course of courses){
@@ -275,30 +368,49 @@ async function getNumberOfCredits(courses){
 
 
 }
+
+
+
+
 async function registerCourses(courses, req) {
     const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
     const studentID = await getStudentID(studentIdentificationNumber);
     const semester = getNextSemester();
     const nbOfCredits=await getNumberOfCredits(courses);
-     //let semester='Spring 2025'
-    
+   
+    let times=[]
     try {
+
         if (courses.length==0)
             return false;
         for (const element of courses) {
             const courseID = await getCourseID(element.courseCode);
             const result = await registerStudentInCourse(req, studentID, courseID, element.sectionNumber, semester,nbOfCredits);
+            times.push(element.Time,element.Days)
             if (!result.success) {
                 throw new Error(result.message);
             }
         }
-        
+        console.log(times)
+        const registered=await getCurrentlyRegisteredCourses( studentID,semester)
+        console.log(registered)
+        const timeConflictResult= await checkTimeConflict(req,times,registered)
+
+        if (!timeConflictResult.success) {
+            throw new Error(timeConflictResult.message);
+        }
+        for (const element of courses) {
+            const courseID = await getCourseID(element.courseCode);
+            const saveResult = await saveRegistration(req, studentID, courseID, element.sectionNumber, semester);}
         return true;
+
     } catch (error) {
         console.error(error);
         throw error;
     }
 }
+
+
 
 const registerCoursesHandler = async (req, res) => {
     try {
