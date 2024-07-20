@@ -237,22 +237,22 @@ async function checkTimeConflict(req,times, registered) {
 async function registerStudentInCourse(req, studentID, courseID, sectionNumber, semester,nbOfCredits) {
     try {
         //check if courses exceed 18
-    //   const creditsAlreadyRegisteredQuery = `
-    //         SELECT SUM(c."Credits") AS "TotalCredits"
-    //         FROM "StudentSections" ss
-    //         INNER JOIN "Courses" c ON ss."CourseID" = c."CourseID"
-    //         WHERE ss."StudentID" = :studentID AND ss."Semester" = :semester
-    //     `;
-    //     const [creditsAlreadyRegistered] = await db.sequelize.query( creditsAlreadyRegisteredQuery, {
-    //         replacements: { studentID, semester },
-    //         type: db.sequelize.QueryTypes.SELECT
-    //     });
+      const creditsAlreadyRegisteredQuery = `
+            SELECT SUM(c."Credits") AS "TotalCredits"
+            FROM "StudentSections" ss
+            INNER JOIN "Courses" c ON ss."CourseID" = c."CourseID"
+            WHERE ss."StudentID" = :studentID AND ss."Semester" = :semester
+        `;
+        const [creditsAlreadyRegistered] = await db.sequelize.query( creditsAlreadyRegisteredQuery, {
+            replacements: { studentID, semester },
+            type: db.sequelize.QueryTypes.SELECT
+        });
         
-    // if ((parseInt(creditsAlreadyRegistered.TotalCredits) + parseInt(nbOfCredits))>18){
-    //     req.toastr.error('Total number of credits greater than allowed');
-    //     return { success: false, message: 'Total number of credits greater than allowed' };
+    if ((parseInt(creditsAlreadyRegistered.TotalCredits) + parseInt(nbOfCredits))>18){
+        req.toastr.error('Total number of credits greater than allowed');
+        return { success: false, message: 'Total number of credits greater than allowed' };
 
-    // }
+    }
 
         // Check if the student is already registered for this course in the same semester
         const duplicateCheckQuery = `

@@ -273,14 +273,14 @@
           } else {
             toastr.error(MessageEvent );
             //toastr.error( 'Error registering courses');
-            addedCourseCodes.clear();
+            //addedCourseCodes.clear();
             localStorage.removeItem('selectedCourses'); 
           }
         })
         .catch(error => {
           toastr.error( );
           console.error('Error:', error);
-          addedCourseCodes.clear();
+          //addedCourseCodes.clear();
           localStorage.removeItem('selectedCourses'); 
         });
       });
