@@ -162,7 +162,7 @@ async function getCurrentlyRegisteredCourses(studentID,semester){
     return CurrentlyRegisteredTimes
 }
 
-async function checkTimeConflict(times, registered) {
+async function checkTimeConflict(req,times, registered) {
     function parseTimeRange(timeRange) {
         const [start, end] = timeRange.split('-').map(time => {
             const [hours, minutes] = time.split(':').map(Number);
@@ -394,7 +394,7 @@ async function registerCourses(courses, req) {
         console.log(times)
         const registered=await getCurrentlyRegisteredCourses( studentID,semester)
         console.log(registered)
-        const timeConflictResult= await checkTimeConflict(times,registered)
+        const timeConflictResult= await checkTimeConflict(req,times,registered)
 
         if (!timeConflictResult.success) {
             throw new Error(timeConflictResult.message);
