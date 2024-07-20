@@ -166,7 +166,7 @@ async function checkTimeConflict(times, registered) {
     function parseTimeRange(timeRange) {
         const [start, end] = timeRange.split('-').map(time => {
             const [hours, minutes] = time.split(':').map(Number);
-            return hours * 60 + minutes; // Convert to minutes since midnight
+            return hours * 60 + minutes; // Convert to minutes 
         });
         return { start, end };
     }
@@ -230,13 +230,6 @@ async function checkTimeConflict(times, registered) {
 
     return { success: true, message: 'No time conflict' };
 }
-
-
-
-
-
-
-
 
 
 
@@ -316,31 +309,29 @@ async function registerStudentInCourse(req, studentID, courseID, sectionNumber, 
 
 async function saveRegistration(req, studentID, courseID, sectionNumber, semester){
     // Register student in the course
-const registerQuery = `
-    INSERT INTO "StudentSections" ("StudentID", "CourseID", "SectionNumber", "Semester", "createdAt", "updatedAt") 
-    VALUES (:studentID, :courseID, :sectionNumber, :semester, NOW(), NOW())
-`;
-await db.sequelize.query(registerQuery, {
-    replacements: { studentID, courseID, sectionNumber, semester },
-    type: db.sequelize.QueryTypes.INSERT
-});
+    const registerQuery = `
+        INSERT INTO "StudentSections" ("StudentID", "CourseID", "SectionNumber", "Semester", "createdAt", "updatedAt") 
+        VALUES (:studentID, :courseID, :sectionNumber, :semester, NOW(), NOW())
+    `;
+    await db.sequelize.query(registerQuery, {
+        replacements: { studentID, courseID, sectionNumber, semester },
+        type: db.sequelize.QueryTypes.INSERT
+    });
 
-// Update reserved seats
-const updateQuery = `
-    UPDATE "Sections"
-    SET "reserved" = "reserved" + 1
-    WHERE "CourseID" = :courseID AND "SectionNumber" = :sectionNumber  AND "Semester" = :semester
-`;
-await db.sequelize.query(updateQuery, {
-    replacements: { courseID, sectionNumber, semester },
-    type: db.sequelize.QueryTypes.UPDATE
-});
+    // Update reserved seats
+    const updateQuery = `
+        UPDATE "Sections"
+        SET "reserved" = "reserved" + 1
+        WHERE "CourseID" = :courseID AND "SectionNumber" = :sectionNumber  AND "Semester" = :semester
+    `;
+    await db.sequelize.query(updateQuery, {
+        replacements: { courseID, sectionNumber, semester },
+        type: db.sequelize.QueryTypes.UPDATE
+    });
 
-req.toastr.success('Registration successful');
-return { success: true, message: 'Registration successful' };
-}
-
-
+    req.toastr.success('Registration successful');
+    return { success: true, message: 'Registration successful' };
+    }
 
 
 
@@ -418,14 +409,6 @@ async function registerCourses(courses, req) {
         throw error;
     }
 }
-
-
-
-
-
-
-
-
 
 
 
