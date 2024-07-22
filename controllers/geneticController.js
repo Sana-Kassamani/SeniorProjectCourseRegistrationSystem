@@ -17,7 +17,7 @@ let days= null
 const config = {
     iterations: 800,
     size: 50,
-    crossover: 0.6,
+    crossover: 0.5,
     mutation: 0.7,
     skip: 50,
     elitism: true,
@@ -242,8 +242,9 @@ genetic.timeConflict = function (course1, course2) {
 };
 
 genetic.parseTime = function (time) {
-    
-    const [hours, minutes] = time.split(':').map(Number);
+    const pm_hours = [1,2,3,4,5,6]
+    let [hours, minutes] = time.split(':').map(Number);
+    hours = pm_hours.includes(hours) ? hours + 12   : hours
     return hours * 60 + minutes;
     // const hours = Number(time) ;
     // return hours * 60 ;
@@ -263,6 +264,15 @@ genetic.generation = function (pop, generation, stats) {
     //         }
     //     }
     // }
+    const bestIndividual = pop[0];
+   
+    if (generation > 300 && bestIndividual.fitness === 0) {
+        console.log(`Stopping at generation ${generation} as the best fitness is 0 and iterations exceed 200.`);
+        return false; // Stop the generation process
+    }
+
+    
+    
     
     return pop[0].entity.length > 0;  // Stop if we find a valid schedule
 };
@@ -368,7 +378,19 @@ const recommendCourses = async function (req,res) {
         res.send('Error recommending courses');
     }
 };
-module.exports = { recommendCourses,filterOutFailingGrades };
+
+const runTest = async (iterations) => {
+    for (let i = 0; i < iterations; i++) {
+        console.log(`Running test iteration ${i + 1}...`);
+        await recommendCourses({}, {});
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Pause for a second between tests
+    }
+    console.log('Test completed.');
+};
+
+
+
+module.exports = { recommendCourses,filterOutFailingGrades,runTest };
 
 
 

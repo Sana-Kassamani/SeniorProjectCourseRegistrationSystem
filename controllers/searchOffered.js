@@ -138,7 +138,9 @@ const withinTime = function(definedtime,time1,time2){
 const parseTime = function (time) {
     
     try{
-        const [hours, minutes] = time.split(':').map(Number);
+        let [hours, minutes] = time.split(':').map(Number);
+        const pm_hours = [1,2,3,4,5,6]
+        hours = pm_hours.includes(hours) ? hours + 12   : hours
         if (hours != null && minutes != null){
             return hours * 60 + minutes;
         }

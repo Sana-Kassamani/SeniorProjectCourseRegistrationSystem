@@ -164,8 +164,10 @@ async function getCurrentlyRegisteredCourses(studentID,semester){
 
 async function checkTimeConflict(req,times, registered) {
     function parseTimeRange(timeRange) {
+        const pm_hours=[1,2,3,4,5,6]
         const [start, end] = timeRange.split('-').map(time => {
-            const [hours, minutes] = time.split(':').map(Number);
+            let [hours, minutes] = time.split(':').map(Number);
+            hours = pm_hours.includes(hours) ? hours + 12   : hours
             return hours * 60 + minutes; // Convert to minutes 
         });
         return { start, end };
@@ -203,7 +205,7 @@ async function checkTimeConflict(req,times, registered) {
 
                 if (conflict) {
                     req.toastr.error('time conflict detected in new courses');
-                    return { success: false, message: ' time conflict detected in new courses' };
+                    return { success: false, message: 'Conflict in time!' };
                 }
             }
         }
@@ -222,7 +224,7 @@ async function checkTimeConflict(req,times, registered) {
 
                 if (conflict) {
                     req.toastr.error('Time conflict detected with registered courses');
-                    return { success: false, message: 'Time conflict detected with registered courses' };
+                    return { success: false, message: 'Conflict in time!' };
                 }
             }
         }
@@ -232,12 +234,8 @@ async function checkTimeConflict(req,times, registered) {
 }
 
 
-
-
-async function registerStudentInCourse(req, studentID, courseID, sectionNumber, semester,nbOfCredits) {
-    try {
-        //check if courses exceed 18
-      const creditsAlreadyRegisteredQuery = `
+async function checkIfNbOfCreditsAllowed (req,studentID,nbOfCredits,semester){
+    const creditsAlreadyRegisteredQuery = `
             SELECT SUM(c."Credits") AS "TotalCredits"
             FROM "StudentSections" ss
             INNER JOIN "Courses" c ON ss."CourseID" = c."CourseID"
@@ -248,11 +246,22 @@ async function registerStudentInCourse(req, studentID, courseID, sectionNumber, 
             type: db.sequelize.QueryTypes.SELECT
         });
         
-    if ((parseInt(creditsAlreadyRegistered.TotalCredits) + parseInt(nbOfCredits))>18){
+    if (parseInt(nbOfCredits) >18 || (parseInt(creditsAlreadyRegistered.TotalCredits) + parseInt(nbOfCredits))> 18 ){
         req.toastr.error('Total number of credits greater than allowed');
-        return { success: false, message: 'Total number of credits greater than allowed' };
+        //success= false
+        //message+= 'Total number of credits greater than allowed\n'
+        return { success: false, message: 'Total number of credits greater than allowed!' };
 
     }
+    return {success: true, message:''}
+}
+
+async function registerStudentInCourse(req, studentID, courseID, sectionNumber, semester) {
+    try {
+        //success=true
+        //message=""
+        //check if courses exceed 18
+      
 
         // Check if the student is already registered for this course in the same semester
         const duplicateCheckQuery = `
@@ -267,13 +276,17 @@ async function registerStudentInCourse(req, studentID, courseID, sectionNumber, 
 
         if (existingRegistration) {
             req.toastr.error('Already registered for this course in the same semester');
-            return { success: false, message: 'Cannot register for the same course twice in the same semester' };
+            //success= false
+            //message+= 'Cannot register for the same course twice in the same semester\n'
+            return { success: false, message: 'Cannot register for the same course twice in the same semester!' };
         }
 
         const prerequisitesMet = await checkPrerequisites(studentID, courseID);
         if (!prerequisitesMet) {
-            req.toastr.error('Prerequisites not met');
-            return { success: false, message: 'Prerequisites not met' };
+            //req.toastr.error('Prerequisites not met');
+            //success= false
+            //message += 'Prerequisites not met\n'
+            return { success: false, message: 'Prerequisites not met!' };
         }
 
         // Check if seats are available
@@ -289,15 +302,19 @@ async function registerStudentInCourse(req, studentID, courseID, sectionNumber, 
 
         if (!section) {
             console.log('Section not found');
-            return { success: false, message: 'Section not found' };
+            //success= false
+            //message += 'Section not found\n'
+            return { success: false, message: 'Section not found!' };
         }
 
         if (section.NbOfSeats <= section.reserved) {
-            req.toastr.error('No available seats');
-            return { success: false, message: 'No available seats' };
+            //req.toastr.error('No available seats');
+            //success= false
+            //message += 'No available seats\n'
+            return { success: false, message: 'No available seats!' };
         }
 
-        return  { success: true, message: ' ' };
+        return  { success: true, message: "" };
     } catch (err) {
         console.error('Error saving course registration', err);
         throw err;
@@ -363,6 +380,7 @@ async function getNumberOfCredits(courses){
       const courseID = await getCourseID(course.courseCode);
       total=  total+await getCredits(courseID)
     }
+    console.log("TOtal credits ", total)
     return total;
 
 
@@ -377,27 +395,45 @@ async function registerCourses(courses, req) {
     const studentID = await getStudentID(studentIdentificationNumber);
     const semester = getNextSemester();
     const nbOfCredits=await getNumberOfCredits(courses);
-   
+    let success=true
+    let message=""
     let times=[]
     try {
 
         if (courses.length==0)
-            return false;
+            throw new Error ("No selected courses!")
+        checkCredits=await checkIfNbOfCreditsAllowed(req,studentID,nbOfCredits,semester)
+        if(!checkCredits.success)
+        {
+            throw new Error(checkCredits.message)
+        }
         for (const element of courses) {
             const courseID = await getCourseID(element.courseCode);
-            const result = await registerStudentInCourse(req, studentID, courseID, element.sectionNumber, semester,nbOfCredits);
-            times.push(element.Time,element.Days)
-            if (!result.success) {
-                throw new Error(result.message);
+            const course_result = await registerStudentInCourse(req, studentID, courseID, element.sectionNumber, semester,nbOfCredits);
+            success = success && course_result.success
+            if (message == "" || course_result.message=="")
+                message+= course_result.message
+            else{
+                if (!message.includes(course_result.message))
+                message+= " & " + course_result.message
             }
+            
+            times.push(element.Time,element.Days)
+            
         }
+        
         console.log(times)
         const registered=await getCurrentlyRegisteredCourses( studentID,semester)
         console.log(registered)
         const timeConflictResult= await checkTimeConflict(req,times,registered)
 
         if (!timeConflictResult.success) {
-            throw new Error(timeConflictResult.message);
+            message = message =="" ? message + timeConflictResult.message : message + " & " + timeConflictResult.message
+            throw new Error(message);
+        }
+        if (!success) {
+            
+            throw new Error(message);
         }
         for (const element of courses) {
             const courseID = await getCourseID(element.courseCode);
@@ -415,7 +451,7 @@ async function registerCourses(courses, req) {
 const registerCoursesHandler = async (req, res) => {
     try {
         const { courses } = req.body;
-        console.log(courses);
+        console.log("Selected Courses are:",courses);
         
         const success = await registerCourses(courses, req);
         if (success) {

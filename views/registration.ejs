@@ -94,7 +94,7 @@
             <td><%= course.FName %> <%= course.LName %></td>
             <td><%= course.SectionNumber %></td>
             <td>
-              <button class="btn btn-sm add-course-btn" data-course-code="<%= course.CourseCode %>" data-section-number="<%= course.SectionNumber %>">Add</button>
+              <button class="btn btn-sm add-course-btn" data-course-code="<%=course.CourseCode%>" data-section-number="<%= course.SectionNumber %>">Add</button>
             </td>
           </tr>
         <% }); %>
@@ -153,7 +153,8 @@
       // Function to handle add course button click
       document.querySelectorAll('.add-course-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-          let courseCode = btn.getAttribute('data-course-code');
+          let courseCode = btn.getAttribute('data-course-code').trim();
+          
           if (!addedCourseCodes.has(courseCode)) {
             let courseRow = btn.closest('tr');
             let courseData = {
@@ -271,21 +272,23 @@
             addedCourseCodes.clear();
             localStorage.removeItem('selectedCourses'); // Clear local storage
           } else {
-            toastr.error(MessageEvent );
+            toastr.error(data.error);
+            
             //toastr.error( 'Error registering courses');
             //addedCourseCodes.clear();
-            localStorage.removeItem('selectedCourses'); 
+            //localStorage.removeItem('selectedCourses'); 
           }
         })
         .catch(error => {
-          toastr.error( );
+          toastr.error();
           console.error('Error:', error);
           //addedCourseCodes.clear();
-          localStorage.removeItem('selectedCourses'); 
+          //localStorage.removeItem('selectedCourses'); 
         });
       });
     });
   })
+
   </script>
   <script src="sidebar.js"></script>
 </body>
