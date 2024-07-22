@@ -13,7 +13,13 @@
   
     font-family: Arial, sans-serif;
     }
+    .center-table th,
+.center-table td {
+    vertical-align: middle;
+    text-align: center;
+}
     table {
+
       /* animation: slideInUp 1s ease-out; */
       width: 100%;
       border-collapse: collapse;
@@ -31,7 +37,7 @@
       background-color: #042630;
       color: #d0d6d6;
     }
-
+    
     /* tbody tr:hover {
       background-color: #f1f1f1;
       transition: background-color 0.3s ease;
@@ -107,7 +113,7 @@ div[class*="overlap"] {
               </form>
             </div>
             <div class="table-responsive">
-              <table class="table table-bordered "style="color: #042630; font-family: Arial, sans-serif;">
+              <table class="table table-bordered center-table"style=" font-family: Arial, sans-serif;">
                 <thead class="table-dark" >
                   <tr>
                     <th>Time</th>
@@ -212,7 +218,7 @@ div[class*="overlap"] {
                 </tbody>
               </table>
               <button class="btn " onclick="calculateGPA()">Calculate</button>
-              <h4 class="mt-3" id="gpa" style="display: none;">Semester GPA: <span id="calculated-gpa">0.00</span></h4>
+              <h4 class="mt-3" id="gpa" style="display: none;">Projected GPA: <span id="calculated-gpa">0.00</span></h4>
             </div>
           </div>
         </div>
