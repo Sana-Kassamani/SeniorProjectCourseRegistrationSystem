@@ -173,13 +173,13 @@ const checkEligibility= async (offeredCourses)=>{
     });
     const studentIdentificationNumber = fs.readFileSync('userID.txt', 'utf8').trim();
     const StudentID = await getStudentID(studentIdentificationNumber); 
-    // console.log(StudentID)
+    
     const program= await getProgram(StudentID);
-    // console.log(program)
+    
     const userCourseHistoryQuery = await getCoursesAttended(StudentID)
     const filteredCourses = filterOutFailingGrades(userCourseHistoryQuery)
     const userCourseHistory= filteredCourses.map(obj => Object.values(obj)[0]);
-    // console.log(offeredCourses)
+    
 
     offeredCourses.forEach(course=>{
         if (course.ProgramID.includes(program[0].ProgramID))

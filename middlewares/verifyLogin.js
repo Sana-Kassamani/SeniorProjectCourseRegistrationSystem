@@ -14,7 +14,7 @@
 // module.exports = verifyLoggedIn;
 // Middleware function to verify if the user is logged in and enforce session timeout
 const verifyLoggedIn = (req, res, next) => {
-    const maxSessionDuration = 15 * 60 * 1000; // 15 minutes in milliseconds
+    const maxSessionDuration = 30 * 60 * 1000; // 15 minutes in milliseconds
 
     // Check if the user is logged in
     if (req.session.accessToken || req.url === '/login') {
