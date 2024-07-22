@@ -111,7 +111,7 @@ const loginUser = async (req, res) => {
         }
 
         const accessToken = jwt.sign({ userId: user.ID }, process.env.ACCESS_TOKEN, {
-            expiresIn: '15m',
+            expiresIn: '30m',
         });
         req.session.accessToken = accessToken;
 
@@ -123,6 +123,7 @@ const loginUser = async (req, res) => {
 
         // Save ID to session
         req.session.ID = user.ID;
+        req.session.loginTime = Date.now();
    
         // Save ID to a text file
         try {

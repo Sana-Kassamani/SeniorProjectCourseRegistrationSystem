@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const app = express()
 const session = require('express-session')
 const { testDatabaseConnection } = require('./TestConnection'); // Update the path
+const {runTest}=require(path.join(__dirname, 'controllers', 'geneticController'))
 const PORT = process.env.PORT
 const verifyLoggedIn = require('./middlewares/verifyLogin')
 const credentialsMiddleware = require('./middlewares/credentialsMiddleware');
@@ -56,7 +57,7 @@ app.use('/main',  require(path.join(__dirname, 'routes', 'main')))
 app.use('/logout',  require(path.join(__dirname, 'routes', 'logout')))
 
 testDatabaseConnection()
-
+//runTest(400)
 app.listen(PORT, ()=>{
     console.log(`Listening on port ${PORT}`)
 })
