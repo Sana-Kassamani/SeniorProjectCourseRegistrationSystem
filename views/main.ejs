@@ -55,13 +55,31 @@
     .links a {
       text-decoration: none; /* To remove any default link styling */
     }
-  </style>
+   
+  /* @media (max-width: 850px) {
+    
+    #responsive{
+        zoom: 0.5;  
+       
+      }
+   
+      }
+      @media (max-width: 1050px) {
+
+#div1050{
+  zoom: 1;}} */
+
+</style>
 </head>
+
 <body>
+<!-- Your navigation and sidebar includes -->
+<div id="responsive">
   <!-- Navigation and sidebar includes -->
   <%- include ('NavBar.ejs') -%>
   <div id="wrapper">
     <%- include ('SideBar.ejs') -%>
+    <div id="div1050">
     <div id="page-content-wrapper">
     <!-- Quote section -->
     <div class="quote-container">
@@ -84,5 +102,7 @@
 
     <script src="sidebar.js"></script>
   </div>
+  </div>
+</div>
 </body>
 </html>

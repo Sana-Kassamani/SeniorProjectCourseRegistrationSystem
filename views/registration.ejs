@@ -17,16 +17,163 @@
       background-color: #5cb85c !important;
       color: #fff !important;
     }
-   
+    #registerBtn {
+      margin-bottom: 2px;
+    }
+    .table-responsive {
+      overflow-x: visible !important;
+    }
+    @media (max-width: 1050px) {
+  /* Generic table adjustments */
+  .table, 
+  #selectedCourses table {
+    display: block;
+    width: 100%;
+  }
+  
+  .table thead, 
+  #selectedCourses table thead {
+    display: none; /* Hide table headers */
+  }
+  
+  .table tr, 
+  #selectedCourses table tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    background-color: white; /* Add background color to rows */
+    padding: 0.5rem; /* Add padding for better appearance */
+    border-radius: 8px; /* Rounded corners for better look */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Add subtle shadow for depth */
+  }
+  
+  .table td, 
+  #selectedCourses table td {
+    display: flex;
+    justify-content: flex-start;
+    text-align: left;
+    margin: 0rem;
+    position: relative;
+    padding: 0.5rem 0.5rem; /* Add padding for better text appearance */
+  }
+  
+  .table td::before, 
+  #selectedCourses table td::before {
+    content: attr(data-label);
+    flex-basis: 5%;
+    font-weight: bold;
+    color: #333; /* Darker text color for better readability */
+  }
+  
+  .table td:nth-child(1)::before {
+    content: "Code: ";
+  }
+  
+  .table td:nth-child(2)::before {
+    content: "Name: ";
+  }
+  
+  .table td:nth-child(3)::before {
+    content: "Credits: ";
+  }
+  
+  .table td:nth-child(4)::before {
+    content: "Days: ";
+  }
+  
+  .table td:nth-child(5)::before {
+    content: "Time: ";
+  }
+  
+  .table td:nth-child(6)::before {
+    content: "Seats: ";
+  }
+  
+  .table td:nth-child(7)::before {
+    content: "Reserved: ";
+  }
+  
+  .table td:nth-child(8)::before {
+    content: "Instructor: ";
+  }
+  
+  .table td:nth-child(9)::before {
+    content: "Section: ";
+  }
+  
+  /* Specific adjustments for the Selected Courses table */
+  #selectedCourses table td:nth-child(8) /* Action */ {
+    display: none;
+  }
+  
+  #selectedCourses table td:nth-child(1)::before {
+    content: "Code: ";
+  }
+  
+  #selectedCourses table td:nth-child(2)::before {
+    content: "Name: ";
+  }
+  
+  #selectedCourses table td:nth-child(3)::before {
+    content: "Credits: ";
+  }
+  
+  #selectedCourses table td:nth-child(4)::before {
+    content: "Days: ";
+  }
+  
+  #selectedCourses table td:nth-child(5)::before {
+    content: "Time: ";
+  }
+  
+  #selectedCourses table td:nth-child(6)::before {
+    content: "Instructor: ";
+  }
+  
+  #selectedCourses table td:nth-child(7)::before {
+    content: "Section: ";
+  }
+}
 
-  /* Custom CSS to adjust bottom margin of the Register button */
-  #registerBtn {
-    margin-bottom: 2px;
+/* Adjustments for screens wider than 600px but less than 1050px */
+@media (min-width: 650px) and (max-width: 1050px) {
+  .table tr, 
+  #selectedCourses table tr {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content:center;
   }
 
-  </style>
+  .table tr > td, 
+  #selectedCourses table tr > td {
+    width: 48%;
+  }
+
+  .table td::before, 
+  #selectedCourses table td::before {
+    width: auto;
+    flex-basis: 20%; /* Adjust flex-basis to ensure label and content fit properly */
+  }
+
+}
+
+
+
+  /* @media (max-width: 850px) {
+    
+    #responsive{
+        zoom: 0.5; 
+       
+      }
+   
+      } */
+</style>
 </head>
+
 <body>
+<!-- Your navigation and sidebar includes -->
+<div id="responsive">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js?v=1.0"></script>
 
@@ -60,85 +207,83 @@
             </div>
 
            <!-- Display Data -->
-<div class="mt-4 table-responsive">
-  <% if (!schedule) { %>
-    <p>No data available.</p>
-  <% } else if (schedule.length === 0) { %>
-    <p>No courses found.</p>
-  <% } else { %>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Course Code</th>
-          <th>Course Name</th>
-          <th>Credits</th>
-          <th>Days</th>
-          <th>Time</th>
-          <th>Seats</th>
-          <th>Reserved Seats</th>
-          <th>Instructor</th>
-          <th>Section Number</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% schedule.forEach(course => { %>
-          <tr>
-            <td><%= course.CourseCode %></td>
-            <td><%= course.CourseName %></td>
-            <td><%= course.Credits %></td>
-            <td><%= course.Days %></td>
-            <td><%= course.Time %></td>
-            <td><%= course.NbOfSeats %></td>
-            <td><%= course.reserved %></td>
-            <td><%= course.FName %> <%= course.LName %></td>
-            <td><%= course.SectionNumber %></td>
-            <td>
-              <button class="btn btn-sm add-course-btn" data-course-code="<%= course.CourseCode %>" data-section-number="<%= course.SectionNumber %>">Add</button>
-            </td>
-          </tr>
-        <% }); %>
-      </tbody>
-    </table>
-  <% } %>
-</div>
+           <div class="mt-4">
+            <% if (!schedule) { %>
+              <p>No data available.</p>
+            <% } else if (schedule.length === 0) { %>
+              <p>No courses found.</p>
+            <% } else { %>
+              <table class="table table-striped table-bordered" >
+                <thead>
+                  <tr>
+                    <th>Course Code</th>
+                    <th>Course Name</th>
+                    <th>Credits</th>
+                    <th>Days</th>
+                    <th>Time</th>
+                    <th>Seats</th>
+                    <th>Reserved Seats</th>
+                    <th>Instructor</th>
+                    <th>Section Number</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% schedule.forEach(course => { %>
+                    <tr>
+                      <td><%= course.CourseCode %></td>
+                      <td><%= course.CourseName %></td>
+                      <td><%= course.Credits %></td>
+                      <td><%= course.Days %></td>
+                      <td><%= course.Time %></td>
+                      <td><%= course.NbOfSeats %></td>
+                      <td><%= course.reserved %></td>
+                      <td><%= course.FName %> <%= course.LName %></td>
+                      <td><%= course.SectionNumber %></td>
+                      <td>
+                        <button class="btn btn-sm add-course-btn" data-course-code="<%= course.CourseCode %>" data-section-number="<%= course.SectionNumber %>">Add</button>
+                      </td>
+                    </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            <% } %>
+          </div>
 
-<!-- Table to display selected courses -->
-<div id="selectedCourses" class="table-responsive">
-  <h3>Selected Courses</h3>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Course Code</th>
-        <th>Course Name</th>
-        <th>Credits</th>
-        <th>Days</th>
-        <th>Time</th>
-        <th>Instructor</th>
-        <th>Section Number</th>
-        <th>Reserved Seats</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody id="selectedCoursesBody">
-      <!-- Selected courses will be added here -->
-    </tbody>
-  </table>
-</div>
-  <div class="mt-3">
-    <button id="registerBtn" class="btn me-2">Register</button>
-    <a href="/recommender" class="btn  mb-2 mb-md-0" style="margin-bottom: 4px;">AI Recommend</a>
-    
-  </div>
+          <!-- Table to display selected courses -->
+          <div id="selectedCourses" class="mt-4">
+            <h3>Selected Courses</h3>
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Course Code</th>
+                  <th>Course Name</th>
+                  <th>Credits</th>
+                  <th>Days</th>
+                  <th>Time</th>
+                  <th>Instructor</th>
+                  <th>Section Number</th>
+                  <th>Reserved Seats</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="selectedCoursesBody">
+                <!-- Selected courses will be added here -->
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-3">
+            <button id="registerBtn" class="btn btn-primary me-2">Register</button>
+            <a href="/recommender" class="btn btn-secondary mb-2 mb-md-0">AI Recommend</a>
           </div>
         </div>
-   
+      </div>
     <% } %>
   </div>
-
- 
+</div>
+</div>
   
-
+</div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <!-- JavaScript to handle adding and removing courses -->
   <script>
@@ -154,7 +299,7 @@
       document.querySelectorAll('.add-course-btn').forEach(btn => {
         btn.addEventListener('click', function() {
           let courseCode = btn.getAttribute('data-course-code');
-          if (!addedCourseCodes.has(courseCode)) {
+          if (!addedCourseCodes.has(courseCode.trim())) {
             let courseRow = btn.closest('tr');
             let courseData = {
               CourseCode: courseRow.querySelector('td:nth-child(1)').innerText,
@@ -168,7 +313,7 @@
               SectionNumber: courseRow.querySelector('td:nth-child(9)').innerText
             };
             addCourseToTable(courseData);
-            addedCourseCodes.add(courseCode);
+            addedCourseCodes.add(courseCode.trim());
             saveCourse(courseData);
           } else {
              toastr.error('Course already added.');
@@ -268,7 +413,7 @@
             toastr.success('Registration successful!');
             // Optionally clear the selected courses table
             document.getElementById('selectedCoursesBody').innerHTML = '';
-            addedCourseCodes.clear();
+            //addedCourseCodes.clear();
             localStorage.removeItem('selectedCourses'); // Clear local storage
           } else {
             toastr.error(MessageEvent );
@@ -278,7 +423,7 @@
           }
         })
         .catch(error => {
-          toastr.error( );
+          toastr.error(  'Error registering courses');
           console.error('Error:', error);
           //addedCourseCodes.clear();
           localStorage.removeItem('selectedCourses'); 
