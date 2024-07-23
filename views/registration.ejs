@@ -280,8 +280,8 @@
             </table>
           </div>
           <div class="mt-3">
-            <button id="registerBtn" class="btn btn-primary me-2">Register</button>
-            <a href="/recommender" class="btn btn-secondary mb-2 mb-md-0">AI Recommend</a>
+            <button id="registerBtn" class="btn me-2">Register</button>
+            <a href="/recommender" class="btn  mb-2 mb-md-0">AI Recommend</a>
           </div>
         </div>
       </div>
@@ -321,7 +321,7 @@
               SectionNumber: courseRow.querySelector('td:nth-child(9)').innerText
             };
             addCourseToTable(courseData);
-            addedCourseCodes.add(courseCode.trim());
+            addedCourseCodes.add(courseCode);
             saveCourse(courseData);
           } else {
              toastr.error('Course already added.');
@@ -385,7 +385,7 @@
         let selectedCourses = [];
         document.querySelectorAll('#selectedCoursesBody tr').forEach(row => {
           let courseCode = row.querySelector('td:nth-child(1)').innerText;
-          let sectionNumber = row.querySelector('td:nth-child(7)').innerText;
+          let sectionNumber = row.querySelector('td:nth-child(9)').innerText;
           let Time = row.querySelector('td:nth-child(5)').innerText;
           let Days = row.querySelector('td:nth-child(4)').innerText;
           selectedCourses.push({ courseCode, sectionNumber,Time,Days });
