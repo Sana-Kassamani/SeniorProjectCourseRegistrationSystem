@@ -172,6 +172,15 @@
         zoom: 0.5; 
        
       }
+      .table td::before, 
+  #selectedCourses table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #333; /* Darker text color for better readability */
+    display: inline-block;
+    width: 600px; /* Adjust this value as needed */
+    margin-right: 1rem; /* Add margin for better appearance */
+  }
    
       }
 </style>
