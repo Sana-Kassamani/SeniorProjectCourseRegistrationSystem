@@ -203,7 +203,7 @@
           <div id="Offering">
             <!-- Search Form -->
             <div class="search-container">
-              <form id="searchForm" action="/registration" method="GET">
+              <form id="searchForm" action="/searchAndRegister" method="GET">
                 <div class="mb-3">
                   <label for="searchInput" class="form-label" style="color: #042630;">Course Code</label>
                   <input type="text" id="searchInput" name="CourseCode" class="form-control" placeholder="Search...">
@@ -410,7 +410,7 @@
         "hideMethod": "fadeOut"
       };
 
-        fetch('/registration', {
+        fetch('/searchAndRegister', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
