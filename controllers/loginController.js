@@ -111,7 +111,7 @@ const loginUser = async (req, res) => {
         }
 
         const accessToken = jwt.sign({ userId: user.ID }, process.env.ACCESS_TOKEN, {
-            expiresIn: '30m',
+            expiresIn: '2h',
         });
         req.session.accessToken = accessToken;
 
