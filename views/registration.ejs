@@ -100,12 +100,7 @@
   .table td:nth-child(9)::before {
     content: "Section: ";
   }
-  
-  /* Specific adjustments for the Selected Courses table */
-  #selectedCourses table td:nth-child(8) /* Action */ {
-    display: none;
-  }
-  
+
   #selectedCourses table td:nth-child(1)::before {
     content: "Code: ";
   }
@@ -127,10 +122,16 @@
   }
   
   #selectedCourses table td:nth-child(6)::before {
-    content: "Instructor: ";
+    content: "Seats: ";
   }
   
   #selectedCourses table td:nth-child(7)::before {
+    content: "Reserved: ";
+  }
+  #selectedCourses table td:nth-child(8)::before {
+    content: "Instructor: ";
+  }
+  #selectedCourses table td:nth-child(9)::before {
     content: "Section: ";
   }
 }
@@ -164,15 +165,15 @@
 }
 
 
-
-  /* @media (max-width: 850px) {
+/* zooming */
+  @media (max-width: 850px) {
     
     #responsive{
         zoom: 0.5; 
        
       }
    
-      } */
+      }
 </style>
 </head>
 
@@ -266,9 +267,10 @@
                   <th>Credits</th>
                   <th>Days</th>
                   <th>Time</th>
+                  <th>Seats</th>
+                  <th>Reserved Seats</th>
                   <th>Instructor</th>
                   <th>Section Number</th>
-                  <th>Reserved Seats</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -313,9 +315,9 @@
               Credits: courseRow.querySelector('td:nth-child(3)').innerText,
               Days: courseRow.querySelector('td:nth-child(4)').innerText,
               Time: courseRow.querySelector('td:nth-child(5)').innerText,
-              NbOfSeats: courseRow.querySelector('td:nth-child(6)').innerText,
-              ReservedSeats: courseRow.querySelector('td:nth-child(7)').innerText, // Added reserved seats data
               Instructor: courseRow.querySelector('td:nth-child(8)').innerText,
+              NbOfSeats: courseRow.querySelector('td:nth-child(6)').innerText, // Added reserved seats data
+              ReservedSeats: courseRow.querySelector('td:nth-child(7)').innerText,
               SectionNumber: courseRow.querySelector('td:nth-child(9)').innerText
             };
             addCourseToTable(courseData);
@@ -336,10 +338,12 @@
           <td>${course.CourseName}</td>
           <td>${course.Credits}</td>
           <td>${course.Days}</td>
-          <td>${course.Time}</td>
+          <td>${course.Time}</td> 
+          <td>${course.NbOfSeats}</td>
+          <td>${course.ReservedSeats}</td> <!-- Added reserved seats data -->
           <td>${course.Instructor}</td>
           <td>${course.SectionNumber}</td>
-          <td>${course.ReservedSeats}</td> <!-- Added reserved seats data -->
+        
           <td><button class="btn btn-sm remove-course-btn" style="background-color:#e7ad99; color :#042630;border-color:  #df8566 ;">Remove</button></td>
         `;
         tableBody.appendChild(row);
